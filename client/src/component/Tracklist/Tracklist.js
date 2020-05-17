@@ -16,7 +16,9 @@ function Tracklist() {
     */
 
     return (
-        <Track />
+        <div>
+            <Track title="One More" artists="Yaeji" album="EP2"/>
+        </div>
     );
 }
 

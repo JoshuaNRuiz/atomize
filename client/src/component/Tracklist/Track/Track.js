@@ -1,17 +1,23 @@
 import React from 'react';
+import playIcon from '../../../resources/play.png';
 
 import './Track.css';
 
 function Track(props) {
 
-    const id = props.id; // string
-    const name = props.name; // string
-    const artists = props.artists; // array of artists objects
-    const album = props.album; // album object
+    const title = props.title;
+    const artistName = props.artists;
+    const albumName = props.album;
 
     return (
-        <div>
-            
+        <div className="track">
+            <button class="play-button">
+                <img src={playIcon}/>
+            </button> 
+            <div class="track-details"> 
+                <p class="title">{title}</p>
+                <p class="artist-album">{artistName} - {albumName} </p>
+            </div>
         </div>
     );
 }
