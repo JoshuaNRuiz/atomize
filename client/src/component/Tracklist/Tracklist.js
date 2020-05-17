@@ -3,10 +3,33 @@ import Track from './Track/Track.js'
 
 const Tracklist = (props) => {
 
-    // fetch the users top songs through the Spotify API
-    // store them in an array
-    // iterate through the array 
-    // create a SongItem for each one
+    //GET https://api.spotify.com/v1/me/top/{type}
+
+    const [type, setType] = useState('tracks');
+    const [timeRange, setTimeRange] = useState('long_term')
+    const [limit, setLimit] = useState(10);
+    const [offset, setOffset] = useState(0)
+    const [response, setResponse] = useState(initialState);
+
+    let url = `https://api.spotify.com/v1/me/top/${type}
+            ?time_range=${timeRange}
+            &limit=${limit}
+            &offset=${offset}`
+
+    useEffect(() => {
+        let result = fetch(url, {
+
+        });
+        setResponse(result);
+        generateTracklist();
+    });
+
+    let generateTracklist = () => {
+        let items = response.items;
+        tracklist = items.map((track) => {
+            return <Track name={track.name} artists={track.artists} album={track.album}/>
+        });
+    }
 
     /* SPOTIFY API EXPECTED DATA
         id: String
@@ -15,16 +38,9 @@ const Tracklist = (props) => {
         artists: Artist object
     */
 
-    const initialState = null;
-    const [response, setResponse] = useState(initialState);
-
-    useEffect(() => {
-
-    });
-
     return (
-        <div>
-            <Track title="One More" artists="Yaeji" album="EP2"/>
+        <div className="tracklist">
+            {tracklist}
         </div>
     );
 }
