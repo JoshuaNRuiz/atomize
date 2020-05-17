@@ -3,7 +3,7 @@ import playIcon from '../../../resources/play.png';
 
 import './Track.css';
 
-function Track(props) {
+const Track = (props) => {
 
     const title = props.title;
     const artistName = props.artists;

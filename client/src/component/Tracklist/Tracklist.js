@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import Track from './Track/Track.js'
 
-function Tracklist() {
+const Tracklist = (props) => {
 
     // fetch the users top songs through the Spotify API
     // store them in an array
@@ -14,6 +14,13 @@ function Tracklist() {
         album: Album Object
         artists: Artist object
     */
+
+    const initialState = null;
+    const [response, setResponse] = useState(initialState);
+
+    useEffect(() => {
+
+    });
 
     return (
         <div>
