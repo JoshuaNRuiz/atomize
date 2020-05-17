@@ -25,4 +25,6 @@ client/yarn-error.log*
 ##### API FILES
 api/node_modules
 
+test.json
+
 private/
