@@ -11,12 +11,12 @@ const Track = (props) => {
 
     return (
         <div className="track">
-            <button class="play-button">
-                <img src={playIcon}/>
+            <button className="play-button">
+                <img src={playIcon} alt="icon"/>
             </button> 
-            <div class="track-details"> 
-                <p class="title">{title}</p>
-                <p class="artist-album">{artistName} - {albumName} </p>
+            <div className="track-details"> 
+                <p className="title">{title}</p>
+                <p className="artist-album">{artistName} - {albumName} </p>
             </div>
         </div>
     );

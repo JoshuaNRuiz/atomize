@@ -3,40 +3,67 @@ import Track from './Track/Track.js'
 
 const Tracklist = (props) => {
 
-    const [type, setType] = useState('tracks');
-    const [timeRange, setTimeRange] = useState('long_term')
-    const [limit, setLimit] = useState(10);
-    const [offset, setOffset] = useState(0)
-    const [response, setResponse] = useState();
+    const TYPE_DEFAULT = 'tracks'
+    const RANGE_DEFAULT = 'long_term'
+    const LIMIT_DEFAULT = 10;
+    const OFFSET_DEFAULT = 0;
 
-    let tracklist = null;
+    const [error, setError] = useState(null);
+    const [isLoaded, setIsLoaded] = useState(false);
+    const [type, setType] = useState(TYPE_DEFAULT);
+    const [timeRange, setTimeRange] = useState(RANGE_DEFAULT)
+    const [limit, setLimit] = useState(LIMIT_DEFAULT);
+    const [offset, setOffset] = useState(OFFSET_DEFAULT)
+    const [items, setItems] = useState([]);
 
-    let url = `https://api.spotify.com/v1/me/top/${type}?time_range=${timeRange}&limit=${limit}&offset=${offset}`
+    let url = `https://api.spotify.com/v1/me/top/tracks?time_range=${timeRange}&limit=10&offset=0`
+
+    async function getData() {
+        
+    }
 
     useEffect(() => {
-        let result = fetch(url, {
-            method: 'get',
+        fetch(url, {
+            method: 'GET',
             headers: {
-                'authorization': props.accessToken
-            }
-        });
-        setResponse(result);
-        console.log(response);
-        // generateTracklist();
-    }, [url, props.accessToken, response]);
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + props.accessToken
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.items);
+                setIsLoaded(true);
+                setItems(data.items)
+            })
+    }, [url, props.accessToken]);
 
-    // let generateTracklist = () => {
-    //     let items = response.items;
-    //     tracklist = items.map((track) => {
-    //         return <Track name={track.name} artists={track.artists} album={track.album}/>
-    //     });
-    // }
+    let generateTracklist = () => {
+        return (
+            <div className='tracklist'>
+                {items.map(item => {
+                    let title = item.name;
+                    let artist = item.artists[0].name;
+                    let album = item.album.name;
+                    let key = title + artist;
 
-    return (
-        <div className="tracklist">
-            <p>TRACKLIST HERE</p>
-        </div>
-    );
+                    return <Track key={key} title={title} artists={artist} album={album}/>
+                })}
+            </div>
+        )
+    }
+
+    if (!isLoaded) {
+        return <div>...loading</div>
+    } else {
+        let tracklist = generateTracklist();
+        return (
+            <div>
+                {tracklist}
+            </div>
+        )
+    }
 }
 
 export default Tracklist;
