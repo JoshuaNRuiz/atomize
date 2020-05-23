@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import Tracker from './container/Tracker'
 import Login from './container/Login.js'
 
-import './App.css';
+import './App.css'
 
 function App() {
   const [isLoggedIn, setLoginStatus] = useState(false);
