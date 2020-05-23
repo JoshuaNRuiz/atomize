@@ -17,11 +17,16 @@ const Tracker = (props) => {
     const [timeRange, setTimeRange] = useState(RANGE_DEFAULT)
     const [items, setItems] = useState([]);
 
-    let url = '';
-    let tracklist = null;
+    const handleTimeRangeChange = (e) => {
+        setTimeRange(e.target.value);
+    }
 
-    const refreshList = () => {
-        url = `https://api.spotify.com/v1/me/top/tracks?time_range=${timeRange}&limit=${limit}&offset=0`
+    const handleLimitChange = (e) => {
+        setLimit(e.target.value);
+    }
+
+    const handleRefresh = () => {
+        let url = `https://api.spotify.com/v1/me/top/tracks?time_range=${timeRange}&limit=${limit}&offset=0`
         fetch(url, {
             method: 'GET',
             headers: {
@@ -38,21 +43,7 @@ const Tracker = (props) => {
             })
     }
 
-    const handleTimeRangeChange = (e) => {
-        setTimeRange(e.target.value);
-    }
-
-    const handleLimitChange = (e) => {
-        setLimit(e.target.value);
-    }
-
-    const handleRefresh = () => {
-        refreshList();
-    }
-
-    if (isLoaded) {
-        tracklist = <Tracklist items={items}/>
-    }
+    let tracklist = isLoaded ? <Tracklist items={items}/> : null
 
     return (
         <div className='tracker'>
