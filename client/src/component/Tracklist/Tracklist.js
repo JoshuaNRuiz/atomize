@@ -14,26 +14,27 @@ const Tracklist = (props) => {
     let url = `https://api.spotify.com/v1/me/top/${type}?time_range=${timeRange}&limit=${limit}&offset=${offset}`
 
     useEffect(() => {
-        // let result = fetch(url, {
-        //     method: 'get',
-        //     headers: new Headers({
-
-        //     }),
-        // });
-        // setResponse(result);
-        // generateTracklist();
-    });
-
-    let generateTracklist = () => {
-        let items = response.items;
-        tracklist = items.map((track) => {
-            return <Track name={track.name} artists={track.artists} album={track.album}/>
+        let result = fetch(url, {
+            method: 'get',
+            headers: {
+                'authorization': props.accessToken
+            }
         });
-    }
+        setResponse(result);
+        console.log(response);
+        // generateTracklist();
+    }, [url, props.accessToken, response]);
+
+    // let generateTracklist = () => {
+    //     let items = response.items;
+    //     tracklist = items.map((track) => {
+    //         return <Track name={track.name} artists={track.artists} album={track.album}/>
+    //     });
+    // }
 
     return (
         <div className="tracklist">
-            {tracklist}
+            <p>TRACKLIST HERE</p>
         </div>
     );
 }
