@@ -18,10 +18,6 @@ const Tracklist = (props) => {
 
     let url = `https://api.spotify.com/v1/me/top/tracks?time_range=${timeRange}&limit=10&offset=0`
 
-    async function getData() {
-        
-    }
-
     useEffect(() => {
         fetch(url, {
             method: 'GET',
@@ -40,18 +36,15 @@ const Tracklist = (props) => {
     }, [url, props.accessToken]);
 
     let generateTracklist = () => {
-        return (
-            <div className='tracklist'>
-                {items.map(item => {
-                    let title = item.name;
-                    let artist = item.artists[0].name;
-                    let album = item.album.name;
-                    let key = title + artist;
+        let tracklist = items.map(item => {
+            let title = item.name;
+            let artist = item.artists[0].name;
+            let album = item.album.name;
+            let key = title + artist;
 
-                    return <Track key={key} title={title} artists={artist} album={album}/>
-                })}
-            </div>
-        )
+            return <Track key={key} title={title} artists={artist} album={album}/>
+        })
+        return tracklist;
     }
 
     if (!isLoaded) {
@@ -59,7 +52,7 @@ const Tracklist = (props) => {
     } else {
         let tracklist = generateTracklist();
         return (
-            <div>
+            <div className='tracklist'>
                 {tracklist}
             </div>
         )
