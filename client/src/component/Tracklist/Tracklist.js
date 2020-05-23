@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import Track from './Track/Track.js'
 
+import './Tracklist.css';
+
 const Tracklist = (props) => {
 
     const TYPE_DEFAULT = 'tracks'

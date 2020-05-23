@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import Tracklist from './component/Tracklist/Tracklist.js'
+import Tracker from './container/Tracker'
 import Login from './container/Login.js'
 
 import './App.css';
@@ -28,11 +28,11 @@ function App() {
     setLoginStatus(!!token);
   }, [isLoggedIn, accessToken]);
 
-  let container = isLoggedIn ? <Tracklist accessToken={accessToken}/> : <Login authorize={openSpotifyAuthorization}/>
+  let container = isLoggedIn ? <Tracker accessToken={accessToken}/> : <Login authorize={openSpotifyAuthorization}/>
 
   return (
     <div className="App">
-      {container} 
+      {container}
     </div>
   );
 }
