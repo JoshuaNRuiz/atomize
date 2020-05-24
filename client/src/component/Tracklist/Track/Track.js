@@ -11,9 +11,7 @@ const Track = (props) => {
 
     return (
         <div className="track">
-            <button className="play-button">
-                <img src={playIcon} alt="icon"/>
-            </button> 
+            <img className='album-image' src={playIcon} alt="icon"/>
             <div className="track-details"> 
                 <p className="title">{title}</p>
                 <p className="artist-album">{artistName} - {albumName} </p>
