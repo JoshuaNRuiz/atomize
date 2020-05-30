@@ -10,11 +10,11 @@ const Tracker = (props) => {
     const LIMIT_DEFAULT = 10;
     const MIN_LIMIT = 1;
     const MAX_LIMIT = 50;
-    const RANGE_DEFAULT = 'long_term'
+    const RANGE_DEFAULT = 'long_term';
 
     const [isLoaded, setIsLoaded] = useState(false);
-    const [limit, setLimit] = useState(LIMIT_DEFAULT)
-    const [timeRange, setTimeRange] = useState(RANGE_DEFAULT)
+    const [limit, setLimit] = useState(LIMIT_DEFAULT);
+    const [timeRange, setTimeRange] = useState(RANGE_DEFAULT);
     const [items, setItems] = useState([]);
 
     const handleTimeRangeChange = (e) => {
