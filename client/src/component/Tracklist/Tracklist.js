@@ -8,13 +8,14 @@ const Tracklist = (props) => {
     const items = props.items;
 
     let generateTracklist = () => {
-        let tracklist = items.map(item => {
+        let tracklist = items.map((item,index) => {
             let title = item.name;
             let artist = item.artists[0].name;
             let album = item.album;
+            let rank = index + 1;
             let key = title + artist;
 
-            return <Track key={key} title={title} artists={artist} album={album}/>
+            return <Track key={key} title={title} artists={artist} album={album} rank={rank}/>
         })
         return tracklist;
     }
