@@ -1,8 +1,8 @@
 .tracklist {
-    max-width: 75%;
+    max-width: 960px;
     margin: auto;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
-    border: 1px solid black;
+    justify-content: center;
+    align-content: flex-start;
 }

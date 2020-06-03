@@ -11,7 +11,7 @@ const Tracklist = (props) => {
         let tracklist = items.map(item => {
             let title = item.name;
             let artist = item.artists[0].name;
-            let album = item.album.name;
+            let album = item.album;
             let key = title + artist;
 
             return <Track key={key} title={title} artists={artist} album={album}/>

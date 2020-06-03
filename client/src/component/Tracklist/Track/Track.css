@@ -1,20 +1,29 @@
 .track {
   display:flex;
-  flex: 0 45%;
-  padding: 0.5em;
+  align-items: center;
+  width: 300px;
+  height: 80px;
+  padding: 0.2em;
   margin: 0.5em 1.0em;
-  background-color: white;
-  border: 1px solid black;
+  background: linear-gradient(90deg, #e3ffe7 0%, #d9e7ff 100%);
+  -webkit-box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.19);
+  -moz-box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.19);
+  box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.19);
+  border: 2px solid transparent;
+  border-image: linear-gradient(to bottom right, #b827fc 0%, #2c90fc 25%, #b8fd33 50%, #fec837 75%, #fd1892 100%);
+  border-image-slice: 1;
 }
   
 .album-image {
-  max-width: 3em;
-  max-height: 3em;
+  width: 80px;
+  height: 80px;
+  margin: auto 0;
+  flex-shrink: 0;
 }
   
 .track-details {
-  display:inline;
-  flex-grow: 4;
+  display: inline;
+  margin: auto 0;
   margin-left: 0.5em;
 }
 
