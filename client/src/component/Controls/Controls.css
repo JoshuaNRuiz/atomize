@@ -1,19 +1,20 @@
 .controls {
+    display: inline-block;
     padding: 1em;
+    border: 1px solid black;
 }
 
 .time-range-input {
-    margin: 0.5em;
-    background-color: #1d6bb9;
-    appearance: none;
-    border: none;
+    
 }
 
 .limit-input {
     width: 4em;
+    height: 30px;
     margin: 0.5em;
-    background-color: #1d6bb9;
-    border: none;
+    padding: 0;
+    border: 1px solid black;
+    border-radius: 4px;
 }
 
 .limit-input::-webkit-outer-spin-button, 
@@ -24,6 +25,9 @@
 
 .limit-input[type=number] {
     -moz-appearance: textfield;
+    text-align: center;
+    height: 30px;
+    padding: 0;
   }
 
 .refresh-button {
