@@ -1,0 +1,42 @@
+.controls {
+    display: inline-block;
+    padding: 4px;
+    width: 648px;
+    margin: auto;
+    background-color: wheat;
+    border: 1px solid black;
+}
+
+.time-range-input {
+    margin-left: 8px;
+}
+
+.limit-input {
+    width: 54px;
+    height: 54px;
+    margin: 0 8px;
+    padding: 0;
+    border: 1px solid rgb(0,0,0,0.2);
+    border-radius: 52px;
+}
+
+.limit-input::-webkit-outer-spin-button, 
+.limit-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.limit-input[type=number] {
+    -moz-appearance: textfield;
+    text-align: center;
+    height: 30px;
+    padding: 0;
+    font-size: medium;
+}
+
+.refresh-button {
+    margin-right: 8px;
+    width: 100px;
+    border: 1px solid black;
+    padding: 6px;
+}

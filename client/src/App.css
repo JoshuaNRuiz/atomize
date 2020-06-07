@@ -1,9 +1,12 @@
+html {
+  background-color: #2E2E2E;
+}
+
 .App {
   text-align: center;
-  background-color: #2E2E2E;
-  border: 1px solid red;
   width: 100vw;
   height: 100vh;
+  font-family: 'Rubik', sans-serif;
 }
 
 .App-logo {
@@ -30,6 +33,11 @@
 
 .App-link {
   color: #61dafb;
+}
+
+h1 {
+  color: white;
+  font-weight: 300;
 }
 
 @keyframes App-logo-spin {

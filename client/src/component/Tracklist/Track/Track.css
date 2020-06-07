@@ -1,38 +1,55 @@
 .track {
-    display: flex;
-    justify-content: flex-start;
-    border: 1px solid black;
-    padding: 1em;
-  }
+  display:flex;
+  align-items: center;
+  width: 300px;
+  height: 80px;
+  padding: 4px;
+  margin: 0.5em 1.0em;
+  background: linear-gradient(90deg, #e3ffe7 0%, #d9e7ff 100%);
+  -webkit-box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.19);
+  -moz-box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.19);
+  box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.19);
+  border: 2px solid transparent;
+  border-image: linear-gradient(to bottom right, #b827fc 0%, #2c90fc 25%, #b8fd33 50%, #fec837 75%, #fd1892 100%);
+  border-image-slice: 1;
+}
 
-  .play-button {
-    width: 48px;
-    height: 48px;
-    padding: 0;
-    border: none;
-    background: none;
-  }
+.track:hover {
+  border: 2px solid red;
+}
   
-  .play-button img {
-    max-width: 100%;
-    max-height: 100%;
-    text-align: center;
-  }
+.album-image {
+  width: 80px;
+  height: 80px;
+  flex-shrink: 0;
+  border: 1px solid rgb(0, 0, 0, 30%);
+}
+
+.album-image:hover {
+  border: 1px solid red;
+}
   
-  .track-details {
-    align-self:center;
-    margin-left: 0.5em;
-  }
-  
-  .title {
-    text-align: left;
-    margin: 0;
-    padding: 0;
-    font-size: 1.2rem;
-  }
-  
-  .artist-album {
-    margin: 0;
-    padding: 0;
-    text-align: left;
-  }
+.track-details {
+  text-align: left;
+  display: inline;
+  margin-left: 0.5em;
+}
+
+.title {
+  text-align: left;
+  margin: 0;
+  padding: 0;
+  font-size: 1.2rem;
+}
+
+.artist-album {
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  font-size: 0.8em;
+  font-weight: 200;
+}
+
+.rank {
+  margin: 0 0 auto auto;
+}
