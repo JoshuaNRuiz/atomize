@@ -47,7 +47,6 @@ const Tracker = (props) => {
 
     return (
         <div className='tracker'>
-            <h1 className='title'>ST2</h1>
             <Controls 
                 min={MIN_LIMIT} 
                 max={MAX_LIMIT} 

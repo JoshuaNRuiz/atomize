@@ -1,20 +1,23 @@
 .controls {
     display: inline-block;
-    padding: 1em;
+    padding: 4px;
+    width: 648px;
+    margin: auto;
+    background-color: wheat;
     border: 1px solid black;
 }
 
 .time-range-input {
-    
+    margin-left: 8px;
 }
 
 .limit-input {
-    width: 4em;
-    height: 30px;
-    margin: 0.5em;
+    width: 54px;
+    height: 54px;
+    margin: 0 8px;
     padding: 0;
-    border: 1px solid black;
-    border-radius: 4px;
+    border: 1px solid rgb(0,0,0,0.2);
+    border-radius: 52px;
 }
 
 .limit-input::-webkit-outer-spin-button, 
@@ -28,8 +31,12 @@
     text-align: center;
     height: 30px;
     padding: 0;
-  }
+    font-size: medium;
+}
 
 .refresh-button {
-    margin: 0.5em;
+    margin-right: 8px;
+    width: 100px;
+    border: 1px solid black;
+    padding: 6px;
 }

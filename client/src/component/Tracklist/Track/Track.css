@@ -13,12 +13,20 @@
   border-image: linear-gradient(to bottom right, #b827fc 0%, #2c90fc 25%, #b8fd33 50%, #fec837 75%, #fd1892 100%);
   border-image-slice: 1;
 }
+
+.track:hover {
+  border: 2px solid red;
+}
   
 .album-image {
   width: 80px;
   height: 80px;
   flex-shrink: 0;
   border: 1px solid rgb(0, 0, 0, 30%);
+}
+
+.album-image:hover {
+  border: 1px solid red;
 }
   
 .track-details {
