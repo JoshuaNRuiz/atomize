@@ -42,6 +42,7 @@ const Tracker = (props) => {
         })
         .then(response => {
             if (!response.ok) {
+                alert("Your authentication has expired.");
                 throw new Error("Did not get a response from the server.")
             }
             return response.json();
