@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import Tracker from './container/Tracker'
-import Login from './container/Login.js'
+import Tracker from './container/Tracker/Tracker'
+import Login from './container/Login/Login'
 
 import './App.css'
 
@@ -11,8 +11,10 @@ function App() {
   useEffect(() => {
     let parameters = window.location.hash.substring(1);
     let token = new URLSearchParams(parameters).get('access_token');
-    setAccessToken(token);
-    setLoginStatus(!!token);
+    if (!!token) {
+      setAccessToken(token);
+      setLoginStatus(true)
+    }
   }, [isLoggedIn, accessToken]);
 
   let container = isLoggedIn ? <Tracker accessToken={accessToken}/> : <Login />

@@ -1,6 +1,6 @@
-import React, {useState, useEffect} from 'react';
-import Controls from '../component/Controls/Controls';
-import Tracklist from '../component/Tracklist/Tracklist';
+import React, {useState} from 'react';
+import Controls from '../../component/Controls/Controls';
+import Tracklist from '../../component/Tracklist/Tracklist';
 import './Tracker.css'
 
 const Tracker = (props) => {
@@ -35,12 +35,19 @@ const Tracker = (props) => {
                 'Authorization': 'Bearer ' + accessToken
             },
         })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data.items);
-                setIsLoaded(true);
-                setItems(data.items)
-            })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Did not get a response from the server.")
+            }
+            return response.json();
+        })
+        .then(data => {
+            setIsLoaded(true);
+            setItems(data.items)
+        })
+        .catch(error => {
+            console.log(error);
+        })
     }
 
     let tracklist = isLoaded ? <Tracklist items={items}/> : null

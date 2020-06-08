@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import Track from './Track/Track.js'
 
 import './Tracklist.css';
@@ -7,7 +7,7 @@ const Tracklist = (props) => {
 
     const items = props.items;
 
-    let generateTracklist = () => {
+    const generateTracklist = () => {
         let tracklist = items.map((item,index) => {
             let title = item.name;
             let artist = item.artists[0].name;
@@ -20,9 +20,11 @@ const Tracklist = (props) => {
         return tracklist;
     }
 
+    const tracklist = generateTracklist();
+
     return (
         <div className='tracklist'>
-            {generateTracklist()}
+            {tracklist}
         </div>
     )
 }

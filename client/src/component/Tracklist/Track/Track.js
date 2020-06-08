@@ -1,5 +1,4 @@
 import React from 'react';
-import playIcon from '../../../resources/play.png';
 
 import './Track.css';
 
