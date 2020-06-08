@@ -11,8 +11,8 @@ Last updated: 06/08/2020</p>
 
 <h3>Goals for v1.0:</h3>
 <ul>
-  <li>Improve the user interface to be more modern and to better support mobile devices</li>
-  <li>Handle authentication logic better with better error reporting</li>
+  <li>Modernize the user interface and better support mobile devices</li>
+  <li>Improve authentication logic and error reporting</li>
 </ul>
 
 <h3>Future Goals:</h3>
