@@ -22,6 +22,11 @@ const Tracker = (props) => {
     }
 
     const handleLimitChange = (e) => {
+        if (e.target.value > 50) {
+            e.target.value = 50;
+        } else if (e.target.value  < 0) {
+            e.target.value = 0
+        }
         setLimit(e.target.value);
     }
 
