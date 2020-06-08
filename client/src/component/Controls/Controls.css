@@ -17,7 +17,6 @@
     margin: 0 8px;
     padding: 0;
     border: 1px solid rgb(0,0,0,0.2);
-    border-radius: 52px;
 }
 
 .limit-input::-webkit-outer-spin-button, 
@@ -27,7 +26,6 @@
 }
 
 .limit-input[type=number] {
-    -moz-appearance: textfield;
     text-align: center;
     height: 30px;
     padding: 0;
