@@ -3,7 +3,8 @@
 The app can be interacted with live at <a href="joshuanruiz.com/projects/spotify-tracker">joshuanruiz.com</a> [currently under construction]</p>
 
 <h3>Built with:</h3>
-<p>ReactJS</p>
+<p>ReactJS<br>
+Spotify API</p>
 
 <h3>Project Status:</h3>
 <p>Current version: 0.8 <br>
