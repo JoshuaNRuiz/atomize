@@ -5,8 +5,6 @@ import './Tracker.css'
 
 const Tracker = (props) => {
 
-    const accessToken = props.accessToken;
-
     const LIMIT_DEFAULT = 10;
     const MIN_LIMIT = 1;
     const MAX_LIMIT = 50;
@@ -37,7 +35,7 @@ const Tracker = (props) => {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + accessToken
+                'Authorization': 'Bearer ' + props.accessToken
             },
         })
         .then(response => {

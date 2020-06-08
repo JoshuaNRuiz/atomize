@@ -14,6 +14,9 @@ function App() {
     if (!!token) {
       setAccessToken(token);
       setLoginStatus(true)
+    } else {
+      setAccessToken(null);
+      setLoginStatus(false);
     }
   }, [isLoggedIn, accessToken]);
 
