@@ -7,20 +7,15 @@ const Tracklist = (props) => {
 
     const items = props.items;
 
-    const generateTracklist = () => {
-        let tracklist = items.map((item,index) => {
-            let title = item.name;
-            let artist = item.artists[0].name;
-            let album = item.album;
-            let rank = index + 1;
-            let key = title + artist;
+    const tracklist = items.map((item,index) => {
+        let title = item.name;
+        let artist = item.artists[0].name;
+        let album = item.album;
+        let rank = index + 1;
+        let key = title + artist;
 
-            return <Track key={key} title={title} artists={artist} album={album} rank={rank}/>
-        })
-        return tracklist;
-    }
-
-    const tracklist = generateTracklist();
+        return <Track key={key} title={title} artists={artist} album={album} rank={rank}/>
+    });
 
     return (
         <div className='tracklist'>
