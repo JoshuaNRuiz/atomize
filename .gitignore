@@ -1,22 +1,28 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-node_modules
-.pnp
-.pnp.js
+client/node_modules
+/client/n.pnp
+/client/n.pnp.js
 
 # testing
-coverage
+/client/ncoverage
 
 # production
-/build
+/client/n/build
 
 # misc
-.DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+/client/n.DS_Store
+/client/n.env.local
+/client/n.env.development.local
+/client/n.env.test.local
+/client/n.env.production.local
 
-npm-debug.log*
+/client/nnpm-debug.log*
 
+/client/node_modules
+
+
+# SERVER FILES
+server/node_modules
+server/process.env
