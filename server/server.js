@@ -5,9 +5,11 @@ const app = express();
 const path = require('path');
 const bodyParser = require('body-parser');
 const fetch = require('node-fetch');
+const cors = require('cors');
 
 app.use(express.static(path.join(__dirname, '../client/build')));
 app.use(bodyParser.json());
+app.use(cors());
 
 const port = process.env.PORT;
 
@@ -54,9 +56,9 @@ const requestToken = async (body) => {
     });
 }
 
-app.post('/api/spotify-auth', (req, res) => {
+app.post('/api/spotify-auth', cors(), (req, res) => {
     const body = req.body
-    
+
     requestToken(body)
     .then(response => {
         res.send(response);

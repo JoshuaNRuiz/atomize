@@ -11,7 +11,7 @@ function App() {
   const [code, setCode] = useState(null);
 
   const client_id = '8e6f4d6f92d645d1b22ca1f6a8e8f371';
-  const REDIRECT_URI = 'localhost:3000';
+  const REDIRECT_URI = 'localhost:8000';
 
   const requestToken = () => {
     fetch('/api/songs', {

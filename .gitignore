@@ -2,6 +2,7 @@
 
 # dependencies
 client/node_modules
+client/build
 client/n.pnp
 client/n.pnp.js
 
@@ -19,10 +20,6 @@ client/n.env.test.local
 client/n.env.production.local
 
 client/nnpm-debug.log*
-
-client/node_modules
-client/build
-
 
 # SERVER FILES
 server/node_modules
