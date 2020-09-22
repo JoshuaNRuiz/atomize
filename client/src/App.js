@@ -11,7 +11,7 @@ function App() {
   const [code, setCode] = useState(null);
 
   const client_id = '8e6f4d6f92d645d1b22ca1f6a8e8f371';
-  const REDIRECT_URI = 'localhost:8000';
+  const REDIRECT_URI = 'http://localhost:8000/';
 
   const requestToken = () => {
     fetch('/api/songs', {
@@ -39,13 +39,15 @@ function App() {
   };
 
   useEffect(() => {
-    let parameters = window.location.hash.substring(1);
+    let parameters = window.location.search;
     let code = new URLSearchParams(parameters).get('code');
 
     if (!!code) {
+      console.log(code);
       setCode(code);
       setLoginStatus(true)
     } else {
+      console.log("weird");
       setAccessToken(null);
       setLoginStatus(false);
     }  

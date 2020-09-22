@@ -12,6 +12,7 @@ const Login = (props) => {
         url += '&client_id=' + encodeURIComponent(client_id);
         url += '&scope=' + encodeURIComponent(scope);
         url += '&redirect_uri=' + encodeURIComponent(redirect_uri);
+        console.log(url);
         window.open(url, "_blank");
     };
 
@@ -25,3 +26,9 @@ const Login = (props) => {
 }
 
 export default Login;
+
+
+//
+//
+// curl -i -H "Accept: application/json" -H "Content-Type: application/json" -X GET https://accounts.spotify.com/authorize?response_type=code&client_id=8e6f4d6f92d645d1b22ca1f6a8e8f371&scope=user-top-read&redirect_uri=localhost:8000
+// https://accounts.spotify.com/authorize?response_type=code&client_id=8e6f4d6f92d645d1b22ca1f6a8e8f371&scope=user-top-read&redirect_uri=localhost%3A8000
