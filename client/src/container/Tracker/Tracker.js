@@ -29,14 +29,16 @@ const Tracker = (props) => {
     }
 
     const handleRefresh = () => {
-        let url = `https://api.spotify.com/v1/me/top/tracks?time_range=${timeRange}&limit=${limit}&offset=0`
-        fetch(url, {
-            method: 'GET',
+        fetch('/api/songs', {
+            method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + props.accessToken
             },
+            body: {
+                
+            }
         })
         .then(response => {
             if (!response.ok) {

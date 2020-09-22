@@ -2,27 +2,28 @@
 
 # dependencies
 client/node_modules
-/client/n.pnp
-/client/n.pnp.js
+client/n.pnp
+client/n.pnp.js
 
 # testing
-/client/ncoverage
+client/ncoverage
 
 # production
-/client/n/build
+client/n/build
 
 # misc
-/client/n.DS_Store
-/client/n.env.local
-/client/n.env.development.local
-/client/n.env.test.local
-/client/n.env.production.local
+client/n.DS_Store
+client/n.env.local
+client/n.env.development.local
+client/n.env.test.local
+client/n.env.production.local
 
-/client/nnpm-debug.log*
+client/nnpm-debug.log*
 
-/client/node_modules
+client/node_modules
+client/build
 
 
 # SERVER FILES
 server/node_modules
-server/process.env
+server/.env

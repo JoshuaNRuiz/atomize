@@ -1,14 +1,14 @@
 import React from 'react';
 
-const Login = () => {
+const Login = (props) => {
 
-    const client_id = '8e6f4d6f92d645d1b22ca1f6a8e8f371';
-    const redirect_uri = 'localhost:3000';
+    const client_id = props.client_id;
+    const redirect_uri = props.redirect_uri;
     const scope = 'user-top-read';
 
-    let openSpotifyAuthorization = () => {
+    let openSpotifyAuthorization = (props) => {
         let url = 'https://accounts.spotify.com/authorize';
-        url += '?response_type=token';
+        url += '?response_type=code';
         url += '&client_id=' + encodeURIComponent(client_id);
         url += '&scope=' + encodeURIComponent(scope);
         url += '&redirect_uri=' + encodeURIComponent(redirect_uri);
