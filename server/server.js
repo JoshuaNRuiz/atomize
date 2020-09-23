@@ -20,11 +20,6 @@ const requestTokens = async (body) => {
 
     const url = "https://accounts.spotify.com/api/token/";
 
-    console.log(code);
-    console.log(redirect_uri);
-    console.log(client_id);
-    console.log(client_secret);
-
     const bodyParameters = qs.stringify({
         grant_type: grant_type,
         code: code,
