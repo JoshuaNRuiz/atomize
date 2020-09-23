@@ -10,17 +10,16 @@ function App() {
   const [refreshToken, setRefreshToken] = useState(null);
   const [code, setCode] = useState(null);
 
-  const client_id = '8e6f4d6f92d645d1b22ca1f6a8e8f371';
-  const REDIRECT_URI = 'http://localhost:8000/';
+  const hostname = 'http://' + window.location.hostname;
+  const baseUrl = hostname.indexOf('localhost') != -1 ? hostname + ':8000' : hostname + '\/';
+
+  const data = {
+    code: code,
+    redirect_uri: 'http://localhost:8000/'
+  }
 
   const requestTokens = () => {
-    const url = REDIRECT_URI + 'api/get-spotify-tokens';
-    const data = {
-      'client_id': client_id,
-      'code': code,
-      'redirect_uri': REDIRECT_URI
-    }
-
+    const url = baseUrl + '/api/get-spotify-tokens';
     fetch(url, {
       method: 'POST',
       headers: {
@@ -30,13 +29,13 @@ function App() {
     })
     .then(response => {
       if (response.ok) {
+        console.log(response);
         return response.json();
       } else {
-        throw new Error('Could not access the API.');
+        throw new Error(url);
       }
     })
     .then(data => {
-      console.log(data.access_token);
       setAccessToken(data.access_token);
       setRefreshToken(data.refresh_token);
     })
@@ -58,14 +57,13 @@ function App() {
     if (isLoggedIn) {
       requestTokens();
     }
-  }, [isLoggedIn, code]); // rerun effect if any of these change
+  }, [isLoggedIn, code]);
 
-  let container = isLoggedIn ? <Tracker code={code}/> : <Login redirect_uri={REDIRECT_URI} client_id={client_id}/>
+  let container = isLoggedIn ? <Tracker code={code}/> : <Login/>
 
   return (
     <div className="App">
       {container}
-      <button onClick={requestTokens}>REQUEST</button>
     </div>
   );
 }

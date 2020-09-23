@@ -11,14 +11,19 @@ app.use(express.static(path.join(__dirname, '../client/build')));
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 
-const requestTokens = async (myBody) => {
+const requestTokens = async (body) => {
     const grant_type = "authorization_code";
-    const code = myBody.code;
-    const redirect_uri = myBody.redirect_uri;
-    const client_id = myBody.client_id;
-    const client_secret = process.env.KEY;
+    const code = body.code;
+    const redirect_uri = body.redirect_uri;
+    const client_id = process.env.CLIENT_ID;
+    const client_secret = process.env.CLIENT_SECRET;
 
     const url = "https://accounts.spotify.com/api/token/";
+
+    console.log(code);
+    console.log(redirect_uri);
+    console.log(client_id);
+    console.log(client_secret);
 
     const bodyParameters = qs.stringify({
         grant_type: grant_type,
@@ -57,6 +62,10 @@ app.post('/api/get-spotify-tokens', (req, res) => {
     .then(response => {
         res.send(response);
     })
+});
+
+app.get('/api/get-id', (req, res) => {
+    res.send(process.env.API_ID);
 });
 
 // ************************ CORE ************************ 
