@@ -9,9 +9,9 @@ const Login = (props) => {
     let openSpotifyAuthorization = (props) => {
         let url = 'https://accounts.spotify.com/authorize';
         url += '?response_type=code';
-        url += '&client_id=' + encodeURIComponent(client_id);
-        url += '&scope=' + encodeURIComponent(scope);
-        url += '&redirect_uri=' + encodeURIComponent(redirect_uri);
+        url += '&client_id=' + client_id;
+        url += '&scope=' + scope;
+        url += '&redirect_uri=' + redirect_uri;
         console.log(url);
         window.open(url, "_blank");
     };

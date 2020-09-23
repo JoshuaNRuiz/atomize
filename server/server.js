@@ -5,47 +5,41 @@ const app = express();
 const path = require('path');
 const bodyParser = require('body-parser');
 const fetch = require('node-fetch');
-const cors = require('cors');
+const qs = require('qs');
 
 app.use(express.static(path.join(__dirname, '../client/build')));
+app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
-app.use(cors());
 
-const port = process.env.PORT;
-
-// API
-
-const requestToken = async (body) => {
+const requestTokens = async (myBody) => {
     const grant_type = "authorization_code";
-    const code = body.code;
-    const redirect_uri = body.redirect_uri;
-    const client_id = body.client_id;
+    const code = myBody.code;
+    const redirect_uri = myBody.redirect_uri;
+    const client_id = myBody.client_id;
     const client_secret = process.env.KEY;
 
-    const url = "https://accounts.spotify.com/api/token";
+    const url = "https://accounts.spotify.com/api/token/";
+
+    const bodyParameters = qs.stringify({
+        grant_type: grant_type,
+        code: code,
+        redirect_uri: redirect_uri,
+        client_id: client_id,
+        client_secret: client_secret
+    });
 
     return fetch(url, {
         method: "POST",
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
         },
-        body: {
-            'grant_type': grant_type,
-            'code': code,
-            'redirect_uri': redirect_uri,
-            'client_id': client_id,
-            'client_secret': client_secret
-        }
+        body: bodyParameters
     })
     .then(response => {
         if (response.ok) {
             return response.json();
         } else {
-            let pokemon = {
-                'name': 'deoxys',
-                'number': '386'
-            }
-            return pokemon;
+            console.log('Error ' + response.status + ":" + response.statusText);
         }
     })
     .then(data => {
@@ -56,17 +50,17 @@ const requestToken = async (body) => {
     });
 }
 
-app.post('/api/spotify-auth', cors(), (req, res) => {
-    const body = req.body
+// ************************ API ************************
 
-    requestToken(body)
+app.post('/api/get-spotify-tokens', (req, res) => {
+    requestTokens(req.body)
     .then(response => {
         res.send(response);
     })
-    
 });
 
-app.listen(port, () => {
-    console.log("server is listening");
-    console.log(path.join(__dirname, '../client/public'));
+// ************************ CORE ************************ 
+
+app.listen(process.env.PORT, () => {
+    console.log(`listening on port ${process.env.PORT}`);
 })
