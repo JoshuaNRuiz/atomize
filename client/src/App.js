@@ -32,7 +32,7 @@ function App() {
         console.log(response);
         return response.json();
       } else {
-        throw new Error(url);
+        throw new Error();
       }
     })
     .then(data => {
@@ -59,7 +59,7 @@ function App() {
     }
   }, [isLoggedIn, code]);
 
-  let container = isLoggedIn ? <Tracker code={code}/> : <Login/>
+  let container = isLoggedIn ? <Tracker accessToken={accessToken} refreshToken={refreshToken}/> : <Login/>
 
   return (
     <div className="App">
