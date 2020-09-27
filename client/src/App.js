@@ -6,9 +6,9 @@ import './App.css'
 
 function App() {
   const [isLoggedIn, setLoginStatus] = useState(false);
+  const [code, setCode] = useState(null);
   const [accessToken, setAccessToken] = useState(null);
   const [refreshToken, setRefreshToken] = useState(null);
-  const [code, setCode] = useState(null);
 
   const hostname = 'http://' + window.location.hostname;
   const baseUrl = hostname.indexOf('localhost') != -1 ? hostname + ':8000' : hostname + '\/';
@@ -20,7 +20,7 @@ function App() {
 
   const requestTokens = () => {
     const url = baseUrl + '/api/get-spotify-tokens';
-    fetch(url, {
+    return fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -29,15 +29,13 @@ function App() {
     })
     .then(response => {
       if (response.ok) {
-        console.log(response);
         return response.json();
       } else {
         throw new Error();
       }
     })
     .then(data => {
-      setAccessToken(data.access_token);
-      setRefreshToken(data.refresh_token);
+      return data;
     })
     .catch(error => {
       alert(error);
@@ -45,17 +43,41 @@ function App() {
   };
 
   useEffect(() => {
-    const parameters = window.location.search;
-    const urlCode = new URLSearchParams(parameters).get('code');
-    const codeIsInParameters = !!urlCode;
-
-    if (!isLoggedIn && codeIsInParameters) {
-      setCode(urlCode);
+    const localLoggedInStatus = localStorage.getItem("isLoggedIn");
+    const localCode = localStorage.getItem("code");
+    if (localLoggedInStatus && !isLoggedIn && localCode) {
       setLoginStatus(true);
-    } 
+    } else if (!isLoggedIn) {
+      const parameters = window.location.search;
+      const urlCode = new URLSearchParams(parameters).get('code');
+      const codeIsInParameters = !!urlCode;
 
-    if (isLoggedIn) {
-      requestTokens();
+      if (codeIsInParameters) {
+        console.log("called");
+        setCode(urlCode);
+        setLoginStatus(true);
+        localStorage.setItem('isLoggedIn', true);
+        localStorage.setItem('code', urlCode);
+      }
+    } else {
+      const localAccessToken = localStorage.getItem("accessToken");
+      const localRefreshToken = localStorage.getItem("refreshToken");
+
+      const localTokensArePresent = localAccessToken && localRefreshToken;
+      const statefulTokensArePresent = accessToken && refreshToken;
+
+      if (localTokensArePresent && !statefulTokensArePresent) {
+        setAccessToken(localAccessToken);
+        setRefreshToken(localRefreshToken);
+      } else if (!localTokensArePresent && !statefulTokensArePresent) {
+        requestTokens()
+        .then(data => {
+          setAccessToken(data.access_token);
+          setRefreshToken(data.refresh_token);
+          localStorage.setItem('accessToken', data.access_token);
+          localStorage.setItem('refreshToken', data.refresh_token);
+        })
+      }
     }
   }, [isLoggedIn, code]);
 
