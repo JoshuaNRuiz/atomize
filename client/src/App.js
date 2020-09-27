@@ -18,7 +18,7 @@ function App() {
     redirect_uri: 'http://localhost:8000/'
   }
 
-  const requestTokens = () => {
+  const requestTokens = async () => {
     const url = baseUrl + '/api/get-spotify-tokens';
     return fetch(url, {
       method: 'POST',
@@ -34,32 +34,36 @@ function App() {
         throw new Error();
       }
     })
-    .then(data => {
-      return data;
-    })
     .catch(error => {
       alert(error);
     });
   };
 
+  // managing users logged in state
   useEffect(() => {
     const localLoggedInStatus = localStorage.getItem("isLoggedIn");
     const localCode = localStorage.getItem("code");
-    if (localLoggedInStatus && !isLoggedIn && localCode) {
+
+    const loggedInLocally = localLoggedInStatus && localCode;
+    if (loggedInLocally && !isLoggedIn) {
       setLoginStatus(true);
-    } else if (!isLoggedIn) {
+    } else if (!loggedInLocally & !isLoggedIn) {
       const parameters = window.location.search;
       const urlCode = new URLSearchParams(parameters).get('code');
       const codeIsInParameters = !!urlCode;
 
       if (codeIsInParameters) {
-        console.log("called");
         setCode(urlCode);
         setLoginStatus(true);
         localStorage.setItem('isLoggedIn', true);
         localStorage.setItem('code', urlCode);
       }
-    } else {
+    }
+  }, [isLoggedIn]);
+
+  // getting and setting the tokens
+  useEffect(() => {
+    if (isLoggedIn) {
       const localAccessToken = localStorage.getItem("accessToken");
       const localRefreshToken = localStorage.getItem("refreshToken");
 
@@ -70,8 +74,7 @@ function App() {
         setAccessToken(localAccessToken);
         setRefreshToken(localRefreshToken);
       } else if (!localTokensArePresent && !statefulTokensArePresent) {
-        requestTokens()
-        .then(data => {
+        requestTokens().then(data => {
           setAccessToken(data.access_token);
           setRefreshToken(data.refresh_token);
           localStorage.setItem('accessToken', data.access_token);
@@ -79,7 +82,7 @@ function App() {
         })
       }
     }
-  }, [isLoggedIn, code]);
+  }, [isLoggedIn])
 
   let container = isLoggedIn ? <Tracker accessToken={accessToken} refreshToken={refreshToken}/> : <Login/>
 

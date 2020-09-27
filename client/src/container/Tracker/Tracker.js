@@ -30,7 +30,6 @@ const Tracker = (props) => {
 
     const handleRefresh = () => {
         let url = `https://api.spotify.com/v1/me/top/tracks?time_range=${timeRange}&limit=${limit}&offset=0`;
-        console.log(props.accessToken);
         fetch(url, {
             method: 'GET',
             headers: {

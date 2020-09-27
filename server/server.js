@@ -11,10 +11,10 @@ app.use(express.static(path.join(__dirname, '../client/build')));
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 
-const requestTokens = async (body) => {
+// this method requires a code received from spotify
+// and a redirect_uri that is specified in the app
+const requestTokens = async (code, redirect_uri) => {
     const grant_type = "authorization_code";
-    const code = body.code;
-    const redirect_uri = body.redirect_uri;
     const client_id = process.env.CLIENT_ID;
     const client_secret = process.env.CLIENT_SECRET;
 
@@ -40,10 +40,8 @@ const requestTokens = async (body) => {
             return response.json();
         } else {
             console.log('Error ' + response.status + ":" + response.statusText);
+            return null;
         }
-    })
-    .then(data => {
-        return data;
     })
     .catch(error => {
         console.log(error);
@@ -53,7 +51,10 @@ const requestTokens = async (body) => {
 // ************************ API ************************
 
 app.post('/api/get-spotify-tokens', (req, res) => {
-    requestTokens(req.body)
+    const code = req.body.code;
+    const redirectUri = req.body.redirect_uri;
+
+    requestTokens(code, redirectUri)
     .then(response => {
         res.send(response);
     })
