@@ -31,7 +31,7 @@ const requestTokens = async (code, redirect_uri) => {
     return fetch(url, {
         method: "POST",
         headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
+            'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: bodyParameters
     })

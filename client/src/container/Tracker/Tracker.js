@@ -41,6 +41,7 @@ const Tracker = (props) => {
         .then(response => {
             if (!response.ok) {
                 alert("Your authentication has expired.");
+                localStorage.clear();
                 throw new Error("Authentication has failed. Please log in again.")
             }
             return response.json();
