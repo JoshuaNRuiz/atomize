@@ -10,16 +10,13 @@ function App() {
   const [accessToken, setAccessToken] = useState(null);
   const [refreshToken, setRefreshToken] = useState(null);
 
-  const hostname = 'http://' + window.location.hostname;
-  const baseUrl = hostname.indexOf('localhost') != -1 ? hostname + ':8000' : hostname + '\/';
-
-  const data = {
-    code: code,
-    redirect_uri: 'http://localhost:8000/'
-  }
-
   const requestTokens = async () => {
-    const url = baseUrl + '/api/get-spotify-tokens';
+    const url = 'http://localhost:8000/api/get-spotify-tokens';
+    const data = {
+      code: code,
+      redirect_uri: 'http://localhost:8000/'
+    }
+
     return fetch(url, {
       method: 'POST',
       headers: {
