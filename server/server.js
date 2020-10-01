@@ -48,20 +48,83 @@ const requestTokens = async (code, redirect_uri) => {
     });
 }
 
+const getTracks = async (accessToken, timeRange, limit, offset) => {
+    let url = 'https://api.spotify.com/v1/me/top/tracks';
+    url += `?time_range=${timeRange}&limit=${limit}&offset=${offset}`;
+    return fetch(url, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + accessToken
+        },
+    })
+    .then (response => {
+        if (response.ok) {
+            console.log('response sent from server');
+            return response.json();
+        } else {
+            console.log('did not get a response from servers');
+            return null;
+        }
+    })
+};
+
+const getTop = async (type, accessToken, timeRange, limit, offset) => {
+    if (type == 'artists' || type == 'tracks') {
+        let url = 'https://api.spotify.com/v1/me/top/';
+        url += `${type}?time_range=${timeRange}&limit=${limit}&offset=${offset}`;
+        return fetch(url, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + accessToken
+            },
+        })
+        .then (response => response.ok ? response.json() : null);
+    }
+};
+
 // ************************ API ************************
 
-app.post('/api/get-spotify-tokens', (req, res) => {
+app.get('/api/get-id', (req, res) => {
+    res.send(process.env.API_ID);
+});
+
+app.post('/api/spotify-helper/get-tokens', (req, res) => {
     const code = req.body.code;
     const redirectUri = req.body.redirect_uri;
 
     requestTokens(code, redirectUri)
-    .then(response => {
-        res.send(response);
+    .then(data => {
+        res.send(data);
     })
 });
 
-app.get('/api/get-id', (req, res) => {
-    res.send(process.env.API_ID);
+// app.post('/api/spotify-helper/top-tracks', (req, res) => {
+//     const accessToken = req.body.access_token
+//     const timeRange = req.body.time_range;
+//     const limit = req.body.limit;
+//     const offset = req.body.offset;
+
+//     getTracks(accessToken, timeRange, limit, offset)
+//     .then(data => {
+//         res.send(data);
+//     })
+// });
+
+app.post('/api/spotify-helper/top-:type', (req, res) => {
+    const type = req.params.type;
+    const accessToken = req.body.access_token
+    const timeRange = req.body.time_range;
+    const limit = req.body.limit;
+    const offset = req.body.offset;
+
+    getTop(type, accessToken, timeRange, limit, offset)
+    .then(data => {
+        res.send(data);
+    })
 });
 
 // ************************ CORE ************************ 

@@ -1,0 +1,43 @@
+import React from 'react';
+import Track from './Track/Track.js';
+import Artist from './Artist/Artist';
+
+import './List.css';
+
+const List = (props) => {
+
+    const type = props.type;
+    const items = props.items;
+
+    const getTrackList = () => {
+        return items.map((item, index) => {
+            let title = item.name;
+            let artist = item.artists[0].name;
+            let album = item.album;
+            let rank = index + 1;
+            let key = title + artist;
+    
+            return <Track key={key} title={title} artists={artist} album={album} rank={rank}/>
+        })
+    };
+
+    const getArtistList = () => {
+        return items.map((item, index) => {
+            let name = item.name;
+            let genres = item.genres;
+            let images = item.images;
+    
+            return <Artist name={name} genres={genres} images={images}/>
+        })
+    };
+
+    const list = type == 'tracks' ? getTrackList() : getArtistList();
+
+    return (
+        <div className='list'>
+            {list}
+        </div>
+    )
+}
+
+export default List;

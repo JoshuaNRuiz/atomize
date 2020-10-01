@@ -11,7 +11,7 @@ function App() {
   const [refreshToken, setRefreshToken] = useState(null);
 
   const requestTokens = async () => {
-    const url = 'http://localhost:8000/api/get-spotify-tokens';
+    const url = 'http://localhost:8000/api/spotify-helper/get-tokens';
     const data = {
       code: code,
       redirect_uri: 'http://localhost:8000/'
