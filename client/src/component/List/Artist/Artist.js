@@ -12,7 +12,7 @@ const Artist = (props) => {
         <div className="artist" >
             <img className='artist-image' src={images[0].url} alt='icon'/>
             <p>{name}</p>
-            <p>{genres[0]}</p>
+            <p>{genres.join(', ')}</p>
         </div>
     );
 }
