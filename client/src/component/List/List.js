@@ -10,15 +10,14 @@ const List = (props) => {
     const items = props.items;
 
     const getTrackList = () => {
-        return items.map((item, index) => {
+        return props.items.map((item, index) => {
             let title = item.name;
             let artist = item.artists[0].name;
             let album = item.album;
             let rank = index + 1;
             let key = title + artist;
-    
             return <Track key={key} title={title} artists={artist} album={album} rank={rank}/>
-        })
+        });
     };
 
     const getArtistList = () => {
@@ -26,12 +25,22 @@ const List = (props) => {
             let name = item.name;
             let genres = item.genres;
             let images = item.images;
-    
             return <Artist name={name} genres={genres} images={images}/>
-        })
+        });
     };
 
-    const list = type == 'tracks' ? getTrackList() : getArtistList();
+    const getList = () => {
+        if (items.length > 0) {
+            if (type == 'tracks' && items[0].type == 'track') {
+                return getTrackList();
+            } else if (type == 'artists' && items[0].type == 'artist') {
+                return getArtistList();
+            }
+        }
+        return null;
+    }
+
+    const list = getList();
 
     return (
         <div className='list'>

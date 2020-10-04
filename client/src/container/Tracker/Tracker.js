@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import Controls from '../../component/Controls/Controls';
 import List from '../../component/List/List';
 import './Tracker.css'
@@ -12,7 +12,6 @@ const Tracker = (props) => {
     const accessToken = props.accessToken;
     const refreshToken = props.refreshToken;
 
-    const [isLoaded, setIsLoaded] = useState(false);
     const [type, setType] = useState(TYPE_DEFAULT);
     const [limit, setLimit] = useState(LIMIT_DEFAULT);
     const [timeRange, setTimeRange] = useState(RANGE_DEFAULT);
@@ -37,7 +36,7 @@ const Tracker = (props) => {
 
     const handleRefresh = () => {
         const url = `http://localhost:8000/api/spotify-helper/top-${type}`;
-        const data = {
+        const serverData = {
             'access_token': accessToken,
             'time_range': timeRange,
             'limit': limit,
@@ -50,17 +49,18 @@ const Tracker = (props) => {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify(serverData)
         })
-        .then(response => response.ok ? response.json() : new Error(response.status))
+        .then(response => {
+            return response.ok ? response.json() : new Error(response.status);
+        })
         .then(data => {
             setItems(data.items);
-            setIsLoaded(true);
         })
-        .catch(error => alert(error))
+        .catch(error => {
+            console.log(error);
+        });
     }
-
-    let list = isLoaded ? <List type={type} items={items}/> : null
 
     return (
         <div className='tracker'>
@@ -70,7 +70,7 @@ const Tracker = (props) => {
                 handleTimeRangeChange={handleTimeRangeChange}
                 handleLimitChange={handleLimitChange}
                 handleRefresh={handleRefresh}/>
-            {list}
+            <List type={type} items={items}/>
         </div>
     )
 }

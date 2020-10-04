@@ -24,16 +24,8 @@ function App() {
       },
       body: JSON.stringify(data)
     })
-    .then(response => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        throw new Error();
-      }
-    })
-    .catch(error => {
-      alert(error);
-    });
+    .then(response => response.ok ? response.json() : new Error(response.statusText))
+    .catch(error => alert(error));
   };
 
   // managing users logged in state
@@ -79,6 +71,7 @@ function App() {
         })
       }
     }
+    
   }, [isLoggedIn])
 
   let container = isLoggedIn ? <Tracker accessToken={accessToken} refreshToken={refreshToken}/> : <Login/>
