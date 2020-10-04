@@ -1,5 +1,7 @@
 import React from 'react';
 
+import './Artist.css';
+
 const Artist = (props) => {
 
     const name = props.name;
