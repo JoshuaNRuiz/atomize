@@ -62,6 +62,10 @@ const Tracker = (props) => {
         });
     }
 
+    useEffect(() => {
+        
+    }, [])
+
     return (
         <div className='tracker'>
             <Controls 

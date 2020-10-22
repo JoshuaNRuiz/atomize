@@ -10,7 +10,7 @@ const Controls = (props) => {
         <div className='controls'>
             <select
                 id='type-input'
-                className='type-input'
+                className='uk-select uk-form-width-small'
                 name='range'
                 onChange={props.handleTypeChange}>
                 <option value='tracks'>Tracks</option>
@@ -18,7 +18,7 @@ const Controls = (props) => {
             </select>
             <select
                 id='time-range-input'
-                className='time-range-input'
+                className='uk-select uk-form-width-small'
                 name='range'
                 onChange={props.handleTimeRangeChange}>
                 <option value='long_term'>All time</option>
@@ -28,13 +28,13 @@ const Controls = (props) => {
             <input
                 type='number'
                 id='limit-input'
-                className='limit-input'
+                className='limit-input uk-textarea uk-form-width-small'
                 min={MIN_LIMIT}
                 max={MAX_LIMIT}
                 value={props.limit}
                 onClick={props.refresh}
                 onChange={props.handleLimitChange}/>
-            <button className='refresh-button' onClick={props.handleRefresh}>Refresh</button>
+            <button className='uk-button uk-button-primary uk-button-small' onClick={props.handleRefresh}>Refresh</button>
         </div>
     )
 }

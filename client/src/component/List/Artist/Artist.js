@@ -8,11 +8,12 @@ const Artist = (props) => {
     const genres = props.genres;
     const images = props.images;
 
+    const genreList = genres.join(', ');
+
     return (
         <div className="artist" >
             <img className='artist-image' src={images[0].url} alt='icon'/>
             <p>{name}</p>
-            <p>{genres.join(', ')}</p>
         </div>
     );
 }
