@@ -4,6 +4,7 @@ The app can be interacted with live at <a href="joshuanruiz.com/projects/spotify
 
 <h3>Built with:</h3>
 <p>ReactJS<br>
+  ExpressJS<br>
 Spotify API</p>
 
 <h3>Project Status:</h3>
