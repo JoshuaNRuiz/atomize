@@ -29,18 +29,15 @@ function App() {
 
   // managing users logged in state
   useEffect(() => {
-    console.log("useEffect called");
     const localAccessToken = localStorage.getItem("accessToken");
     const localRefreshToken = localStorage.getItem("refreshToken");
     const localTokensArePresent = localAccessToken != null && localRefreshToken != null;
-    console.log("lctap:" + localTokensArePresent);
 
     const localAccessTokenExpirationTime = localStorage.getItem('accessTokenExpirationTime')
 
-    const userPreviouslyLoggedIn = localAccessTokenExpirationTime != null && localTokensArePresent;
+    const userPreviouslyLoggedIn = (localAccessTokenExpirationTime != null && localTokensArePresent);
     if (userPreviouslyLoggedIn) {
-      console.log("previous");
-      const currentTime = Date.now() / 1000; // we are checking in seconds
+      const currentTime = Date.now() / 1000;
       const authExpired = currentTime > localAccessTokenExpirationTime;
 
       if (authExpired) {
@@ -50,7 +47,7 @@ function App() {
           if (!isLoggedIn) setLoginStatus(true);
           const statefulTokensArePresent = accessToken != null && refreshToken != null
           if (!statefulTokensArePresent) {
-            setAccessToken(localAccessTokenExpirationTime);
+            setAccessToken(localAccessToken);
             setRefreshToken(localRefreshToken);
           }
       }
@@ -59,10 +56,8 @@ function App() {
       const code = new URLSearchParams(parameters).get('code');
       const codeIsInParameters = code != null;
 
-      if (codeIsInParameters) {
+      if (codeIsInParameters && !isLoggedIn) {
         requestTokens(code).then(data => {
-          console.log(code);
-          console.log(data);
           setAccessToken(data.access_token);
           setRefreshToken(data.refresh_token);
           localStorage.setItem('accessToken', data.access_token);
