@@ -27,6 +27,19 @@ function App() {
     .catch(error => alert(error));
   }
 
+  const renewAccessToken = async () => {
+    const url = 'http://localhost:8000/api/spotify-helper/renew-auth-token';
+    const data = {
+      refresh_token: refreshToken
+    }
+
+    return fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(data)
+    })
+    .then(response => response.json());
+  }
+
   // managing users logged in state
   useEffect(() => {
     const localAccessToken = localStorage.getItem("accessToken");
@@ -34,14 +47,19 @@ function App() {
     const localTokensArePresent = localAccessToken != null && localRefreshToken != null;
 
     const localAccessTokenExpirationTime = localStorage.getItem('accessTokenExpirationTime')
-
     const userPreviouslyLoggedIn = (localAccessTokenExpirationTime != null && localTokensArePresent);
+
     if (userPreviouslyLoggedIn) {
       const currentTime = Date.now() / 1000;
       const authExpired = currentTime > localAccessTokenExpirationTime;
 
       if (authExpired) {
-        // use the refresh token
+        // renewAccessToken()
+        // .then(data => {
+        //   setAccessToken(data.access_token);
+        //   const accessTokenExpirationTime = Math.floor((Date.now() / 1000) + 3600);
+        //   localStorage.setItem('accessTokenExpirationTime', accessTokenExpirationTime);
+        // })
         console.log("auth expired");
       } else {
           if (!isLoggedIn) setLoginStatus(true);
@@ -58,6 +76,7 @@ function App() {
 
       if (codeIsInParameters && !isLoggedIn) {
         requestTokens(code).then(data => {
+          console.log(data.access_token);
           setAccessToken(data.access_token);
           setRefreshToken(data.refresh_token);
           localStorage.setItem('accessToken', data.access_token);
