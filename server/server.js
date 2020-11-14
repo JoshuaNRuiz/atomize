@@ -27,8 +27,6 @@ const requestTokens = async (code, redirect_uri) => {
         client_secret: client_secret
     });
 
-    console.log(bodyParameters);
-
     return fetch(url, {
         method: 'POST',
         headers: {
@@ -56,7 +54,7 @@ const renewAccessToken = async (refreshToken) => {
 
     const client_id = process.env.CLIENT_ID;
     const client_secret = process.env.CLIENT_SECRET;
-    const authorization = qs.stringify(client_id + ':' + client+client_secret);
+    const authorization = qs.stringify(client_id + ':' + client + client_secret);
 
     return fetch(url, {
         method: 'POST',
