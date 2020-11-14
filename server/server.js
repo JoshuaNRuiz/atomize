@@ -6,7 +6,6 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const fetch = require('node-fetch');
 const qs = require('qs');
-const e = require('express');
 
 app.use(express.static(path.join(__dirname, '../client/build')));
 app.use(bodyParser.urlencoded({extended:true}));
