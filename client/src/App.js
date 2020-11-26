@@ -14,7 +14,7 @@ function App() {
     const data = {
       code: code,
       redirect_uri: 'http://localhost:8000/'
-    }
+    };
 
     return fetch(url, {
       method: 'POST',
@@ -28,55 +28,56 @@ function App() {
   }
 
   const renewAccessToken = async () => {
-    const url = 'http://localhost:8000/api/spotify-helper/renew-auth-token';
+    const url = 'http://localhost:8000/api/spotify-helper/renew-access-token';
     const data = {
       refresh_token: refreshToken
-    }
+    };
 
     return fetch(url, {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify(data)
     })
-    .then(response => response.json());
+    .then(response => {
+      return response.json();
+    })
+    .catch(error => {
+      console.log('ERROR: ' + error);
+    })
   }
 
   // managing users logged in state
   useEffect(() => {
-    const localAccessToken = localStorage.getItem("accessToken");
-    const localRefreshToken = localStorage.getItem("refreshToken");
+    const localAccessToken = localStorage.getItem('accessToken');
+    const localRefreshToken = localStorage.getItem('refreshToken');
     const localTokensArePresent = localAccessToken != null && localRefreshToken != null;
-
-    const localAccessTokenExpirationTime = localStorage.getItem('accessTokenExpirationTime')
-    const userPreviouslyLoggedIn = (localAccessTokenExpirationTime != null && localTokensArePresent);
+    const localAccessTokenExpirationTime = localStorage.getItem('accessTokenExpirationTime');
+    const userPreviouslyLoggedIn = (localAccessTokenExpirationTime !== null && localTokensArePresent);
 
     if (userPreviouslyLoggedIn) {
-      const currentTime = Date.now() / 1000;
-      const authExpired = currentTime > localAccessTokenExpirationTime;
+      if (!isLoggedIn) {
+        setLoginStatus(true);
 
-      if (authExpired) {
-        // renewAccessToken()
-        // .then(data => {
-        //   setAccessToken(data.access_token);
-        //   const accessTokenExpirationTime = Math.floor((Date.now() / 1000) + 3600);
-        //   localStorage.setItem('accessTokenExpirationTime', accessTokenExpirationTime);
-        // })
-        console.log("auth expired");
-      } else {
-          if (!isLoggedIn) setLoginStatus(true);
-          const statefulTokensArePresent = accessToken != null && refreshToken != null
-          if (!statefulTokensArePresent) {
-            setAccessToken(localAccessToken);
-            setRefreshToken(localRefreshToken);
-          }
+        const statefulTokensArePresent = accessToken !== null && refreshToken !== null;
+
+        if (!statefulTokensArePresent) {
+          setAccessToken(localAccessToken);
+          setRefreshToken(localRefreshToken);
+        }
       }
-    } else {
+    } else { // user has no history of logging in
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      localStorage.removeItem('accessTokenExpirationTime');
+
       const parameters = window.location.search;
       const code = new URLSearchParams(parameters).get('code');
       const codeIsInParameters = code != null;
 
       if (codeIsInParameters && !isLoggedIn) {
         requestTokens(code).then(data => {
-          console.log(data.access_token);
           setAccessToken(data.access_token);
           setRefreshToken(data.refresh_token);
           localStorage.setItem('accessToken', data.access_token);
@@ -89,6 +90,29 @@ function App() {
       }
     }
   }, [isLoggedIn]);
+
+  // manage the expired access token state
+  useEffect(() => {
+    if (isLoggedIn) {
+      const currentTime = Date.now() / 1000;
+      const localAccessTokenExpirationTime = localStorage.getItem('accessTokenExpirationTime');
+      const authExpired = currentTime > localAccessTokenExpirationTime;
+
+      const localRefreshToken = localStorage.getItem('refreshToken');
+
+      if (authExpired && localRefreshToken) {
+        renewAccessToken()
+          .then(data => {
+            setAccessToken(data.access_token);
+            const accessTokenExpirationTime = Math.floor((Date.now() / 1000) + 3600);
+            localStorage.setItem('accessTokenExpirationTime', accessTokenExpirationTime);
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      }
+    }
+  })
 
   let container = isLoggedIn ? <Tracker accessToken={accessToken} refreshToken={refreshToken}/> : <Login/>
 
