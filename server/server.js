@@ -11,30 +11,73 @@ app.use(express.static(path.join(__dirname, '../client/build')));
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 
-const requestTokens = async (code, redirect_uri) => {
-    const grant_type = "authorization_code";
-    const client_id = process.env.CLIENT_ID;
-    const client_secret = process.env.CLIENT_SECRET;
+const CLIENT_ID = process.env.CLIENT_ID;
+const CLIENT_SECRET = process.env.CLIENT_SECRET;
 
-    const url = "https://accounts.spotify.com/api/token/";
+const requestTokens = async (code, redirect_uri) => {
+    const grant_type = 'authorization_code';
+    const authorization = Buffer.from(CLIENT_ID + ':' + CLIENT_SECRET).toString('base64');
+
+    const url = "https://accounts.spotify.com/api/token";
 
     const bodyParameters = qs.stringify({
         grant_type: grant_type,
         code: code,
         redirect_uri: redirect_uri,
-        client_id: client_id,
-        client_secret: client_secret
     });
 
     return fetch(url, {
-        method: "POST",
+        method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
+            'Authorization': 'Basic ' + authorization
         },
         body: bodyParameters
     })
-    .then(response => response.ok ? response.json() : new Error(response.status))
-    .catch(error => console.log(error));
+    .then(response => {
+        if (response.ok) {
+            return response.json()
+        } else {
+            throw new Error(response.status);
+        }
+    })
+    .catch(error => {
+        console.log(error)
+    });
+}
+
+const renewAccessToken = async (refreshToken) => {
+    const url = 'https://accounts.spotify.com/api/token';
+
+    const authorization = Buffer.from(CLIENT_ID + ':' + client_secret).toString('base64');
+
+    const bodyParameters = qs.stringify({
+        grant_type: 'refresh_token',
+        refresh_token: refreshToken
+    });
+
+    return fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Authorization': 'Basic ' + authorization
+        },
+        body: bodyParameters
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        } else{
+            console.log('Error:' + response.status);
+            return {
+                error: true,
+
+            }
+        } 
+    })
+    .catch(error => {
+        console.log(error);
+    });
 }
 
 const getTop = async (type, accessToken, timeRange, limit, offset) => {
@@ -49,7 +92,7 @@ const getTop = async (type, accessToken, timeRange, limit, offset) => {
                 'Authorization': 'Bearer ' + accessToken
             },
         })
-        .then (response => response.ok ? response.json() : new Error(response.status))
+        .then (response => response.ok ? response.json() : {})
         .catch(error => console.log(error));
     }
 };
@@ -65,6 +108,15 @@ app.post('/api/spotify-helper/get-tokens', (req, res) => {
     const redirectUri = req.body.redirect_uri;
 
     requestTokens(code, redirectUri)
+    .then(data => {
+        res.send(data);
+    })
+});
+
+app.post('/api/spotify-helper/renew-access-token', (req, res) => {
+    const refreshToken = req.body.refresh_token;
+
+    renewAccessToken(refreshToken)
     .then(data => {
         res.send(data);
     })
