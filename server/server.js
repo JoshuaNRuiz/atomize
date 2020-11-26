@@ -49,7 +49,7 @@ const requestTokens = async (code, redirect_uri) => {
 const renewAccessToken = async (refreshToken) => {
     const url = 'https://accounts.spotify.com/api/token';
 
-    const authorization = Buffer.from(CLIENT_ID + ':' + client_secret).toString('base64');
+    const authorization = Buffer.from(CLIENT_ID + ':' + CLIENT_SECRET).toString('base64');
 
     const bodyParameters = qs.stringify({
         grant_type: 'refresh_token',
@@ -136,6 +136,11 @@ app.post('/api/spotify-helper/top-:type', (req, res) => {
 });
 
 // ************************ CORE ************************ 
+
+// enable react-router to control the routes
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/build/index.html'));
+})
 
 app.listen(process.env.PORT, () => {
     console.log(`listening on port ${process.env.PORT}`);

@@ -1,6 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import Tracker from './container/Tracker/Tracker'
-import Login from './container/Login/Login'
+import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+
+import Login from './container/Login/Login';
+import Gateway from './component/Gateway/Gateway';
+import Analyzer from './container/Analyzer/Analyzer';
+import Tracker from './container/Tracker/Tracker';
+import Explorer from './container/Explorer/Explorer';
+
 
 import './App.css'
 
@@ -114,12 +120,21 @@ function App() {
     }
   })
 
-  let container = isLoggedIn ? <Tracker accessToken={accessToken} refreshToken={refreshToken}/> : <Login/>
+  let container = isLoggedIn ? Gateway : Login;
+  const tracker = props => <Tracker {...props} accessToken={accessToken} refreshToken={refreshToken}/>
 
   return (
-    <div className="App">
-      {container}
-    </div>
+    <Router>
+      <div className="App">
+        <Switch>
+          <Route path='/' exact component={container} />
+          <Route path='/music-analysis' render={Analyzer} />
+          <Route path='/top' component={tracker} />
+          <Route path='/explorer' component={Explorer} />
+        </Switch>
+      </div>
+    </Router>
+    
   );
 }
 
