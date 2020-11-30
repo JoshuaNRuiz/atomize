@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 
+import Navbar from './component/Navbar/Navbar';
 import Login from './container/Login/Login';
 import Gateway from './component/Gateway/Gateway';
 import Analyzer from './container/Analyzer/Analyzer';
@@ -126,9 +127,10 @@ function App() {
   return (
     <Router>
       <div className="App">
+        <Navbar />
         <Switch>
           <Route path='/' exact component={container} />
-          <Route path='/music-analysis' render={Analyzer} />
+          <Route path='/analyze' render={Analyzer} />
           <Route path='/top' component={tracker} />
           <Route path='/explorer' component={Explorer} />
         </Switch>

@@ -5,7 +5,7 @@ const Gateway = (props) => {
 
     return (
         <div className='gateway'>
-            <Link to='/music-analysis'> 
+            <Link to='/analyze'> 
                 <button>Music Analysis</button> 
             </Link>
 
