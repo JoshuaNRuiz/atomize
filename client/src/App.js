@@ -120,7 +120,7 @@ function App() {
           });
       }
     }
-  },[])
+  })
 
   let container = isLoggedIn ? Gateway : Login;
   const tracker = props => <Tracker {...props} accessToken={accessToken} refreshToken={refreshToken}/>
