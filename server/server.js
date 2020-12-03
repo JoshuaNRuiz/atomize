@@ -15,22 +15,6 @@ app.use(bodyParser.json());
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 
-const getPlaylists = async (userId, accessToken) => {
-    const url = `https://api.spotify.com/v1/users/${userId}/playlists`;
-
-    return fetch(url, {
-        method: 'GET',
-        headers: {
-            'Authorization': 'Bearer ' + accessToken
-        }
-    })
-    .then(response => response.ok ? response.json : new Error(response.status))
-    .catch(error => {
-        console.log(error);
-        return error;
-    })
-}
-
 // ************************ API ************************
 
 app.get('/api/get-id', (req, res) => {
@@ -125,7 +109,7 @@ const renewAccessToken = async (refreshToken) => {
     .catch(error => {
         console.log(error);
     });
-}
+};
 
 // ************************ GETTING TOP TRACKS/ARTISTS ************************ 
 
@@ -157,6 +141,28 @@ const getTop = async (type, accessToken, timeRange, limit, offset) => {
     }
 };
 
+// ************************ GETTING USER PLAYLISTS ************************ 
+
+app.post('/api/spotify-helper/user-playlists', (req, res) => {
+    const accessToken = req.body.access_token;
+
+    getPlaylists(accessToken)
+    .then(data => res.send(data));
+});
+
+const getPlaylists = async (accessToken) => {
+    const url = 'https://api.spotify.com/v1/me/playlists';
+    try {
+        const response = await axios.get(url, {
+            headers: {
+                'Authorization': 'Bearer ' + accessToken
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 // ************************ CORE ************************ 
 
