@@ -9,7 +9,7 @@ const Tracker = (props) => {
     const LIMIT_DEFAULT = 10;
     const RANGE_DEFAULT = 'long_term';
 
-    const accessToken = props.accessToken;
+    const accessToken = props.accessToken || localStorage.getItem('accessToken');
 
     const [type, setType] = useState(TYPE_DEFAULT);
     const [limit, setLimit] = useState(LIMIT_DEFAULT);
@@ -62,7 +62,7 @@ const Tracker = (props) => {
     }
 
     useEffect(() => {
-        
+        handleRefresh();
     }, [])
 
     return (
