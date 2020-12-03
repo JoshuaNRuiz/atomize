@@ -123,7 +123,8 @@ function App() {
   })
 
   let container = isLoggedIn ? Gateway : Login;
-  const tracker = props => <Tracker {...props} accessToken={accessToken} refreshToken={refreshToken}/>
+  const tracker = () => <Tracker accessToken={accessToken}/>
+  const analyzer = () => <Analyzer accessToken={accessToken}/>
 
   return (
     <Router>
@@ -131,7 +132,7 @@ function App() {
         {isLoggedIn ? <Navbar /> : null}
         <Switch>
           <Route path='/' exact component={container} />
-          <Route path='/analyze' render={Analyzer} />
+          <Route path='/analyze' render={analyzer} />
           <Route path='/top' component={tracker} />
           <Route path='/explorer' component={Explorer} />
         </Switch>
