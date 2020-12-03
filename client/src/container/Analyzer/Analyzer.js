@@ -29,13 +29,14 @@ const Analyzer = (props) => {
     }
 
     const generatePlaylists = () => {
-        const listOfPlaylists = playlists.map((playlist, index) => {
-            const title = playlist.title;
-            const image = playlist.images[0];
-            return <Playlist title={title} image={image} />
-        })
-        return listOfPlaylists;
+        return playlists.map((playlist, index) => {
+            let name = playlist.name;
+            // let image = playlist.images[0].url;
+            return <Playlist name={name}/>
+        });
     }
+
+    const pl = generatePlaylists();
 
     useEffect(() => {
         console.log("called")
@@ -47,6 +48,7 @@ const Analyzer = (props) => {
         <div>
             ANALYZER
             <button onClick={getPlaylists}>CLICK ME</button>
+            {pl}
         </div>
     )
 }
