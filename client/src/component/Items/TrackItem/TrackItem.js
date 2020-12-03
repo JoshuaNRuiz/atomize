@@ -1,8 +1,8 @@
 import React from 'react';
 
-import './Track.css';
+import './TrackItem.css';
 
-const Track = (props) => {
+const TrackItem = (props) => {
 
     const title = props.title;
     const artistName = props.artists;
@@ -22,4 +22,4 @@ const Track = (props) => {
     );
 }
 
-export default Track;
+export default TrackItem;
