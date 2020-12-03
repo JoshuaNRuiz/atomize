@@ -121,11 +121,15 @@ const getTop = async (type, accessToken, timeRange, limit, offset) => {
 
 // ************************ GETTING USER PLAYLISTS ************************ 
 
-app.post('/api/spotify-helper/user-playlists', (req, res) => {
+app.post('/api/spotify-helper/user-playlists', async (req, res) => {
     const accessToken = req.body.access_token;
-
-    getPlaylists(accessToken)
-    .then(data => res.send(data));
+    try {
+        const data = await getPlaylists(accessToken);
+        res.send(data);
+    } catch (error) {
+        console.log(error);
+        res.send({});
+    }
 });
 
 const getPlaylists = async (accessToken) => {
