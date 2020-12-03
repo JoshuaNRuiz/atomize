@@ -19,7 +19,7 @@ const Analyzer = (props) => {
         try {
             const response = await axios.post(url, {
                 access_token: accessToken
-        }   )
+            })
             console.log(response.data);
             setPlaylists(response.data.items);
             setIsLoaded(true);
@@ -31,8 +31,8 @@ const Analyzer = (props) => {
     const generatePlaylists = () => {
         return playlists.map((playlist, index) => {
             let name = playlist.name;
-            // let image = playlist.images[0].url;
-            return <Playlist name={name}/>
+            let imageUrl = !!playlist.images[0] ? playlist.images[0].url : null;
+            return <Playlist name={name} imageUrl={imageUrl}/>
         });
     }
 

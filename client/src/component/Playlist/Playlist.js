@@ -4,12 +4,12 @@ import './Playlist.css';
 const Playlist = (props) => {
 
     const name = props.name;
+    const imageUrl = props.imageUrl;
 
     return (
         <div className='playlist'>
-            <div>
-                {name}
-            </div>
+            {name}
+            <img src={imageUrl}></img>
         </div>
     )
 };
