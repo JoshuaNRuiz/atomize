@@ -1,11 +1,11 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
+import {Link, Redirect} from 'react-router-dom';
 
 const Gateway = (props) => {
 
     return (
         <div className='gateway'>
-            <Link to='/music-analysis'> 
+            <Link to='/analyze'> 
                 <button>Music Analysis</button> 
             </Link>
 

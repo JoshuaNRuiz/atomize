@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom';
 
+import Navbar from './component/Navbar/Navbar';
 import Login from './container/Login/Login';
 import Gateway from './component/Gateway/Gateway';
 import Analyzer from './container/Analyzer/Analyzer';
@@ -14,6 +15,7 @@ function App() {
   const [isLoggedIn, setLoginStatus] = useState(false);
   const [accessToken, setAccessToken] = useState(null);
   const [refreshToken, setRefreshToken] = useState(null);
+  const [isAccessTokenValid, setAccessTokenStatus] = useState(false);
 
   const requestTokens = async (code) => {
     const url = 'http://localhost:8000/api/spotify-helper/get-tokens';
@@ -95,18 +97,18 @@ function App() {
         setLoginStatus(true);
       }
     }
-  }, [isLoggedIn]);
+  }, []);
 
   // manage the expired access token state
   useEffect(() => {
     if (isLoggedIn) {
       const currentTime = Date.now() / 1000;
-      const localAccessTokenExpirationTime = localStorage.getItem('accessTokenExpirationTime');
-      const authExpired = currentTime > localAccessTokenExpirationTime;
+      const accessTokenExpirationTime = localStorage.getItem('accessTokenExpirationTime');
+      const accessTokenExpired = currentTime > accessTokenExpirationTime;
 
       const localRefreshToken = localStorage.getItem('refreshToken');
 
-      if (authExpired && localRefreshToken) {
+      if (accessTokenExpired && !!localRefreshToken) {
         renewAccessToken()
           .then(data => {
             setAccessToken(data.access_token);
@@ -118,7 +120,7 @@ function App() {
           });
       }
     }
-  })
+  },[])
 
   let container = isLoggedIn ? Gateway : Login;
   const tracker = props => <Tracker {...props} accessToken={accessToken} refreshToken={refreshToken}/>
@@ -126,9 +128,10 @@ function App() {
   return (
     <Router>
       <div className="App">
+        {isLoggedIn ? <Navbar /> : null}
         <Switch>
           <Route path='/' exact component={container} />
-          <Route path='/music-analysis' render={Analyzer} />
+          <Route path='/analyze' render={Analyzer} />
           <Route path='/top' component={tracker} />
           <Route path='/explorer' component={Explorer} />
         </Switch>
