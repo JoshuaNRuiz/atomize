@@ -144,46 +144,19 @@ const getPlaylists = async (accessToken) => {
 
 // ************************ GETTING TRACK INFO ************************ 
 
-app.post('/api/spotify-helper/tracks', async (req, res) => {
+app.post('/api/spotify-helper/tracks/:infotype', async (req, res) => {
+    const infotype = req.params.infotype;
     const accessToken = req.body.access_token;
-    let payload = null;
-    let method = null;
+    const ids = req.body.ids;
 
-    if (!!req.body.id) {
-        payload = req.body.id;
-        method = getTrack;
-    } else if (!!req.body.ids) {
-        payload = req.body.ids;
-        method = getMultipleTracks;
-    } else {
-        throw new Error('the id\'s were not specified')
+    let url = 'https://api.spotify.com/v1/'
+
+    if (infotype === 'general') {
+        url += 'tracks';
+    } else if (infotype === 'audio-features') {
+        url += 'audio-features';
     }
 
-    try {
-        const data = await method(accessToken, payload);
-        res.send(data);
-    } catch (error) {
-        console.log(erorr);
-        res.send({});
-    }
-});
-
-const getTrack = async (accessToken, id) => {
-    const url = `https://api.spotify.com/v1/tracks/${id}`;
-    try {
-        const response = await axios.get(url, {
-            headers: {
-                'Authorization': 'Bearer ' + accessToken
-            }
-        })
-        return response.data;
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-const getMultipleTracks = async (accessToken, ids) => {
-    const url = `https://api.spotify.com/v1/tracks`;
     try {
         const response = await axios.get(url, {
             headers: {
@@ -192,12 +165,40 @@ const getMultipleTracks = async (accessToken, ids) => {
             params: {
                 ids: ids
             }
-        })
-        return response.data;
+        });
+        res.send(response.data);
     } catch (error) {
         console.log(error);
+        res.send({});
     }
-}
+});
+
+app.post('/api/spotify-helper/tracks/:infotype/:id', async (req, res) => {
+    const infotype = req.params.infotype;
+    const id = req.params.id;
+    const accessToken = req.body.access_token;
+
+    let url = 'https://api.spotify.com/v1/'
+
+    if (infotype === 'general') {
+        url += `tracks/${id}`;
+    } else if (infotype === 'audio-features') {
+        url += `audio-features/${id}`;
+    }
+
+    try {
+        const response = await axios.get(url, {
+            headers: {
+                'Authorization': 'Bearer ' + accessToken
+            }
+        });
+        res.send(response.data);
+    } catch (error) {
+        console.log(error);
+        res.send({});
+    }
+});
+
 
 // ************************ CORE ************************ 
 
