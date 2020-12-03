@@ -184,6 +184,8 @@ app.post('/api/spotify-helper/tracks/:infotype/:id', async (req, res) => {
         url += `tracks/${id}`;
     } else if (infotype === 'audio-features') {
         url += `audio-features/${id}`;
+    } else if (infotype === 'audio-analysis') {
+        url += `audio-analysis/${id}`
     }
 
     try {
