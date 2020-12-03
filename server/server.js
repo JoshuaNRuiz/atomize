@@ -28,41 +28,32 @@ app.post('/api/spotify-helper/get-tokens', (req, res) => {
     const redirectUri = req.body.redirect_uri;
 
     requestTokens(code, redirectUri)
-    .then(data => {
-        res.send(data);
-    })
+    .then(data => res.send(data))
 });
 
 const requestTokens = async (code, redirect_uri) => {
-    const grant_type = 'authorization_code';
-    const authorization = Buffer.from(CLIENT_ID + ':' + CLIENT_SECRET).toString('base64');
-
     const url = "https://accounts.spotify.com/api/token";
+    const authorization = Buffer.from(CLIENT_ID + ':' + CLIENT_SECRET).toString('base64');
+    const grant_type = 'authorization_code';
+    const data = {
+        'grant_type': grant_type,
+        'code': code,
+        'redirect_uri': redirect_uri,
+    };
 
-    const bodyParameters = qs.stringify({
-        grant_type: grant_type,
-        code: code,
-        redirect_uri: redirect_uri,
-    });
-
-    return fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Authorization': 'Basic ' + authorization
-        },
-        body: bodyParameters
-    })
-    .then(response => {
-        if (response.ok) {
-            return response.json()
-        } else {
-            throw new Error(response.status);
-        }
-    })
-    .catch(error => {
-        console.log(error)
-    });
+    try {
+        const response = await axios(url, {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/x-www-form-urlencoded',
+                'Authorization': 'Basic ' + authorization
+            },
+            data: qs.stringify(data)
+        });
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 
@@ -72,43 +63,30 @@ app.post('/api/spotify-helper/renew-access-token', (req, res) => {
     const refreshToken = req.body.refresh_token;
 
     renewAccessToken(refreshToken)
-    .then(data => {
-        res.send(data);
-    })
+    .then(data => res.send(data));
 });
 
 const renewAccessToken = async (refreshToken) => {
     const url = 'https://accounts.spotify.com/api/token';
-
     const authorization = Buffer.from(CLIENT_ID + ':' + CLIENT_SECRET).toString('base64');
+    const data = {
+        'grant_type': 'refresh_token',
+        'refresh_token': refreshToken
+    };
 
-    const bodyParameters = qs.stringify({
-        grant_type: 'refresh_token',
-        refresh_token: refreshToken
-    });
-
-    return fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Authorization': 'Basic ' + authorization
-        },
-        body: bodyParameters
-    })
-    .then(response => {
-        if (response.ok) {
-            return response.json();
-        } else{
-            console.log('Error:' + response.status);
-            return {
-                error: true,
-
-            }
-        } 
-    })
-    .catch(error => {
+    try {
+        const response = await axios(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Authorization': 'Basic ' + authorization
+            },
+            data: qs.stringify(data)
+        });
+        return response.data;
+    } catch (error) {
         console.log(error);
-    });
+    }
 };
 
 // ************************ GETTING TOP TRACKS/ARTISTS ************************ 
