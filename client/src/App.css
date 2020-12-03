@@ -3,9 +3,11 @@ html {
 }
 
 .App {
-  text-align: center;
   width: 100vw;
   height: 100vh;
+  max-width: 960px;
+  margin: auto;
+  text-align: center;
   font-family: 'Rubik', sans-serif;
 }
 
