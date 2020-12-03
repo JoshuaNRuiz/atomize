@@ -10,7 +10,6 @@ const Tracker = (props) => {
     const RANGE_DEFAULT = 'long_term';
 
     const accessToken = props.accessToken;
-    const refreshToken = props.refreshToken;
 
     const [type, setType] = useState(TYPE_DEFAULT);
     const [limit, setLimit] = useState(LIMIT_DEFAULT);

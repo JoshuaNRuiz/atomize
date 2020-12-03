@@ -138,6 +138,9 @@ const getPlaylists = async (accessToken) => {
         const response = await axios.get(url, {
             headers: {
                 'Authorization': 'Bearer ' + accessToken
+            },
+            params: {
+                limit: 50
             }
         });
         return response.data;
