@@ -7,7 +7,7 @@ const Navbar = (props) => {
 
     return (
         <nav className='navbar'>
-            <h4 className='logo'>APOLLO</h4>
+            <h4 className='logo'>atomize</h4>
             <ul>
                <li><Link to='/analyze' className='link-item'>Analyze</Link></li>
                 <li><Link to='/top' className='link-item'>Top</Link></li>
