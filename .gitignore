@@ -2,6 +2,7 @@
 
 # dependencies
 client/node_modules
+client/package-lock.json
 client/build
 client/n.pnp
 client/n.pnp.js
@@ -24,3 +25,4 @@ client/nnpm-debug.log*
 # SERVER FILES
 server/node_modules
 server/.env
+server/package-lock.json

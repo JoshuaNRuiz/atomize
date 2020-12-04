@@ -11,7 +11,7 @@ const Analyzer = (props) => {
     const [isSearch, setIsSearch] = useState(false);
     const [items, setItems] = useState([]);
     const [searchItems, setSearchItems] = useState([]);
-    const [currentPlaylist, setCurrentPlaylist] = useState(null);
+    const [tracks, setTracks] = useState([]);
 
     const getPlaylists = async () => {
         const url = 'http://localhost:8000/api/spotify-helper/user-playlists';
@@ -19,7 +19,6 @@ const Analyzer = (props) => {
             const response = await axios.post(url, {
                 access_token: accessToken
             })
-            console.log(response.data);
             let result = response.data.items;
             result.sort((a,b) => {
                 let nameA = a.name.toLowerCase();
@@ -27,7 +26,7 @@ const Analyzer = (props) => {
                 if (nameA < nameB) return -1;
                 if (nameA > nameB) return 1;
                 return 0;
-            })
+            });
             console.log(result);
             setItems(result);
             setIsLoaded(true);
