@@ -1,8 +1,8 @@
 import React from 'react';
 
-import './Artist.css';
+import './ArtistItem.css';
 
-const Artist = (props) => {
+const ArtistItem = (props) => {
 
     const name = props.name;
     const genres = props.genres;
@@ -18,4 +18,4 @@ const Artist = (props) => {
     );
 }
 
-export default Artist;
+export default ArtistItem;
