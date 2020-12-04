@@ -56,7 +56,6 @@ const requestTokens = async (code, redirect_uri) => {
     }
 }
 
-
 // ************************ RENEWING ACCESS TOKENS ************************
 
 app.post('/api/spotify-helper/renew-access-token', (req, res) => {

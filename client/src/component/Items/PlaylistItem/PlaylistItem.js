@@ -3,11 +3,14 @@ import './PlaylistItem.css';
 
 const PlaylistItem = (props) => {
 
-    const name = props.name;
+    const {name, trackCount} = props;
 
     return (
         <div className='playlist'>
-            {name}
+            <p className='title'>{name}</p>
+            <div className='count-container'>
+                <p className='track-count'>{trackCount}</p>
+            </div>
         </div>
     )
 };

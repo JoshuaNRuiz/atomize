@@ -36,7 +36,6 @@ const Analyzer = (props) => {
     }
 
     const handleSearch = (e) => {
-        console.log('called');
         const searchString = e.target.value.toLowerCase().trim();
         if (searchString != '') {
             let searchResults = []
@@ -60,9 +59,11 @@ const Analyzer = (props) => {
 
     return (
         <div>
-            ANALYZER
-            <button onClick={getPlaylists}>CLICK ME</button>
-            <input type='text' id='search' onChange={handleSearch}/>
+            <h1>ANALYZER</h1>
+            <div class='search-container'>
+                <span>search: </span>
+                <input type='text' id='search' onChange={handleSearch}/>
+            </div>
             <List type={'playlists'} items={isSearch ? searchItems : items}/>
         </div>
     )

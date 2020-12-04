@@ -1,6 +1,48 @@
+.search {
+    
+}
+
 .playlist {
-    border: 1px solid black;
-    width: 200px;
-    height: 200px;
-    display: inline-block
+    display: flex;
+    align-items: center;
+    margin: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    width: 260px;
+    height: 48px;
+}
+
+.playlist p {
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat', sans-serif;
+    color: white;
+    display: inline;
+    font-size: 14px;
+}
+
+.playlist .title {
+    min-width: 0;
+    max-width: 85%;
+    margin-left: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    font-weight: 500;
+    text-overflow: ellipsis;
+}
+
+.playlist .count-container {
+    display:flex;
+    min-width: 48px;
+    margin: 0 0 auto auto;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    background-color: #1D3557;
+    border-left: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.playlist .track-count {
+    font-weight: 500;
+    color: white;
 }

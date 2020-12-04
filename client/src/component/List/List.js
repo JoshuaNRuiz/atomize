@@ -57,7 +57,8 @@ const List = (props) => {
     const getPlaylistList = () => {
         return items.map((item, index) => {
             let name = item.name;
-            return <PlaylistItem name={name}/>
+            let trackCount = item.tracks.total;
+            return <PlaylistItem name={name} trackCount={trackCount}/>
         });
     }
 
