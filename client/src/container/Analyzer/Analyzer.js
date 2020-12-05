@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useRef} from 'react';
 import axios from 'axios';
 import List from '../../component/List/List';
+import searchicon from '../../resources/searchicon.svg';
 
 const Analyzer = (props) => {
     //TODO: pagination for the playlists
@@ -9,26 +10,16 @@ const Analyzer = (props) => {
 
     const [isLoaded, setIsLoaded] = useState(false);
     const [isSearch, setIsSearch] = useState(false);
-    const [items, setItems] = useState([]);
+    const [items, setItems] = useState({});
     const [searchItems, setSearchItems] = useState([]);
     const [tracks, setTracks] = useState([]);
 
     const getPlaylists = async () => {
         const url = 'http://localhost:8000/api/spotify-helper/user-playlists';
+        const options = {"access_token": accessToken}
         try {
-            const response = await axios.post(url, {
-                access_token: accessToken
-            })
-            let result = response.data.items;
-            result.sort((a,b) => {
-                let nameA = a.name.toLowerCase();
-                let nameB = b.name.toLowerCase();
-                if (nameA < nameB) return -1;
-                if (nameA > nameB) return 1;
-                return 0;
-            });
-            console.log(result);
-            setItems(result);
+            const response = await axios.post(url, options)
+            setItems(response.data);
             setIsLoaded(true);
         } catch (error) {
             alert('Unable to retrieve your playlists: ' + error);
@@ -39,13 +30,12 @@ const Analyzer = (props) => {
         const searchString = e.target.value.toLowerCase().trim();
         if (searchString != '') {
             let searchResults = []
-
-            for (const item of items) {
+            let itemsArray = Object.values(items)
+            for (const item of itemsArray) {
                 if (item.name.toLowerCase().includes(searchString)) {
                     searchResults.push(item);
                 }
             }
-
             setSearchItems(searchResults);
             if (!isSearch) setIsSearch(true);
         } else {
@@ -59,10 +49,9 @@ const Analyzer = (props) => {
 
     return (
         <div>
-            <h1>ANALYZER</h1>
+            <h2>analyzer</h2>
             <div class='search-container'>
-                <span>search: </span>
-                <input type='text' id='search' onChange={handleSearch}/>
+                <input type='text' onChange={handleSearch}/>
             </div>
             <List type={'playlists'} items={isSearch ? searchItems : items}/>
         </div>

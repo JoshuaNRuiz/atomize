@@ -7,8 +7,7 @@ import './List.css';
 
 const List = (props) => {
 
-    const type = props.type;
-    const items = props.items;
+    const {type, items} = props
 
     const getList = () => {
         if (type === null || items === null) {
@@ -31,7 +30,7 @@ const List = (props) => {
                 break;
         }
 
-        return items.length > 0 ? getItems() : null;
+        return items !== null ? getItems() : null;
     }
 
     const getTrackList = () => {
@@ -55,7 +54,7 @@ const List = (props) => {
     };
 
     const getPlaylistList = () => {
-        return items.map((item, index) => {
+        return Object.values(items).map((item, index) => {
             let name = item.name;
             let trackCount = item.tracks.total;
             return <PlaylistItem name={name} trackCount={trackCount}/>

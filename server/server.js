@@ -132,20 +132,33 @@ app.post('/api/spotify-helper/user-playlists', async (req, res) => {
 });
 
 const getPlaylists = async (accessToken) => {
-    const url = 'https://api.spotify.com/v1/me/playlists';
+    let items = [];
     try {
-        const response = await axios.get(url, {
+        let url = 'https://api.spotify.com/v1/me/playlists';
+        const options = {
             headers: {
-                'Authorization': 'Bearer ' + accessToken
-            },
+                'Authorization': 'Bearer ' + accessToken},
             params: {
                 limit: 50
             }
-        });
-        return response.data;
+        }
+
+        do {
+            const response = await axios.get(url, options);
+            let responseItems = Object.values(response.data.items);
+            items.push(...responseItems);
+            url = response.data.next;
+        } while (url !== null);
+
+        items.sort((a, b) => {
+            if (a.name < b.name) return -1;
+            if (a.name < b.name) return 1;
+            else return 0;
+        })
     } catch (error) {
-        console.log(error)
+        console.log(error);
     }
+    return {...items};
 }
 
 // ************************ GETTING TRACK INFO ************************ 

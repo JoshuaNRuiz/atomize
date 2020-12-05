@@ -2,7 +2,7 @@ import React from 'react';
 
 const Login = () => {
     const redirect_uri = window.location.href;
-    const scope = 'user-top-read playlist-read-private';
+    const scope = 'user-top-read playlist-read-private user-library-read';
 
     const openSpotifyAuthorization = () => {
         let url = 'https://accounts.spotify.com/authorize';
