@@ -150,7 +150,7 @@ const getPlaylists = async (accessToken) => {
             url = response.data.next;
         } while (url !== null);
 
-        items.sort((a, b) => { // alphabetize befor sending
+        items.sort((a, b) => { // alphabetize before sending
             if (a.name < b.name) return -1;
             if (a.name < b.name) return 1;
             else return 0;
