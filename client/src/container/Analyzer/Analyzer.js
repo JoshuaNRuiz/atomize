@@ -14,6 +14,8 @@ const Analyzer = (props) => {
     const [searchItems, setSearchItems] = useState([]);
     const [tracks, setTracks] = useState([]);
 
+    const LIST_TYPE = 'playlists';
+
     const getPlaylists = async () => {
         const url = 'http://localhost:8000/api/spotify-helper/user-playlists';
         const options = {"access_token": accessToken}
@@ -26,14 +28,15 @@ const Analyzer = (props) => {
         }
     }
 
+    // TODO: THIS HAS TO BE IMPROVED, WE ARE DUPLICATING DATA -- we just need to filter
     const handleSearch = (e) => {
         const searchString = e.target.value.toLowerCase().trim();
         if (searchString != '') {
-            let searchResults = []
-            let itemsArray = Object.values(items)
-            for (const item of itemsArray) {
-                if (item.name.toLowerCase().includes(searchString)) {
-                    searchResults.push(item);
+            let searchResults = {}
+            for (const [key, playlist] of Object.entries(items)) {
+                const playlistName = playlist.name.toLowerCase();
+                if (playlistName.includes(searchString)) {
+                    searchResults[key] = playlist;
                 }
             }
             setSearchItems(searchResults);
@@ -53,7 +56,7 @@ const Analyzer = (props) => {
             <div class='search-container'>
                 <input type='text' onChange={handleSearch}/>
             </div>
-            <List type={'playlists'} items={isSearch ? searchItems : items}/>
+            <List type={LIST_TYPE} items={isSearch ? searchItems : items}/>
         </div>
     )
 }
