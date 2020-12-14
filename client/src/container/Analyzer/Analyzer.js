@@ -13,8 +13,11 @@ const Analyzer = (props) => {
     const [items, setItems] = useState({});
     const [searchItems, setSearchItems] = useState([]);
     const [tracks, setTracks] = useState([]);
+    const [mode, setMode] = useState('')
 
     const LIST_TYPE = 'playlists';
+    const LIKED_MODE = 'liked';
+    const PLAYLIST_MODE = 'playlist';
 
     const getPlaylists = async () => {
         const url = 'http://localhost:8000/api/spotify-helper/user-playlists';
