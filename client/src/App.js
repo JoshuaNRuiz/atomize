@@ -17,11 +17,13 @@ function App() {
   const [refreshToken, setRefreshToken] = useState(null);
   const [isAccessTokenValid, setAccessTokenStatus] = useState(false);
 
+  const baseUrl = window.location.origin;
+
   const requestTokens = async (code) => {
-    const url = 'http://localhost:8000/api/spotify-helper/get-tokens';
+    const url = baseUrl + '/api/spotify-helper/get-tokens';
     const data = {
       code: code,
-      redirect_uri: 'http://localhost:8000/'
+      redirect_uri: baseUrl + '/'
     };
 
     return fetch(url, {
@@ -36,7 +38,7 @@ function App() {
   }
 
   const renewAccessToken = async () => {
-    const url = 'http://localhost:8000/api/spotify-helper/renew-access-token';
+    const url = baseUrl + '/api/spotify-helper/renew-access-token';
     const data = {
       refresh_token: refreshToken
     };

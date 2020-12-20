@@ -8,26 +8,56 @@ const Analyzer = (props) => {
 
     const accessToken = props.accessToken || localStorage.getItem('accessToken');
 
-    const [isLoaded, setIsLoaded] = useState(false);
     const [isSearch, setIsSearch] = useState(false);
-    const [items, setItems] = useState({});
-    const [searchItems, setSearchItems] = useState([]);
+    const [playlists, setPlaylists] = useState({});
     const [tracks, setTracks] = useState([]);
-    const [mode, setMode] = useState('')
-
-    const LIST_TYPE = 'playlists';
-    const LIKED_MODE = 'liked';
-    const PLAYLIST_MODE = 'playlist';
+    const [trackIds, setTrackIds] = useState([]);
+    const [searchItems, setSearchItems] = useState([]);
 
     const getPlaylists = async () => {
         const url = 'http://localhost:8000/api/spotify-helper/user-playlists';
         const options = {"access_token": accessToken}
         try {
             const response = await axios.post(url, options)
-            setItems(response.data);
-            setIsLoaded(true);
+            console.log(response.data);
+            setPlaylists(response.data);
         } catch (error) {
             alert('Unable to retrieve your playlists: ' + error);
+        }
+    }
+
+    const getLikedTracks = async () => {
+        const url = 'http://localhost:8000/api/spotify-helper/liked-tracks';
+        const options = {"access_token": accessToken}
+        try {
+            const response = await axios.post(url, options)
+            setTracks(response.data);
+            console.log(response.data);
+        } catch (error) {
+            alert('Unable to retrieve your liked tracks: ' + error);
+        }
+    }
+
+    const getTrackIds = async () => {
+        let ids = [];
+        for (const track of Object.values(tracks)) {
+            ids.push(track.id);
+        }
+        console.log(ids);
+        setTrackIds(ids);
+    }
+
+    const getAudioFeatures = async () => {
+        const url = 'http://localhost:8000/api/spotify-helper/audio-features';
+        const options = {
+            access_token: accessToken,
+            track_ids: trackIds,
+        }
+        try {
+            const response = await axios.post(url, options)
+            console.log(response.data);
+        } catch (error) {
+            alert('Unable to retrieve your liked tracks: ' + error);
         }
     }
 
@@ -36,7 +66,7 @@ const Analyzer = (props) => {
         const searchString = e.target.value.toLowerCase().trim();
         if (searchString != '') {
             let searchResults = {}
-            for (const [key, playlist] of Object.entries(items)) {
+            for (const [key, playlist] of Object.entries(playlists)) {
                 const playlistName = playlist.name.toLowerCase();
                 if (playlistName.includes(searchString)) {
                     searchResults[key] = playlist;
@@ -50,16 +80,23 @@ const Analyzer = (props) => {
     }
 
     useEffect(() => {
-        getPlaylists();
-    }, [])
+        if (tracks.length !== 0) {
+            if (trackIds.length === 0) getTrackIds();
+        } else {
+            getLikedTracks();
+        }
+    }, [tracks]);
+
+    useEffect(() => {
+        if (trackIds.length !== 0) {
+            getAudioFeatures();
+        }
+    }, [trackIds]);
 
     return (
         <div>
             <h2>analyzer</h2>
-            <div class='search-container'>
-                <input type='text' onChange={handleSearch}/>
-            </div>
-            <List type={LIST_TYPE} items={isSearch ? searchItems : items}/>
+            
         </div>
     )
 }

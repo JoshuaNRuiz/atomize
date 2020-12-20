@@ -137,7 +137,8 @@ const getPlaylists = async (accessToken) => {
         let url = 'https://api.spotify.com/v1/me/playlists';
         const options = {
             headers: {
-                'Authorization': 'Bearer ' + accessToken},
+                'Authorization': 'Bearer ' + accessToken
+            },
             params: {
                 limit: 50
             }
@@ -220,6 +221,83 @@ app.post('/api/spotify-helper/tracks/:infotype/:id', async (req, res) => {
     }
 });
 
+app.post('/api/spotify-helper/liked-tracks', async (req, res) => {
+    const accessToken = req.body.access_token;
+    try {
+        const data = await getLikedTracks(accessToken);
+        res.send(data);
+    } catch (error) {
+        console.log(error);
+        res.send({});
+    }
+});
+
+const getLikedTracks = async (accessToken) => {
+    let tracks = [];
+    try {
+        let url = 'https://api.spotify.com/v1/me/tracks';
+        const options = {
+            headers: {
+                'Authorization': 'Bearer ' + accessToken
+            },
+            params: {
+                limit: 50
+            }
+        }
+
+        do {
+            const response = await axios.get(url, options);
+            for (const value of Object.values(response.data.items)) {
+                tracks.push(value.track);
+            }
+            url = response.data.next;
+        } while (url !== null);
+
+    } catch (error) {
+        console.log(error);
+    }
+    return {...tracks};
+};
+
+app.post('/api/spotify-helper/audio-features', async (req, res) => {
+    const accessToken = req.body.access_token;
+    const ids = req.body.track_ids;
+    try {
+        const data = await getAudioFeatures(accessToken, ids);
+        res.send(data);
+    } catch (error) {
+        console.log(error);
+        res.send({});
+    }
+});
+
+const getAudioFeatures = async(accessToken, ids) => {
+    let items = []
+    try {
+        const url = 'https://api.spotify.com/v1/audio-features/';
+        let options = {
+            headers: {
+                'Authorization': 'Bearer ' + accessToken
+            }
+        }
+        let trackIds = '';
+        let startIndex = 0;
+        while (startIndex < ids.length) {
+            let endIndex = startIndex + 100 > ids.length ? ids.length : startIndex + 100;
+            trackIds = ids.slice(startIndex, endIndex).join(',');
+            options.params = {
+                ids: trackIds
+            }
+            const response = await axios.get(url, options);
+            const responseItems = Object.values(response.data.audio_features);
+            items.push(...responseItems);
+            startIndex += 100;
+        }
+    } catch (error) {
+        console.log(error);
+    }
+    return {...items};
+}
 
 // ************************ CORE ************************ 
 
