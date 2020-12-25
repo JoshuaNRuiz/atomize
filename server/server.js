@@ -108,7 +108,6 @@ const getTop = async (type, accessToken, timeRange, limit, offset) => {
         return fetch(url, {
             method: 'GET',
             headers: {
-                'Accept': 'application/json',
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + accessToken
             },
@@ -282,8 +281,9 @@ const getAudioFeatures = async(accessToken, ids) => {
         }
         let trackIds = '';
         let startIndex = 0;
+        let endIndex = 0;
         while (startIndex < ids.length) {
-            let endIndex = startIndex + 100 > ids.length ? ids.length : startIndex + 100;
+            endIndex = startIndex + 100 > ids.length ? ids.length : startIndex + 100;
             trackIds = ids.slice(startIndex, endIndex).join(',');
             options.params = {
                 ids: trackIds

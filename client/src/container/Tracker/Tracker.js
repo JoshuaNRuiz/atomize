@@ -61,10 +61,6 @@ const Tracker = (props) => {
         });
     }
 
-    useEffect(() => {
-        handleRefresh();
-    }, [])
-
     return (
         <div className='tracker'>
             <Controls 
