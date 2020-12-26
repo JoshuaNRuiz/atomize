@@ -282,7 +282,7 @@ const getAudioFeatures = async(accessToken, ids) => {
         let trackIds = '';
         let startIndex = 0;
         let endIndex = 0;
-        while (startIndex < ids.length) {
+        while (startIndex <= ids.length) {
             endIndex = startIndex + 100 > ids.length ? ids.length : startIndex + 100;
             trackIds = ids.slice(startIndex, endIndex).join(',');
             options.params = {

@@ -1,12 +1,12 @@
 import React, {useState, useEffect,  useRef} from 'react';
 import axios from 'axios';
-import Chart from 'chart.js';
 import List from '../../component/List/List';
 import searchicon from '../../resources/searchicon.svg';
+import Chart from '../../component/Chart/Chart';
+
+import './Analyzer.css';
 
 const Analyzer = (props) => {
-    //TODO: pagination for the playlists
-
     const accessToken = props.accessToken || localStorage.getItem('accessToken');
 
     const [isSearch, setIsSearch] = useState(false);
@@ -16,6 +16,7 @@ const Analyzer = (props) => {
     const [audioFeatureData, setAudioFeatureData] = useState({});
     const [audioFeatureAverages, setAudioFeatureAverages] = useState({})
     const [searchItems, setSearchItems] = useState([]);
+    const [isLoaded, setIsLoaded] = useState(false);
 
     const getUsersPlaylists = async () => {
         const url = 'http://localhost:8000/api/spotify-helper/user-playlists';
@@ -68,36 +69,43 @@ const Analyzer = (props) => {
     const calculateAudioFeatureAverages = async () => {
         let danceability = 0;
         let energy = 0;
+        let tempo = 0;
+        let valence = 0;
+
         let liveness = 0;
         let instrumentalness = 0;
         let speechiness = 0;
-        let valence = 0;
 
         for (const data of Object.values(audioFeatureData)) {
             danceability += data.danceability;
             energy += data.energy;
+            tempo += data.tempo;
+
+            valence += data.valence;
             liveness += data.liveness;
             instrumentalness += data.instrumentalness;
             speechiness += data.speechiness;
-            valence += data.valence;
         }
 
         const count = Object.keys(audioFeatureData).length;
 
         danceability /= count;
         energy /= count;
+        tempo /= count;
+        valence /= count;
+
         liveness /= count;
         instrumentalness /= count;
         speechiness /= count;
-        valence /= count;
         
         const averages = {
             danceability: danceability,
             energy: energy,
+            tempo: tempo,
+            valence: valence,
             liveness: liveness,
             instrumentalness: instrumentalness,
-            speechiness: speechiness,
-            valence: valence
+            speechiness: speechiness
         }
 
         setAudioFeatureAverages(averages);
@@ -157,42 +165,18 @@ const Analyzer = (props) => {
             calculateAudioFeatureAverages();
         }
     },[audioFeatureData]);
-
-    const chartRef = useRef(null);
     
     useEffect(() => {
         const isAudioFeatureAveragesEmpty = Object.keys(audioFeatureAverages).length === 0;
         if (!isAudioFeatureAveragesEmpty) {
-            const myChartRef = chartRef.current.getContext("2d");
-
-            let labels = [];
-            let values = [];
-
-            for (const [label, value] of Object.entries(audioFeatureAverages)) {
-                labels.push(label);
-                values.push(value);
-            }
-
-            new Chart(myChartRef, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'value',
-                        data: values,
-                        backgroundColor: ["#FFFFFF","#FFFFFF","#FFFFFF","#FFFFFF","#FFFFFF","#FFFFFF",],
-                        borderColor: [],
-                        borderWidth: 1
-                    }]
-                },
-            });
+            setIsLoaded(true);
         }
     }, [audioFeatureAverages]);
 
     return (
         <div>
-            <h2>analyzer</h2>
-            <canvas id="myChart" ref={chartRef} />
+            <h2 className='page-title'>analyzer</h2>
+            {isLoaded? <Chart title={"Vibe"} data={audioFeatureAverages}/> : null}
         </div>
     )
 }
