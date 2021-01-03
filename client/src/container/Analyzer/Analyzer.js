@@ -157,7 +157,7 @@ const Analyzer = (props) => {
         }
     },[trackIds]);
 
-    // calculate the avarages
+    // calculate the averages
     useEffect(() => {
         const isAudioFeatureDataEmpty = Object.keys(audioFeatureData).length === 0;
         const isAudioFeatureAveragesEmpty = Object.keys(audioFeatureAverages).length === 0;
@@ -166,6 +166,7 @@ const Analyzer = (props) => {
         }
     },[audioFeatureData]);
     
+    // display the data
     useEffect(() => {
         const isAudioFeatureAveragesEmpty = Object.keys(audioFeatureAverages).length === 0;
         if (!isAudioFeatureAveragesEmpty) {
