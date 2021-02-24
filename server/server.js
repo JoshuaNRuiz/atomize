@@ -220,39 +220,45 @@ app.post('/api/spotify-helper/tracks/:infotype/:id', async (req, res) => {
 
 app.post('/api/spotify-helper/liked-tracks', async (req, res) => {
     const accessToken = req.body.access_token;
-    try {
-        const data = await getLikedTracks(accessToken);
-        res.send(data);
-    } catch (error) {
-        console.log(error);
-        res.send({});
-    }
+
+    const data = await getLikedTracks(accessToken)
+        .catch(error => {
+            if (error.response) {
+                const serverError = error.response.data.error;
+                const time = new Date(Date.now()).toLocaleTimeString();
+                console.error(`[${time}]: ${serverError.status} ${serverError.message}`);
+            }
+            return {error: error.response.data};
+        })
+    
+    res.send(data);
 });
 
 const getLikedTracks = async (accessToken) => {
     let tracks = [];
-    try {
-        let url = 'https://api.spotify.com/v1/me/tracks';
-        const options = {
-            headers: {
-                'Authorization': 'Bearer ' + accessToken
-            },
-            params: {
-                limit: 50
-            }
+    let url = 'https://api.spotify.com/v1/me/tracks';
+    const options = {
+        headers: {
+            'Authorization': 'Bearer ' + accessToken
+        },
+        params: {
+            limit: 50
+        }
+    }
+
+    do {
+        const response = await axios.get(url, options)
+            .catch(error => {
+                throw error;
+            });
+
+        for (const value of Object.values(response.data.items)) {
+            tracks.push(value.track);
         }
 
-        do {
-            const response = await axios.get(url, options);
-            for (const value of Object.values(response.data.items)) {
-                tracks.push(value.track);
-            }
-            url = response.data.next;
-        } while (url !== null);
+        url = response.data.next;
+    } while (url !== null);
 
-    } catch (error) {
-        console.log(error);
-    }
     return {...tracks};
 };
 
