@@ -18,29 +18,28 @@ const Analyzer = (props) => {
     const [audioFeatureAverages, setAudioFeatureAverages] = useState({});
     const [searchItems, setSearchItems] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
+    const [isChart, setIsChart] = useState(true);
+    
+    const getUserData = async (type) => {
+        let url = "";
 
-    const getUsersPlaylists = async () => {
-        const url = 'http://localhost:8000/api/spotify-helper/user-playlists';
+        switch (type) {
+            case 'playlist': 
+                url = 'http://localhost:8000/api/spotify-helper/user-playlists';
+                break;
+            case 'liked-tracks':
+                url = 'http://localhost:8000/api/spotify-helper/liked-tracks';
+                break;
+            default:
+                throw new Error("requested user data not available");
+        }
+
         const options = {"access_token": accessToken}
 
         const response = await axios.post(url, options)
             .catch(error => {
                 throw error;
             });
-
-        return response.data;
-    }
-
-    const getUsersLikedTracks = async () => {
-        const url = 'http://localhost:8000/api/spotify-helper/liked-tracks';
-        const options = {"access_token": accessToken}
-
-        const response = await axios.post(url, options)
-            .catch(error => {
-                throw error;
-            });
-
-        console.log(response.data);
 
         return response.data;
     }
@@ -124,7 +123,7 @@ const Analyzer = (props) => {
 
     useEffect(() => {
         async function getData() {
-            const tracks = await getUsersLikedTracks();
+            const tracks = await getUserData('liked-tracks');
             const trackIds = getTrackIds(tracks);
             const featureData = await getAudioFeatureData(trackIds);
             const audioFeatureAverages = await calculateAudioFeatureAverages(featureData);
@@ -159,7 +158,7 @@ const Analyzer = (props) => {
     return (
         <div>
             <h2 className='page-title'>analyzer</h2>
-            {isLoaded? <Chart title={"Vibe"} data={audioFeatureAverages}/> : <Loader />}
+            {isLoaded ? <Chart title={"Vibe"} data={audioFeatureAverages}/> : <Loader />}
         </div>
     )
 }
