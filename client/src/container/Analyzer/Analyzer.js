@@ -1,5 +1,7 @@
 import React, {useState, useEffect,  useRef} from 'react';
 import axios from 'axios';
+
+import Loader from '../../component/Loader/Loader';
 import List from '../../component/List/List';
 import searchicon from '../../resources/searchicon.svg';
 import Chart from '../../component/Chart/Chart';
@@ -20,55 +22,53 @@ const Analyzer = (props) => {
     const getUsersPlaylists = async () => {
         const url = 'http://localhost:8000/api/spotify-helper/user-playlists';
         const options = {"access_token": accessToken}
-        try {
-            const response = await axios.post(url, options)
-            console.log(response.data);
-            setUserPlaylists(response.data);
-        } catch (error) {
-            alert('Unable to retrieve your playlists: ' + error);
-        }
+
+        const response = await axios.post(url, options)
+            .catch(error => {
+                throw error;
+            });
+
+        return response.data;
     }
 
     const getUsersLikedTracks = async () => {
         const url = 'http://localhost:8000/api/spotify-helper/liked-tracks';
         const options = {"access_token": accessToken}
-        try {
-            const response = await axios.post(url, options)
-            console.log(response.data);
-            setUserTracks(response.data);
-            return(response.data);
-        } catch (error) {
-            alert('Unable to retrieve your liked tracks: ' + error);
-        }
+
+        const response = await axios.post(url, options)
+            .catch(error => {
+                throw error;
+            });
+
+        console.log(response.data);
+
+        return response.data;
     }
 
-    const getAudioFeatureData = async (tracks) => {
-        const trackIds = getTrackIds(tracks);
+    const getTrackIds = (tracks) => {
+        let ids = [];
+        for (const track of Object.values(tracks)) {
+            ids.push(track.id);
+        }
+        return ids;
+    }
+
+    const getAudioFeatureData = async (trackIds) => {
         const url = 'http://localhost:8000/api/spotify-helper/audio-features';
         const options = {
             access_token: accessToken,
             track_ids: trackIds,
         }
 
-        const data = await axios.post(url, options)
-            .then(response => {
-                console.log(response.data);
-                setAudioFeatureData(response.data);
-                return response.data;
-            })
+        const response = await axios.post(url, options)
             .catch(error => {
-                alert("Unable to retrieve your audio data: " + error.message);
+                console.error(error);
+                throw error;
             });
 
-        return data;
-    }
+        console.log(response.data);
 
-    const getTrackIds = (listOfTracks) => {
-        let ids = [];
-        for (const track of Object.values(listOfTracks)) {
-            ids.push(track.id);
-        }
-        return ids;
+        return response.data;
     }
 
     const calculateAudioFeatureAverages = async (featureData) => {
@@ -120,10 +120,13 @@ const Analyzer = (props) => {
         }
     }
 
+    /* MANAGING THE USERS INFORMATION */
+
     useEffect(() => {
         async function getData() {
             const tracks = await getUsersLikedTracks();
-            const featureData = await getAudioFeatureData(tracks);
+            const trackIds = getTrackIds(tracks);
+            const featureData = await getAudioFeatureData(trackIds);
             const audioFeatureAverages = await calculateAudioFeatureAverages(featureData);
             
             return {
@@ -139,10 +142,16 @@ const Analyzer = (props) => {
                 setAudioFeatureData(data.featureData);
                 setAudioFeatureAverages(data.audioFeatureAverages);
             })
-            .then(response => {
+            .then(() => {
                 setIsLoaded(true);
             })
             .catch(error => {
+                if (error.response) {
+                    const response = error.response;
+                    if (response.status === 401) {
+                        alert("Your access token has expired. Please renew it.");
+                    }
+                }
                 console.error(error);
             });
     }, [])
@@ -150,7 +159,7 @@ const Analyzer = (props) => {
     return (
         <div>
             <h2 className='page-title'>analyzer</h2>
-            {isLoaded? <Chart title={"Vibe"} data={audioFeatureAverages}/> : null}
+            {isLoaded? <Chart title={"Vibe"} data={audioFeatureAverages}/> : <Loader />}
         </div>
     )
 }
