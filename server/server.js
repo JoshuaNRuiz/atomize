@@ -23,12 +23,11 @@ app.get('/api/get-id', (req, res) => {
 
 // ************************ AUTHORIZATION ************************
 
-app.post('/api/spotify-helper/get-tokens', (req, res) => {
+app.post('/api/spotify-helper/get-tokens', async (req, res) => {
     const code = req.body.code;
     const redirectUri = req.body.redirect_uri;
-
-    requestTokens(code, redirectUri)
-    .then(data => res.send(data))
+    const response = await requestTokens(code, redirectUri);
+    res.send(response);
 });
 
 const requestTokens = async (code, redirect_uri) => {
@@ -52,17 +51,16 @@ const requestTokens = async (code, redirect_uri) => {
         });
         return response.data;
     } catch (error) {
-        console.log(error);
+        return {error: error.message};
     }
 }
 
 // ************************ RENEWING ACCESS TOKENS ************************
 
-app.post('/api/spotify-helper/renew-access-token', (req, res) => {
+app.post('/api/spotify-helper/renew-access-token', async (req, res) => {
     const refreshToken = req.body.refresh_token;
-
-    renewAccessToken(refreshToken)
-    .then(data => res.send(data));
+    const response =  await renewAccessToken(refreshToken);
+    res.send(response);
 });
 
 const renewAccessToken = async (refreshToken) => {
@@ -84,9 +82,9 @@ const renewAccessToken = async (refreshToken) => {
         });
         return response.data;
     } catch (error) {
-        console.log(error);
+        return {error: error.message};
     }
-};
+}
 
 // ************************ GETTING TOP TRACKS/ARTISTS ************************ 
 
@@ -258,19 +256,16 @@ const getLikedTracks = async (accessToken) => {
     return {...tracks};
 };
 
+// ************************ GETTING  AUDIO FEATURES ************************ 
+
 app.post('/api/spotify-helper/audio-features', async (req, res) => {
     const accessToken = req.body.access_token;
     const ids = req.body.track_ids;
-    try {
-        const data = await getAudioFeatures(accessToken, ids);
-        res.send(data);
-    } catch (error) {
-        console.log(error);
-        res.send({});
-    }
+    const response = await getAudioFeatures(accessToken, ids);
+    res.send(response);
 });
 
-const getAudioFeatures = async(accessToken, ids) => {
+const getAudioFeatures = async (accessToken, ids) => {
     let items = []
     try {
         const url = 'https://api.spotify.com/v1/audio-features/';
@@ -293,10 +288,10 @@ const getAudioFeatures = async(accessToken, ids) => {
             items.push(...responseItems);
             startIndex += 100;
         }
+        return {...items};
     } catch (error) {
-        console.log(error);
+        return {error: error.message};
     }
-    return {...items};
 }
 
 // ************************ CORE ************************ 

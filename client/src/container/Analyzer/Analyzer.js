@@ -12,9 +12,8 @@ const Analyzer = (props) => {
     const [isSearch, setIsSearch] = useState(false);
     const [userPlaylists, setUserPlaylists] = useState({});
     const [userTracks, setUserTracks] = useState({});
-    const [trackIds, setTrackIds] = useState([]);
     const [audioFeatureData, setAudioFeatureData] = useState({});
-    const [audioFeatureAverages, setAudioFeatureAverages] = useState({})
+    const [audioFeatureAverages, setAudioFeatureAverages] = useState({});
     const [searchItems, setSearchItems] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
 
@@ -35,81 +34,72 @@ const Analyzer = (props) => {
         const options = {"access_token": accessToken}
         try {
             const response = await axios.post(url, options)
-            setUserTracks(response.data);
             console.log(response.data);
+            setUserTracks(response.data);
+            return(response.data);
         } catch (error) {
             alert('Unable to retrieve your liked tracks: ' + error);
         }
     }
 
-    const getTrackIds = async () => {
-        let ids = [];
-        for (const track of Object.values(userTracks)) {
-            ids.push(track.id);
-        }
-        console.log(ids);
-        setTrackIds(ids);
-    }
-
-    const getAudioFeatures = async () => {
+    const getAudioFeatureData = async (tracks) => {
+        const trackIds = getTrackIds(tracks);
         const url = 'http://localhost:8000/api/spotify-helper/audio-features';
         const options = {
             access_token: accessToken,
             track_ids: trackIds,
         }
-        try {
-            const response = await axios.post(url, options)
-            setAudioFeatureData(response.data);
-            console.log(response.data);
-        } catch (error) {
-            alert('Unable to retrieve your liked tracks: ' + error);
-        } finally {}
+
+        const data = await axios.post(url, options)
+            .then(response => {
+                console.log(response.data);
+                setAudioFeatureData(response.data);
+                return response.data;
+            })
+            .catch(error => {
+                alert("Unable to retrieve your audio data: " + error.message);
+            });
+
+        return data;
     }
 
-    const calculateAudioFeatureAverages = async () => {
-        let danceability = 0;
-        let energy = 0;
-        let tempo = 0;
-        let valence = 0;
+    const getTrackIds = (listOfTracks) => {
+        let ids = [];
+        for (const track of Object.values(listOfTracks)) {
+            ids.push(track.id);
+        }
+        return ids;
+    }
 
-        let liveness = 0;
-        let instrumentalness = 0;
-        let speechiness = 0;
-
-        for (const data of Object.values(audioFeatureData)) {
-            danceability += data.danceability;
-            energy += data.energy;
-            tempo += data.tempo;
-
-            valence += data.valence;
-            liveness += data.liveness;
-            instrumentalness += data.instrumentalness;
-            speechiness += data.speechiness;
+    const calculateAudioFeatureAverages = async (featureData) => {
+        let featureAverages = {
+            danceability: 0,
+            energy: 0,
+            tempo: 0,
+            valence: 0,
+            liveness: 0,
+            instrumentalness: 0,
+            speechiness: 0
         }
 
-        const count = Object.keys(audioFeatureData).length;
-
-        danceability /= count;
-        energy /= count;
-        tempo /= count;
-        valence /= count;
-
-        liveness /= count;
-        instrumentalness /= count;
-        speechiness /= count;
-        
-        const averages = {
-            danceability: danceability,
-            energy: energy,
-            tempo: tempo,
-            valence: valence,
-            liveness: liveness,
-            instrumentalness: instrumentalness,
-            speechiness: speechiness
+        for (const data of Object.values(featureData)) {
+            featureAverages.danceability += data.danceability;
+            featureAverages.energy += data.energy;
+            featureAverages.tempo += data.tempo;
+            featureAverages.valence += data.valence;
+            featureAverages.liveness += data.liveness;
+            featureAverages.instrumentalness += data.instrumentalness;
+            featureAverages.speechiness += data.speechiness;
         }
 
-        setAudioFeatureAverages(averages);
-        console.log(averages);
+        const count = Object.keys(featureData).length;
+
+        Object.keys(featureAverages).forEach(key => {
+            featureAverages[key] = featureAverages[key] / count;
+        })
+
+        console.log(featureAverages);
+        return featureAverages;
     }
 
     // TODO: THIS HAS TO BE IMPROVED, WE ARE DUPLICATING DATA -- we just need to filter
@@ -129,50 +119,33 @@ const Analyzer = (props) => {
             setIsSearch(false);
         }
     }
-    
-    // get the users liked tracks
-    useEffect(() => {
-        const userTracksIsEmpty = Object.keys(userTracks).length === 0;
-        if (userTracksIsEmpty) {
-            getUsersLikedTracks();
-        }
-        
-    }, []);
 
-    // get the  track ids
     useEffect(() => {
-        const userTracksIsEmpty = Object.keys(userTracks).length === 0;
-        const isTrackIdsEmpty = trackIds.length === 0
-        if (!userTracksIsEmpty && isTrackIdsEmpty) {
-            getTrackIds();
+        async function getData() {
+            const tracks = await getUsersLikedTracks();
+            const featureData = await getAudioFeatureData(tracks);
+            const audioFeatureAverages = await calculateAudioFeatureAverages(featureData);
+            
+            return {
+                tracks: tracks,
+                featureData: featureData,
+                audioFeatureAverages: audioFeatureAverages
+            }
         }
-    },[userTracks]);
 
-    // get the audio features of those track ids
-    useEffect(() => {
-        const isTrackIdsEmpty = trackIds.length == 0;
-        const isAudioFeatureDataEmpty = Object.keys(audioFeatureData).length === 0;
-        if (!isTrackIdsEmpty && isAudioFeatureDataEmpty) {
-            getAudioFeatures();
-        }
-    },[trackIds]);
-
-    // calculate the averages
-    useEffect(() => {
-        const isAudioFeatureDataEmpty = Object.keys(audioFeatureData).length === 0;
-        const isAudioFeatureAveragesEmpty = Object.keys(audioFeatureAverages).length === 0;
-        if (!isAudioFeatureDataEmpty && isAudioFeatureAveragesEmpty) {
-            calculateAudioFeatureAverages();
-        }
-    },[audioFeatureData]);
-    
-    // display the data
-    useEffect(() => {
-        const isAudioFeatureAveragesEmpty = Object.keys(audioFeatureAverages).length === 0;
-        if (!isAudioFeatureAveragesEmpty) {
-            setIsLoaded(true);
-        }
-    }, [audioFeatureAverages]);
+        getData()
+            .then(data => {
+                setUserTracks(data.tracks);
+                setAudioFeatureData(data.featureData);
+                setAudioFeatureAverages(data.audioFeatureAverages);
+            })
+            .then(response => {
+                setIsLoaded(true);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }, [])
 
     return (
         <div>
