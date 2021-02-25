@@ -66,6 +66,13 @@ app.post('/api/spotify-helper/renew-access-token', async (req, res) => {
 const renewAccessToken = async (refreshToken) => {
     const url = 'https://accounts.spotify.com/api/token';
     const authorization = Buffer.from(CLIENT_ID + ':' + CLIENT_SECRET).toString('base64');
+    const options = {
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Authorization': 'Basic ' + authorization
+        },
+        data: qs.stringify(data)
+    }
     const data = {
         'grant_type': 'refresh_token',
         'refresh_token': refreshToken
@@ -88,30 +95,36 @@ const renewAccessToken = async (refreshToken) => {
 
 // ************************ GETTING TOP TRACKS/ARTISTS ************************ 
 
-app.post('/api/spotify-helper/top-:type', (req, res) => {
+app.post('/api/spotify-helper/top-:type', async (req, res) => {
     const type = req.params.type;
     const accessToken = req.body.access_token
     const timeRange = req.body.time_range;
     const limit = req.body.limit;
     const offset = req.body.offset;
 
-    getTop(type, accessToken, timeRange, limit, offset)
-    .then(data => res.send(data))
+    const response = await getTop(type, accessToken, timeRange, limit, offset);
+    res.send(response);
 });
 
 const getTop = async (type, accessToken, timeRange, limit, offset) => {
     if (type == 'artists' || type == 'tracks') {
         let url = 'https://api.spotify.com/v1/me/top/';
         url += `${type}?time_range=${timeRange}&limit=${limit}&offset=${offset}`;
-        return fetch(url, {
-            method: 'GET',
+
+        const options = {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + accessToken
-            },
-        })
-        .then (response => response.ok ? response.json() : {})
-        .catch(error => console.log(error));
+            }
+        }
+
+        const response = await axios.get(url, options)
+            .then(response => response.data)
+            .catch(error => {
+                return {error: error.message}
+            });
+
+        return response;
     }
 };
 
@@ -205,17 +218,18 @@ app.post('/api/spotify-helper/tracks/:infotype/:id', async (req, res) => {
         url += `audio-analysis/${id}`
     }
 
-    try {
-        const response = await axios.get(url, {
-            headers: {
-                'Authorization': 'Bearer ' + accessToken
-            }
-        });
-        res.send(response.data);
-    } catch (error) {
-        console.log(error);
-        res.send({});
+    const options = {
+        headers: {
+            'Authorization': 'Bearer ' + accessToken
+        }
     }
+
+    const response = await axios.get(url, options)
+        .catch(error => {
+            return error;
+        });
+
+    res.send(response.data);
 });
 
 app.post('/api/spotify-helper/liked-tracks', async (req, res) => {
