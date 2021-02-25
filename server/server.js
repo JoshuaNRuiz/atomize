@@ -66,31 +66,29 @@ app.post('/api/spotify-helper/renew-access-token', async (req, res) => {
 const renewAccessToken = async (refreshToken) => {
     const url = 'https://accounts.spotify.com/api/token';
     const authorization = Buffer.from(CLIENT_ID + ':' + CLIENT_SECRET).toString('base64');
+    const grantType = 'refresh_token';
+
     const options = {
+        method: 'post',
+        url: url,
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
             'Authorization': 'Basic ' + authorization
         },
-        data: qs.stringify(data)
+        data: qs.stringify({
+            grant_type: grantType,
+            refresh_token: refreshToken
+        }),
     }
-    const data = {
-        'grant_type': 'refresh_token',
-        'refresh_token': refreshToken
-    };
 
-    try {
-        const response = await axios(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Authorization': 'Basic ' + authorization
-            },
-            data: qs.stringify(data)
-        });
-        return response.data;
-    } catch (error) {
-        return {error: error.message};
-    }
+    const data = await axios(options)
+        .then(response => response.data)
+        .catch(error => {
+            console.log(error.name + " " + error.message);
+            return {error: error.message}
+        })
+    
+    return data;
 }
 
 // ************************ GETTING TOP TRACKS/ARTISTS ************************ 
@@ -155,7 +153,10 @@ const getPlaylists = async (accessToken) => {
         }
 
         do {
-            const response = await axios.get(url, options);
+            const response = await axios.get(url, options)
+                .catch(error => {
+                    throw error;
+                });
             let responseItems = Object.values(response.data.items);
             items.push(...responseItems);
             url = response.data.next;
@@ -234,17 +235,7 @@ app.post('/api/spotify-helper/tracks/:infotype/:id', async (req, res) => {
 
 app.post('/api/spotify-helper/liked-tracks', async (req, res) => {
     const accessToken = req.body.access_token;
-
-    const data = await getLikedTracks(accessToken)
-        .catch(error => {
-            if (error.response) {
-                const serverError = error.response.data.error;
-                const time = new Date(Date.now()).toLocaleTimeString();
-                console.error(`[${time}]: ${serverError.status} ${serverError.message}`);
-            }
-            return {error: error.response.data};
-        })
-    
+    const data = await getLikedTracks(accessToken);
     res.send(data);
 });
 
@@ -263,7 +254,12 @@ const getLikedTracks = async (accessToken) => {
     do {
         const response = await axios.get(url, options)
             .catch(error => {
-                throw error;
+                if (error.response) {
+                    const serverError = error.response.data.error;
+                    const time = new Date(Date.now()).toLocaleTimeString();
+                    console.error(`[${time}]: ${serverError.status} ${serverError.message}`);
+                }
+                return {error: error.response.data};
             });
 
         for (const value of Object.values(response.data.items)) {
@@ -310,6 +306,7 @@ const getAudioFeatures = async (accessToken, ids) => {
         }
         return {...items};
     } catch (error) {
+        console.log(error.name + " " + error.message);
         return {error: error.message};
     }
 }

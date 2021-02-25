@@ -70,7 +70,7 @@ const Analyzer = (props) => {
         return response.data;
     }
 
-    const calculateAudioFeatureAverages = async (featureData) => {
+    const calculateAudioFeatureAverages = (featureData) => {
         let featureAverages = {
             danceability: 0,
             energy: 0,
@@ -126,7 +126,7 @@ const Analyzer = (props) => {
             const tracks = await getUserData('liked-tracks');
             const trackIds = getTrackIds(tracks);
             const featureData = await getAudioFeatureData(trackIds);
-            const audioFeatureAverages = await calculateAudioFeatureAverages(featureData);
+            const audioFeatureAverages = calculateAudioFeatureAverages(featureData);
             
             return {
                 tracks: tracks,
