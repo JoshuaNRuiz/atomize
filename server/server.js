@@ -9,7 +9,9 @@ const qs = require('qs');
 const axios = require('axios').default;
 
 app.use(express.static(path.join(__dirname, '../client/build')));
-app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 app.use(bodyParser.json());
 
 const CLIENT_ID = process.env.CLIENT_ID;
@@ -51,7 +53,9 @@ const requestTokens = async (code, redirect_uri) => {
         });
         return response.data;
     } catch (error) {
-        return {error: error.message};
+        return {
+            error: error.message
+        };
     }
 }
 
@@ -59,7 +63,7 @@ const requestTokens = async (code, redirect_uri) => {
 
 app.post('/api/spotify-helper/renew-access-token', async (req, res) => {
     const refreshToken = req.body.refresh_token;
-    const response =  await renewAccessToken(refreshToken);
+    const response = await renewAccessToken(refreshToken);
     res.send(response);
 });
 
@@ -85,9 +89,11 @@ const renewAccessToken = async (refreshToken) => {
         .then(response => response.data)
         .catch(error => {
             console.log(error.name + " " + error.message);
-            return {error: error.message}
+            return {
+                error: error.message
+            }
         })
-    
+
     return data;
 }
 
@@ -119,7 +125,9 @@ const getTop = async (type, accessToken, timeRange, limit, offset) => {
         const response = await axios.get(url, options)
             .then(response => response.data)
             .catch(error => {
-                return {error: error.message}
+                return {
+                    error: error.message
+                }
             });
 
         return response;
@@ -170,7 +178,9 @@ const getPlaylists = async (accessToken) => {
     } catch (error) {
         console.log(error);
     }
-    return {...items};
+    return {
+        ...items
+    };
 }
 
 // ************************ GETTING TRACK INFO ************************ 
@@ -243,6 +253,7 @@ const getLikedTracks = async (accessToken) => {
     let tracks = [];
     let url = 'https://api.spotify.com/v1/me/tracks';
     const options = {
+        method: 'get',
         headers: {
             'Authorization': 'Bearer ' + accessToken
         },
@@ -252,24 +263,31 @@ const getLikedTracks = async (accessToken) => {
     }
 
     do {
-        const response = await axios.get(url, options)
+        const response = await axios(url, options)
+            .then(response => {
+                for (const value of Object.values(response.data.items)) {
+                    tracks.push(value.track);
+                }
+                url = response.data.next;
+                return response;
+            })
             .catch(error => {
                 if (error.response) {
                     const serverError = error.response.data.error;
                     const time = new Date(Date.now()).toLocaleTimeString();
                     console.error(`[${time}]: ${serverError.status} ${serverError.message}`);
                 }
-                return {error: error.response.data};
+                return {
+                    error: error.response.data
+                };
             });
 
-        for (const value of Object.values(response.data.items)) {
-            tracks.push(value.track);
-        }
-
-        url = response.data.next;
+        if (response.error) break;
     } while (url !== null);
 
-    return {...tracks};
+    return {
+        ...tracks
+    };
 };
 
 // ************************ GETTING  AUDIO FEATURES ************************ 
@@ -304,10 +322,14 @@ const getAudioFeatures = async (accessToken, ids) => {
             items.push(...responseItems);
             startIndex += 100;
         }
-        return {...items};
+        return {
+            ...items
+        };
     } catch (error) {
         console.log(error.name + " " + error.message);
-        return {error: error.message};
+        return {
+            error: error.message
+        };
     }
 }
 
