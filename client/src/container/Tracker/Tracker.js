@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useRef} from 'react';
 import Controls from '../../component/Controls/Controls';
 import List from '../../component/List/List';
+import axios from 'axios';
 import './Tracker.css'
 
 const Tracker = (props) => {
@@ -16,15 +17,15 @@ const Tracker = (props) => {
     const [timeRange, setTimeRange] = useState(RANGE_DEFAULT);
     const [items, setItems] = useState([]);
 
-    const handleTypeChange = (e) => {
+    function handleTypeChange(e) {
         setType(e.target.value);
     }
 
-    const handleTimeRangeChange = (e) => {
+    function handleTimeRangeChange(e) {
         setTimeRange(e.target.value);
     }
 
-    const handleLimitChange = (e) => {
+    function handleLimitChange(e) {
         if (e.target.value > 50) {
             e.target.value = 50;
         } else if (e.target.value  < 0) {
@@ -33,32 +34,29 @@ const Tracker = (props) => {
         setLimit(e.target.value);
     }
 
-    const handleRefresh = () => {
+    async function handleRefresh() {
         const url = `http://localhost:8000/api/spotify-helper/top-${type}`;
-        const serverData = {
+        const data = {
             'access_token': accessToken,
             'time_range': timeRange,
             'limit': limit,
             'offset': 0
         }
-
-        fetch(url, {
-            method: "POST",
+        const options = {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(serverData)
-        })
-        .then(response => {
-            return response.ok ? response.json() : new Error(response.status);
-        })
-        .then(data => {
-            setItems(data.items);
-        })
-        .catch(error => {
-            console.log(error);
-        });
+        }
+
+        const response = await axios.post(url, data, options)
+            .catch(error => {
+                console.error(error.response);
+            })
+
+        const items = response.data.items ? response.data.items : {};
+
+        setItems(items);
     }
 
     return (

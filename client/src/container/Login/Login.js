@@ -4,7 +4,7 @@ const Login = () => {
     const redirect_uri = window.location.href;
     const scope = 'user-top-read playlist-read-private user-library-read';
 
-    const openSpotifyAuthorization = () => {
+    function openSpotifyAuthorization() {
         let url = 'https://accounts.spotify.com/authorize';
         url += '?response_type=code';
         url += '&client_id=' + '8e6f4d6f92d645d1b22ca1f6a8e8f371';

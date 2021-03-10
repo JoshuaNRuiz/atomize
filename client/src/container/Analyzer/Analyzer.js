@@ -20,7 +20,7 @@ const Analyzer = (props) => {
     const [isLoaded, setIsLoaded] = useState(false);
     const [isChart, setIsChart] = useState(true);
     
-    const getUserData = async (type) => {
+    async function getUserData(type) {
         let url = "";
 
         switch (type) {
@@ -44,7 +44,7 @@ const Analyzer = (props) => {
         return response.data;
     }
 
-    const getTrackIds = (tracks) => {
+    function getTrackIds(tracks) {
         let ids = [];
         const tracksArray = Object.values(tracks);
         if (tracksArray.length > 0) {
@@ -57,7 +57,7 @@ const Analyzer = (props) => {
         return ids;
     }
 
-    const getAudioFeatureData = async (trackIds) => {
+    async function getAudioFeatureData(trackIds) {
         const url = 'http://localhost:8000/api/spotify-helper/audio-features';
         const options = {
             access_token: accessToken,
@@ -75,7 +75,7 @@ const Analyzer = (props) => {
         return response.data;
     }
 
-    const calculateAudioFeatureAverages = (featureData) => {
+    function calculateAudioFeatureAverages(featureData) {
         let featureAverages = {
             danceability: 0,
             energy: 0,
