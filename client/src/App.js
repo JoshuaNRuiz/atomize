@@ -19,7 +19,7 @@ function App() {
 
   const baseUrl = window.location.origin;
 
-  const requestTokens = async (code) => {
+  async function requestTokens(code) {
     const url = baseUrl + '/api/spotify-helper/get-tokens';
     const data = {
       code: code,
@@ -37,7 +37,8 @@ function App() {
     .catch(error => alert(error));
   }
 
-  const renewAccessToken = async () => {
+
+  async function renewAccessToken() {
     const url = baseUrl + '/api/spotify-helper/renew-access-token';
     const data = {
       refresh_token: refreshToken
