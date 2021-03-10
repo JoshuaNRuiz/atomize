@@ -1,4 +1,4 @@
-import React, {useState, useEffect,  useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 
 import Loader from '../../component/Loader/Loader';
@@ -19,12 +19,12 @@ const Analyzer = (props) => {
     const [searchItems, setSearchItems] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
     const [isChart, setIsChart] = useState(true);
-    
+
     async function getUserData(type) {
         let url = "";
 
         switch (type) {
-            case 'playlist': 
+            case 'playlist':
                 url = 'http://localhost:8000/api/spotify-helper/user-playlists';
                 break;
             case 'liked-tracks':
@@ -34,7 +34,7 @@ const Analyzer = (props) => {
                 throw new Error("requested user data not available");
         }
 
-        const options = {"access_token": accessToken}
+        const options = { "access_token": accessToken }
 
         const response = await axios.post(url, options)
             .catch(error => {
@@ -132,7 +132,7 @@ const Analyzer = (props) => {
             const trackIds = getTrackIds(tracks);
             const featureData = await getAudioFeatureData(trackIds);
             const audioFeatureAverages = calculateAudioFeatureAverages(featureData);
-            
+
             return {
                 tracks: tracks,
                 featureData: featureData,
@@ -163,7 +163,7 @@ const Analyzer = (props) => {
     return (
         <div>
             <h2 className='page-title'>analyzer</h2>
-            {isLoaded ? <Chart title={"Vibe"} data={audioFeatureAverages}/> : <Loader />}
+            {isLoaded ? <Chart title={"Vibe"} data={audioFeatureAverages} /> : <Loader />}
         </div>
     )
 }

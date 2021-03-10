@@ -7,6 +7,8 @@ const bodyParser = require('body-parser');
 const qs = require('qs');
 const axios = require('axios').default;
 
+const NetworkError = require('./model/Errors/NetworkError');
+
 app.use(express.static(path.join(__dirname, '../client/build')));
 app.use(bodyParser.urlencoded({
     extended: true
@@ -27,73 +29,81 @@ app.get('/api/get-id', (req, res) => {
 app.post('/api/spotify-helper/get-tokens', async (req, res) => {
     const code = req.body.code;
     const redirectUri = req.body.redirect_uri;
-    const response = await requestTokens(code, redirectUri);
-    res.send(response);
+    const response = await requestTokens(code, redirectUri)
+        .then(response => response.data)
+        .catch(error => {
+            const networkError = new NetworkError(error);
+            console.error(networkError);
+            return {error: networkError};
+        })
+
+    const status = response.error ? response.error.status : 200;
+
+    res.status(status).send(response);
 });
 
 async function requestTokens(code, redirect_uri) {
-    const url = "https://accounts.spotify.com/api/token";
     const authorization = Buffer.from(CLIENT_ID + ':' + CLIENT_SECRET).toString('base64');
-    const grant_type = 'authorization_code';
-    const data = {
-        'grant_type': grant_type,
-        'code': code,
-        'redirect_uri': redirect_uri,
-    };
 
-    try {
-        const response = await axios(url, {
-            method: 'POST',
-            headers: {
-                'content-type': 'application/x-www-form-urlencoded',
-                'Authorization': 'Basic ' + authorization
-            },
-            data: qs.stringify(data)
-        });
-        return response.data;
-    } catch (error) {
-        return {
-            error: error.message
-        };
+    const options = {
+        url: 'https://accounts.spotify.com/api/token',
+        method: 'POST',
+        headers: {
+            'content-type': 'application/x-www-form-urlencoded',
+            'Authorization': 'Basic ' + authorization
+        },
+        data: qs.stringify({
+            'grant_type': 'authorization_code',
+            'code': code,
+            'redirect_uri': redirect_uri,
+        })
     }
+
+    const response = await axios(options);
+
+    return response;
 }
 
 // ************************ RENEWING ACCESS TOKENS ************************
 
 app.post('/api/spotify-helper/renew-access-token', async (req, res) => {
     const refreshToken = req.body.refresh_token;
-    const response = await renewAccessToken(refreshToken);
-    res.send(response);
+    const response = await renewAccessToken(refreshToken)
+        .then(response => response.data)
+        .catch(error => {
+            const details = {
+                status: error.response.status,
+                message: error.message,
+                type: error.response.data.error,
+            }
+            console.error(details);
+            return { error: details };
+        });
+
+    const status = response.error ? response.error.status : 200;
+
+    res.status(status).send(response);
 });
 
 async function renewAccessToken(refreshToken) {
-    const url = 'https://accounts.spotify.com/api/token';
     const authorization = Buffer.from(CLIENT_ID + ':' + CLIENT_SECRET).toString('base64');
-    const grantType = 'refresh_token';
 
     const options = {
-        method: 'post',
-        url: url,
+        url: 'https://accounts.spotify.com/api/token',
+        method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
             'Authorization': 'Basic ' + authorization
         },
         data: qs.stringify({
-            grant_type: grantType,
+            grant_type: 'refresh_token',
             refresh_token: refreshToken
         }),
     }
 
-    const data = await axios(options)
-        .then(response => response.data)
-        .catch(error => {
-            console.log(error.name + " " + error.message);
-            return {
-                error: error.message
-            }
-        })
+    const response = await axios(options);
 
-    return data;
+    return response;
 }
 
 // ************************ GETTING TOP TRACKS/ARTISTS ************************ 

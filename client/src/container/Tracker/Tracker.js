@@ -1,7 +1,8 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
+
 import Controls from '../../component/Controls/Controls';
 import List from '../../component/List/List';
-import axios from 'axios';
 import './Tracker.css'
 
 const Tracker = (props) => {
@@ -28,7 +29,7 @@ const Tracker = (props) => {
     function handleLimitChange(e) {
         if (e.target.value > 50) {
             e.target.value = 50;
-        } else if (e.target.value  < 0) {
+        } else if (e.target.value < 0) {
             e.target.value = 0
         }
         setLimit(e.target.value);
@@ -61,13 +62,13 @@ const Tracker = (props) => {
 
     return (
         <div className='tracker'>
-            <Controls 
-                limit={limit} 
+            <Controls
+                limit={limit}
                 handleTypeChange={handleTypeChange}
                 handleTimeRangeChange={handleTimeRangeChange}
                 handleLimitChange={handleLimitChange}
-                handleRefresh={handleRefresh}/>
-            <List type={type} items={items}/>
+                handleRefresh={handleRefresh} />
+            <List type={type} items={items} />
         </div>
     )
 }
