@@ -46,8 +46,13 @@ const Analyzer = (props) => {
 
     const getTrackIds = (tracks) => {
         let ids = [];
-        for (const track of Object.values(tracks)) {
-            ids.push(track.id);
+        const tracksArray = Object.values(tracks);
+        if (tracksArray.length > 0) {
+            for (const track of tracksArray) {
+                ids.push(track.id);
+            }
+        } else {
+            throw new Error("Tried to get track ids for an empty list of tracks");
         }
         return ids;
     }
