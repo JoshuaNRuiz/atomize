@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
+import React, { useState, useEffect, useContext } from 'react';
+import { BrowserRouter as Router, Switch, Route, Redirect, useHistory } from 'react-router-dom';
 import axios from 'axios';
 
 import Navbar from './component/Navbar/Navbar';
@@ -12,6 +12,7 @@ import Explorer from './container/Explorer/Explorer';
 import './App.css'
 
 function App() {
+    const history = useHistory();
     const [isLoggedIn, setLoginStatus] = useState(false);
     const [accessToken, setAccessToken] = useState(null);
     const [refreshToken, setRefreshToken] = useState(null);
@@ -77,7 +78,7 @@ function App() {
         setRefreshToken(refreshToken);
         localStorage.setItem('refreshToken', refreshToken);
 
-        const accessTokenExpirationTime = Math.floor((Date.now() / 1000) + 3600);
+        const accessTokenExpirationTime = Math.floor((Date.now()) + 3600000);
         localStorage.setItem('accessTokenExpirationTime', accessTokenExpirationTime);
     }
 
@@ -112,25 +113,35 @@ function App() {
     // manage the expired access token state
     useEffect(() => {
         if (isLoggedIn) {
-            const currentTime = Date.now() / 1000;
-            const accessTokenExpirationTime = localStorage.getItem('accessTokenExpirationTime');
-            const accessTokenExpired = currentTime > accessTokenExpirationTime;
-
+            const accessTokenExpired = hasAccessTokenExpired();
             const localRefreshToken = localStorage.getItem('refreshToken');
-
             if (accessTokenExpired && !!localRefreshToken) {
+                console.error("access token expired... attempting to renew");
                 renewAccessToken()
                     .then(accessToken => {
                         setAccessToken(accessToken);
-                        const accessTokenExpirationTime = Math.floor((Date.now() / 1000) + 3600);
+                        const accessTokenExpirationTime = Math.floor((Date.now()) + 3600000);
                         localStorage.setItem('accessTokenExpirationTime', accessTokenExpirationTime);
                     })
                     .catch(error => {
-                        console.log(error);
+                        console.error(error);
                     });
+            } else if (accessTokenExpired && !localRefreshToken) {
+                localStorage.clear();
+                setLoginStatus(false);
             }
         }
     });
+
+    function hasAccessTokenExpired() {
+        const currentTime = Date.now() / 1000;
+        const accessTokenExpirationTime = localStorage.getItem('accessTokenExpirationTime');
+        if (!accessTokenExpirationTime) return true;
+
+        const accessTokenExpired = currentTime > accessTokenExpirationTime;
+
+        return accessTokenExpired;
+    }
 
     let container = isLoggedIn ? Gateway : Login;
     const tracker = () => <Tracker accessToken={accessToken} />
@@ -138,10 +149,8 @@ function App() {
 
     return (
         <Router>
-            <div className="App" > {
-                isLoggedIn ? <Navbar /> : null
-            }
-
+            <div className="App">
+                {isLoggedIn ? <Navbar /> : null}
                 <Switch>
                     <Route path='/' exact component={container} />
                     <Route path='/analyze' render={analyzer} />
