@@ -4,7 +4,6 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const bodyParser = require('body-parser');
-const fetch = require('node-fetch');
 const qs = require('qs');
 const axios = require('axios').default;
 
@@ -32,7 +31,7 @@ app.post('/api/spotify-helper/get-tokens', async (req, res) => {
     res.send(response);
 });
 
-const requestTokens = async (code, redirect_uri) => {
+async function requestTokens(code, redirect_uri) {
     const url = "https://accounts.spotify.com/api/token";
     const authorization = Buffer.from(CLIENT_ID + ':' + CLIENT_SECRET).toString('base64');
     const grant_type = 'authorization_code';
@@ -67,7 +66,7 @@ app.post('/api/spotify-helper/renew-access-token', async (req, res) => {
     res.send(response);
 });
 
-const renewAccessToken = async (refreshToken) => {
+async function renewAccessToken(refreshToken) {
     const url = 'https://accounts.spotify.com/api/token';
     const authorization = Buffer.from(CLIENT_ID + ':' + CLIENT_SECRET).toString('base64');
     const grantType = 'refresh_token';
@@ -110,7 +109,7 @@ app.post('/api/spotify-helper/top-:type', async (req, res) => {
     res.send(response);
 });
 
-const getTop = async (type, accessToken, timeRange, limit, offset) => {
+async function getTop(type, accessToken, timeRange, limit, offset) {
     if (type == 'artists' || type == 'tracks') {
         let url = 'https://api.spotify.com/v1/me/top/';
         url += `${type}?time_range=${timeRange}&limit=${limit}&offset=${offset}`;
@@ -147,7 +146,7 @@ app.post('/api/spotify-helper/user-playlists', async (req, res) => {
     }
 });
 
-const getPlaylists = async (accessToken) => {
+async function getPlaylists(accessToken) {
     let items = [];
     try {
         let url = 'https://api.spotify.com/v1/me/playlists';
@@ -249,7 +248,7 @@ app.post('/api/spotify-helper/liked-tracks', async (req, res) => {
     res.send(data);
 });
 
-const getLikedTracks = async (accessToken) => {
+async function getLikedTracks(accessToken) {
     let tracks = [];
     let url = 'https://api.spotify.com/v1/me/tracks';
     const options = {
@@ -299,7 +298,7 @@ app.post('/api/spotify-helper/audio-features', async (req, res) => {
     res.send(response);
 });
 
-const getAudioFeatures = async (accessToken, ids) => {
+async function getAudioFeatures(accessToken, ids) {
     let items = []
     try {
         const url = 'https://api.spotify.com/v1/audio-features/';
