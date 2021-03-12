@@ -17,7 +17,7 @@ const Login = () => {
         <div>
             <p>To view your information, you must temporarily authorize this application to
                 access your Spotify information.</p>
-            <button className="uk-button uk-button-primary uk-button-small" onClick={openSpotifyAuthorization}>Login</button>
+            <button onClick={openSpotifyAuthorization}>Login</button>
         </div>
     )
 }

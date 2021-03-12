@@ -14,8 +14,8 @@ import './App.css'
 function App() {
     const history = useHistory();
 
-    const tracker = () => <Tracker accessToken={accessToken}/>
-    const analyzer = () => <Analyzer accessToken={accessToken}/>
+    const tracker = () => <Tracker accessToken={accessToken} />
+    const analyzer = () => <Analyzer accessToken={accessToken} />
 
     const [isLoggedIn, setLoginStatus] = useState(false);
     const [accessToken, setAccessToken] = useState(null);
@@ -66,7 +66,7 @@ function App() {
     }
 
     function getTokens() {
-        
+
     }
 
     async function requestTokens(code) {
@@ -128,7 +128,7 @@ function App() {
     });
 
     function hasAccessTokenExpired() {
-        const currentTime = Date.now() / 1000;
+        const currentTime = Date.now();
         const accessTokenExpirationTime = localStorage.getItem('accessTokenExpirationTime');
         if (!accessTokenExpirationTime) return true;
 
@@ -155,18 +155,28 @@ function App() {
 
     // ************************ CORE ************************
 
-    let container = isLoggedIn ? Gateway : Login;
-
     return (
         <Router>
             <div className="App">
-                {isLoggedIn ? <Navbar /> : null}
+                <Navbar />
                 <Switch>
-                    <Route path='/' exact component={container} />
-                    <Route path='/analyze' render={analyzer} />
-                    <Route path='/top' component={tracker} />
-                    <Route path='/explorer' component={Explorer} />
-                </Switch> </div>
+                    <Route exact path='/'>
+                        {isLoggedIn ? Gateway : Login}
+                    </Route>
+
+                    <Route path='/analyze'>
+                        <Analyzer accessToken={accessToken} />
+                    </Route>
+
+                    <Route path='/top'>
+                        <Tracker accessToken={accessToken} />
+                    </Route>
+
+                    <Route path='/explorer'>
+
+                    </Route>
+                </Switch>
+            </div>
         </Router>
 
     );

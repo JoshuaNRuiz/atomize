@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 import Controls from '../../component/Controls/Controls';
@@ -35,30 +35,38 @@ const Tracker = (props) => {
         setLimit(e.target.value);
     }
 
-    async function handleRefresh() {
-        const url = `http://localhost:8000/api/spotify-helper/top-${type}`;
-        const data = {
-            'access_token': accessToken,
-            'time_range': timeRange,
-            'limit': limit,
-            'offset': 0
-        }
+    function handleRefresh() {
+        getItems();
+    }
+
+    async function getItems() {
         const options = {
+            url: `http://localhost:8000/api/spotify-helper/top-${type}`,
+            method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
+            data: {
+                'access_token': accessToken,
+                'time_range': timeRange,
+                'limit': limit,
+                'offset': 0
+            }
         }
 
-        const response = await axios.post(url, data, options)
+        axios(options)
+            .then(response => {
+                const data = response.data;
+                console.log(data);
+                setItems(data.items);
+            })
             .catch(error => {
                 console.error(error.response);
-            })
-
-        const items = response.data.items ? response.data.items : {};
-
-        setItems(items);
+            });
     }
+
+    useEffect(handleRefresh, [type]);
 
     return (
         <div className='tracker'>
