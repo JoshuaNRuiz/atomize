@@ -29,17 +29,18 @@ app.get('/api/get-id', (req, res) => {
 app.post('/api/spotify-helper/get-tokens', async (req, res) => {
     const code = req.body.code;
     const redirectUri = req.body.redirect_uri;
-    const response = await requestTokens(code, redirectUri)
-        .then(response => response.data)
+
+    const data = await requestTokens(code, redirectUri)
         .catch(error => {
-            const networkError = new NetworkError(error);
-            console.error(networkError);
-            return {error: networkError};
-        })
+            return {
+                error: error.message,
+                status: error.response.status
+            }
+        });
 
-    const status = response.error ? response.error.status : 200;
+    const status = data.error ? data.status : 200;
 
-    res.status(status).send(response);
+    res.status(status).send(data);
 });
 
 async function requestTokens(code, redirect_uri) {
@@ -57,32 +58,30 @@ async function requestTokens(code, redirect_uri) {
             'code': code,
             'redirect_uri': redirect_uri,
         })
-    }
+    };
 
-    const response = await axios(options);
+    const data = await axios(options)
+        .then(response => response.data);
 
-    return response;
+    return data;
 }
 
 // ************************ RENEWING ACCESS TOKENS ************************
 
 app.post('/api/spotify-helper/renew-access-token', async (req, res) => {
     const refreshToken = req.body.refresh_token;
-    const response = await renewAccessToken(refreshToken)
-        .then(response => response.data)
+
+    const data = await renewAccessToken(refreshToken)
         .catch(error => {
-            const details = {
-                status: error.response.status,
-                message: error.message,
-                type: error.response.data.error,
+            return {
+                error: error.message,
+                status: error.response.status
             }
-            console.error(details);
-            return { error: details };
         });
 
-    const status = response.error ? response.error.status : 200;
+    const status = data.error ? data.status : 200;
 
-    res.status(status).send(response);
+    res.status(status).send(data);
 });
 
 async function renewAccessToken(refreshToken) {
@@ -99,11 +98,12 @@ async function renewAccessToken(refreshToken) {
             grant_type: 'refresh_token',
             refresh_token: refreshToken
         }),
-    }
+    };
 
-    const response = await axios(options);
+    const data = await axios(options)
+        .then(response => response.data);
 
-    return response;
+    return data;
 }
 
 // ************************ GETTING TOP TRACKS/ARTISTS ************************ 
@@ -115,31 +115,36 @@ app.post('/api/spotify-helper/top-:type', async (req, res) => {
     const limit = req.body.limit;
     const offset = req.body.offset;
 
-    const response = await getTop(type, accessToken, timeRange, limit, offset);
-    res.send(response);
+    const data = await getTop(type, accessToken, timeRange, limit, offset)
+        .catch(error => {
+            return {
+                error: error.message,
+                status: error.response.status
+            }
+        });
+
+    const status = data.error ? data.status : 200;
+
+    res.status(status).send(data);
 });
 
 async function getTop(type, accessToken, timeRange, limit, offset) {
     if (type == 'artists' || type == 'tracks') {
-        let url = 'https://api.spotify.com/v1/me/top/';
-        url += `${type}?time_range=${timeRange}&limit=${limit}&offset=${offset}`;
+        const url = `https://api.spotify.com/v1/me/top/${type}?time_range=${timeRange}&limit=${limit}&offset=${offset}`;
 
         const options = {
+            url: url,
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + accessToken
             }
         }
 
-        const response = await axios.get(url, options)
-            .then(response => response.data)
-            .catch(error => {
-                return {
-                    error: error.message
-                }
-            });
+        const data = await axios(options)
+            .then(response => response.data);
 
-        return response;
+        return data;
     }
 };
 
@@ -147,49 +152,50 @@ async function getTop(type, accessToken, timeRange, limit, offset) {
 
 app.post('/api/spotify-helper/user-playlists', async (req, res) => {
     const accessToken = req.body.access_token;
-    try {
-        const data = await getPlaylists(accessToken);
-        res.send(data);
-    } catch (error) {
-        console.log(error);
-        res.send({});
-    }
+
+    const data = await getPlaylists(accessToken)
+        .catch(error => {
+            return {
+                error: error.message,
+                status: error.response.status
+            }
+        });
+
+    const status = data.error ? data.status : 200;
+
+    res.status(status).send(data)
 });
 
 async function getPlaylists(accessToken) {
-    let items = [];
-    try {
-        let url = 'https://api.spotify.com/v1/me/playlists';
-        const options = {
-            headers: {
-                'Authorization': 'Bearer ' + accessToken
-            },
-            params: {
-                limit: 50
-            }
+    let playlists = [];
+
+    let options = {
+        url: 'https://api.spotify.com/v1/me/playlists',
+        method: 'GET',
+        headers: {
+            'Authorization': 'Bearer ' + accessToken
+        },
+        params: {
+            limit: 50
         }
-
-        do {
-            const response = await axios.get(url, options)
-                .catch(error => {
-                    throw error;
-                });
-            let responseItems = Object.values(response.data.items);
-            items.push(...responseItems);
-            url = response.data.next;
-        } while (url !== null);
-
-        items.sort((a, b) => { // alphabetize before sending
-            if (a.name < b.name) return -1;
-            if (a.name < b.name) return 1;
-            else return 0;
-        })
-    } catch (error) {
-        console.log(error);
-    }
-    return {
-        ...items
     };
+
+    do {
+        await axios(options)
+            .then(response => {
+                const items = Object.values(response.data.items);
+                playlists.push(...items);
+                options.url = response.data.next;
+            });
+    } while (options.url !== null);
+
+    items.sort((a, b) => { // alphabetize before sending
+        if (a.name < b.name) return -1;
+        if (a.name < b.name) return 1;
+        else return 0;
+    });
+
+    return playlists;
 }
 
 // ************************ GETTING TRACK INFO ************************ 
@@ -199,7 +205,7 @@ app.post('/api/spotify-helper/tracks/:infotype', async (req, res) => {
     const accessToken = req.body.access_token;
     const ids = req.body.ids;
 
-    let url = 'https://api.spotify.com/v1/'
+    let url = 'https://api.spotify.com/v1/';
 
     if (infotype === 'general') {
         url += 'tracks';
@@ -207,20 +213,29 @@ app.post('/api/spotify-helper/tracks/:infotype', async (req, res) => {
         url += 'audio-features';
     }
 
-    try {
-        const response = await axios.get(url, {
-            headers: {
-                'Authorization': 'Bearer ' + accessToken
-            },
-            params: {
-                ids: ids
+    const options = {
+        url: url,
+        method: 'GET',
+        headers: {
+            'Authorization': 'Bearer ' + accessToken
+        },
+        params: {
+            ids: ids
+        }
+    }
+
+    const data = await axios(options)
+        .then(response => response.data)
+        .catch(error => {
+            return {
+                error: error.message,
+                status: error.response.status
             }
         });
-        res.send(response.data);
-    } catch (error) {
-        console.log(error);
-        res.send({});
-    }
+
+    const status = data.error ? data.status : 200;
+
+    res.status(status).send(data);
 });
 
 app.post('/api/spotify-helper/tracks/:infotype/:id', async (req, res) => {
@@ -254,15 +269,24 @@ app.post('/api/spotify-helper/tracks/:infotype/:id', async (req, res) => {
 
 app.post('/api/spotify-helper/liked-tracks', async (req, res) => {
     const accessToken = req.body.access_token;
-    const data = await getLikedTracks(accessToken);
-    res.send(data);
+    const data = await getLikedTracks(accessToken)
+        .catch(error => {
+            return {
+                error: error.message,
+                status: error.message.status
+            }
+        });
+
+    const status = data.error ? data.status : 200;
+
+    res.status(status).send(data);
 });
 
 async function getLikedTracks(accessToken) {
     let tracks = [];
-    let url = 'https://api.spotify.com/v1/me/tracks';
-    const options = {
-        method: 'get',
+    let options = {
+        url: 'https://api.spotify.com/v1/me/tracks',
+        method: 'GET',
         headers: {
             'Authorization': 'Bearer ' + accessToken
         },
@@ -272,31 +296,15 @@ async function getLikedTracks(accessToken) {
     }
 
     do {
-        const response = await axios(url, options)
+        await axios(options)
             .then(response => {
-                for (const value of Object.values(response.data.items)) {
-                    tracks.push(value.track);
-                }
-                url = response.data.next;
-                return response;
-            })
-            .catch(error => {
-                if (error.response) {
-                    const serverError = error.response.data.error;
-                    const time = new Date(Date.now()).toLocaleTimeString();
-                    console.error(`[${time}]: ${serverError.status} ${serverError.message}`);
-                }
-                return {
-                    error: error.response.data
-                };
+                const items = Object.values(response.data.items);
+                tracks.push(...items);
+                options.url = response.data.next;
             });
+    } while (options.url !== null);
 
-        if (response.error) break;
-    } while (url !== null);
-
-    return {
-        ...tracks
-    };
+    return { ...tracks };
 };
 
 // ************************ GETTING  AUDIO FEATURES ************************ 
@@ -304,42 +312,49 @@ async function getLikedTracks(accessToken) {
 app.post('/api/spotify-helper/audio-features', async (req, res) => {
     const accessToken = req.body.access_token;
     const ids = req.body.track_ids;
-    const response = await getAudioFeatures(accessToken, ids);
-    res.send(response);
+    const data = await getAudioFeatures(accessToken, ids)
+        .catch(error => {
+            return {
+                error: error.message,
+                status: error.status
+            }
+        });
+
+    const status = data.error ? data.status : 200;
+
+    res.send(data);
 });
 
 async function getAudioFeatures(accessToken, ids) {
-    let items = []
-    try {
-        const url = 'https://api.spotify.com/v1/audio-features/';
-        let options = {
-            headers: {
-                'Authorization': 'Bearer ' + accessToken
-            }
-        }
-        let trackIds = '';
-        let startIndex = 0;
-        let endIndex = 0;
-        while (startIndex <= ids.length) {
-            endIndex = startIndex + 100 > ids.length ? ids.length : startIndex + 100;
-            trackIds = ids.slice(startIndex, endIndex).join(',');
-            options.params = {
-                ids: trackIds
-            }
-            const response = await axios.get(url, options);
-            const responseItems = Object.values(response.data.audio_features);
-            items.push(...responseItems);
-            startIndex += 100;
-        }
-        return {
-            ...items
-        };
-    } catch (error) {
-        console.log(error.name + " " + error.message);
-        return {
-            error: error.message
-        };
+    let audioFeatureData = []
+
+    let options = {
+        url: 'https://api.spotify.com/v1/audio-features/',
+        method: 'GET',
+        headers: {
+            'Authorization': 'Bearer ' + accessToken
+        },
+        params: {ids: ''}
     }
+
+    let trackIds = '';
+    let startIndex = 0;
+    let endIndex = 0;
+
+    while (startIndex <= ids.length) {
+        endIndex = startIndex + 100 > ids.length ? ids.length : startIndex + 100;
+        trackIds = ids.slice(startIndex, endIndex).join(',');
+        options.params.ids = trackIds;
+
+        await axios(options)
+            .then(response => {
+                const audioFeatures = response.data.audio_features;
+                audioFeatureData.push(...audioFeatures);
+                startIndex += 100;
+            })
+    }
+
+    return audioFeatureData;
 }
 
 // ************************ CORE ************************ 

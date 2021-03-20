@@ -36,10 +36,7 @@ const Analyzer = (props) => {
 
         const options = { "access_token": accessToken }
 
-        const response = await axios.post(url, options)
-            .catch(error => {
-                throw error;
-            });
+        const response = await axios.post(url, options);
 
         return response.data;
     }
@@ -65,10 +62,6 @@ const Analyzer = (props) => {
         }
 
         const response = await axios.post(url, options)
-            .catch(error => {
-                console.error(error);
-                throw error;
-            });
 
         console.log(response.data);
 
@@ -167,5 +160,8 @@ const Analyzer = (props) => {
         </div>
     )
 }
+
+// {isLoaded ? <Chart title={"Vibe"} data={audioFeatureAverages} /> : <Loader />}
+
 
 export default Analyzer;
