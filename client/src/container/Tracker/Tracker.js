@@ -58,11 +58,7 @@ const Tracker = (props) => {
         axios(options)
             .then(response => {
                 const data = response.data;
-                console.log(data);
                 setItems(data.items);
-            })
-            .catch(error => {
-                console.error(error.response);
             });
     }
 
