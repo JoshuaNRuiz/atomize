@@ -299,8 +299,8 @@ async function getLikedTracks(accessToken) {
         await axios(options)
             .then(response => {
                 const items = Object.values(response.data.items);
-                data = items.map(item => item.track);
-                tracks.push(...data);
+                strippedData = items.map(item => item.track);
+                tracks.push(...strippedData);
                 options.url = response.data.next;
             });
     } while (options.url !== null);

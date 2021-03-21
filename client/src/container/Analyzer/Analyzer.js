@@ -115,16 +115,12 @@ const Analyzer = (props) => {
 
     // TODO: THIS HAS TO BE IMPROVED, WE ARE DUPLICATING DATA -- we just need to filter
     const handleSearch = (e) => {
-        const searchString = e.target.value.toLowerCase().trim();
-        if (searchString != '') {
-            let searchResults = {}
-            for (const [key, playlist] of Object.entries(userPlaylists)) {
-                const playlistName = playlist.name.toLowerCase();
-                if (playlistName.includes(searchString)) {
-                    searchResults[key] = playlist;
-                }
-            }
-            setSearchItems(searchResults);
+        const searchString = e.target.value.toUpperCase().trim();
+        if (searchString !== '') {
+            const searchResults = Object.values(userPlaylists).filter(playlist => {
+                playlist.name.toUpperCase().includes(searchString);
+            });
+            setSearchItems({...searchResults});
             if (!isSearch) setIsSearch(true);
         } else {
             setIsSearch(false);
