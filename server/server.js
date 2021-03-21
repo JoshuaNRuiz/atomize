@@ -273,7 +273,7 @@ app.post('/api/spotify-helper/liked-tracks', async (req, res) => {
         .catch(error => {
             return {
                 error: error.message,
-                status: error.message.status
+                status: error.response.status
             }
         });
 
@@ -293,13 +293,14 @@ async function getLikedTracks(accessToken) {
         params: {
             limit: 50
         }
-    }
+    };
 
     do {
         await axios(options)
             .then(response => {
                 const items = Object.values(response.data.items);
-                tracks.push(...items);
+                data = items.map(item => item.track);
+                tracks.push(...data);
                 options.url = response.data.next;
             });
     } while (options.url !== null);
@@ -316,13 +317,13 @@ app.post('/api/spotify-helper/audio-features', async (req, res) => {
         .catch(error => {
             return {
                 error: error.message,
-                status: error.status
+                status: error.response.status
             }
         });
 
     const status = data.error ? data.status : 200;
 
-    res.send(data);
+    res.status(status).send(data);
 });
 
 async function getAudioFeatures(accessToken, ids) {

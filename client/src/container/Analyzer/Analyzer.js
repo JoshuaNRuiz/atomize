@@ -34,11 +34,20 @@ const Analyzer = (props) => {
                 throw new Error("requested user data not available");
         }
 
-        const options = { "access_token": accessToken }
+        const options = {
+            url: url,
+            method: 'POST',
+            data: {
+                access_token: accessToken
+            }
+        }
 
-        const response = await axios.post(url, options);
+        const data = await axios(options)
+            .then(response => response.data);
 
-        return response.data;
+        console.log(data);
+
+        return data;
     }
 
     function getTrackIds(tracks) {
@@ -51,21 +60,26 @@ const Analyzer = (props) => {
         } else {
             throw new Error("Tried to get track ids for an empty list of tracks");
         }
+        console.log(ids);
         return ids;
     }
 
     async function getAudioFeatureData(trackIds) {
-        const url = 'http://localhost:8000/api/spotify-helper/audio-features';
         const options = {
-            access_token: accessToken,
-            track_ids: trackIds,
+            url: 'http://localhost:8000/api/spotify-helper/audio-features',
+            method: 'POST',
+            data: {
+                access_token: accessToken,
+                track_ids: trackIds,
+            }
         }
 
-        const response = await axios.post(url, options)
+        const data = await axios(options)
+            .then(response => response.data);
+            
+        console.log(data);
 
-        console.log(response.data);
-
-        return response.data;
+        return data;
     }
 
     function calculateAudioFeatureAverages(featureData) {
