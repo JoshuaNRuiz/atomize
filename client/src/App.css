@@ -1,11 +1,9 @@
 html {
   background-color: #2E2E2E;
-  background-image: url("./resources/what-the-hex-dark.png");
-  background-repeat: repeat;
 }
 
 body {
-  background-color: rgb(25, 25, 25);
+  /* background-color: rgb(25, 25, 25); */
   max-width: 960px;
   margin: 0 auto;
 }
@@ -48,13 +46,4 @@ body {
 h1 {
   color: white;
   font-weight: 300;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }
