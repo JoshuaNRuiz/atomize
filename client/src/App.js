@@ -22,7 +22,7 @@ function App() {
     const [refreshToken, setRefreshToken] = useState(null);
     const [isAccessTokenValid, setAccessTokenStatus] = useState(false);
 
-    const baseUrl = window.location.origin;
+    const baseUrl = process.env.REACT_APP_ENVIRONMENT;
 
     // ************************ MANAGE USER LOGGED IN STATE ************************
 
@@ -70,6 +70,7 @@ function App() {
     }
 
     async function requestTokens(code) {
+        console.log(baseUrl);
         const options = {
             url: baseUrl + '/api/spotify-helper/get-tokens',
             method: 'POST',

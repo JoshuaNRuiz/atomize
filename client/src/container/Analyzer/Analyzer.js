@@ -20,7 +20,7 @@ const Analyzer = (props) => {
     const [isLoaded, setIsLoaded] = useState(false);
     const [isChart, setIsChart] = useState(true);
 
-    const baseUrl = window.location.origin;
+    const baseUrl = process.env.REACT_APP_ENVIRONMENT;
 
     async function getUserData(type) {
         let url = baseUrl;

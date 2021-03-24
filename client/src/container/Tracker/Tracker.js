@@ -18,7 +18,7 @@ const Tracker = (props) => {
     const [timeRange, setTimeRange] = useState(RANGE_DEFAULT);
     const [items, setItems] = useState([]);
 
-    const baseUrl = window.location.origin;
+    const baseUrl = process.env.REACT_APP_ENVIRONMENT;
 
     function handleTypeChange(e) {
         setType(e.target.value);
