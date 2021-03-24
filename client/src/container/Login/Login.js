@@ -1,5 +1,7 @@
 import React from 'react';
 
+import './Login.css';
+
 const Login = () => {
     const redirect_uri = process.env.REACT_APP_BASE_URL + '/';
     const scope = 'user-top-read playlist-read-private user-library-read';
@@ -10,14 +12,13 @@ const Login = () => {
         url += '&client_id=' + '8e6f4d6f92d645d1b22ca1f6a8e8f371';
         url += '&scope=' + scope;
         url += '&redirect_uri=' + redirect_uri;
-        window.open(url, "_self");
+        window.open(url, "_self"); 
     };
 
     return (
-        <div>
-            <p>To view your information, you must temporarily authorize this application to
-                access your Spotify information.</p>
-            <button onClick={openSpotifyAuthorization}>Login</button>
+        <div className='container'>
+            <h1>This app requires permission to access your Spotify information.</h1>
+            <button className='auth-button' onClick={openSpotifyAuthorization}>Authorize</button>
         </div>
     )
 }
