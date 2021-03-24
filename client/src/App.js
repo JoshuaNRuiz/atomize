@@ -23,6 +23,7 @@ function App() {
     const [isAccessTokenValid, setAccessTokenStatus] = useState(false);
 
     const baseUrl = process.env.REACT_APP_ENVIRONMENT;
+    const basePath = process.env.REACT_APP_BASE_PATH;
 
     // ************************ MANAGE USER LOGGED IN STATE ************************
 
@@ -161,19 +162,19 @@ function App() {
             <div className="App">
                 <Navbar />
                 <Switch>
-                    <Route exact path='/'>
+                    <Route exact path={basePath + '/'}>
                         {isLoggedIn ? Gateway : Login}
                     </Route>
 
-                    <Route path='/analyze'>
+                    <Route path={basePath + '/analyze'}>
                         <Analyzer accessToken={accessToken} />
                     </Route>
 
-                    <Route path='/top'>
+                    <Route path={basePath + '/top'}>
                         <Tracker accessToken={accessToken} />
                     </Route>
 
-                    <Route path='/explore'>
+                    <Route path={basePath + '/explore'}>
 
                     </Route>
                 </Switch>
