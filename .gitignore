@@ -22,6 +22,8 @@ client/n.env.production.local
 
 client/nnpm-debug.log*
 
+client/.env
+
 # SERVER FILES
 server/node_modules
 server/.env

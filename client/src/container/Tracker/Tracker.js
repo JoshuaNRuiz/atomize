@@ -18,6 +18,8 @@ const Tracker = (props) => {
     const [timeRange, setTimeRange] = useState(RANGE_DEFAULT);
     const [items, setItems] = useState([]);
 
+    const BASE_URL = process.env.REACT_APP_BASE_URL;
+
     function handleTypeChange(e) {
         setType(e.target.value);
     }
@@ -41,7 +43,7 @@ const Tracker = (props) => {
 
     async function getItems() {
         const options = {
-            url: `http://localhost:8000/api/spotify-helper/top-${type}`,
+            url: `${BASE_URL}/api/spotify-helper/top-${type}`,
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
