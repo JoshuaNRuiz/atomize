@@ -7,15 +7,15 @@ const Gateway = (props) => {
 
     return (
         <div className='gateway'>
-            <Link to={baseUrl + 'analyze'}> 
+            <Link to='analyze'> 
                 <button>Music Analysis</button> 
             </Link>
 
-            <Link to={baseUrl + 'top'}> 
+            <Link to='top'> 
                 <button>Top Artists & Tracks</button> 
             </Link>
 
-            <Link to={baseUrl + 'explore'}> 
+            <Link to='explore'> 
                 <button>Find New Music</button> 
             </Link>
         </div>
