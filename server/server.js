@@ -6,6 +6,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const qs = require('qs');
 const axios = require('axios').default;
+const cors = require('cors');
 
 const NetworkError = require('./model/Errors/NetworkError');
 
@@ -14,6 +15,7 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(bodyParser.json());
+app.use(cors());
 
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
