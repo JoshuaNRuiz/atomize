@@ -1,0 +1,29 @@
+h1 {
+    color: white;
+    font-size: 20px;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 40% auto;
+    padding: 64px 32px;
+    max-width: 600px;
+    background-color: rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.6);
+}
+
+.auth-button {
+    background-color: green;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    border-radius: 2px;
+    padding: 12px 14px;
+    color: white;
+    width: 100px;
+}
+
+.auth-button:hover {
+    cursor: pointer;
+}
