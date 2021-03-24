@@ -3,7 +3,7 @@ import {Link, Redirect} from 'react-router-dom';
 
 const Gateway = (props) => {
 
-    const baseUrl = process.env.REACT_APP_ENVIRONMENT;
+    const BASE_URL = process.env.REACT_APP_BASE_URL;
 
     return (
         <div className='gateway'>

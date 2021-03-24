@@ -19,7 +19,7 @@ app.use(cors());
 
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
-const basePath = process.env.BASE_PATH
+const BASE_PATH = process.env.BASE_PATH
 
 // ************************ API ************************
 
@@ -29,7 +29,7 @@ app.get('/api/get-id', (req, res) => {
 
 // ************************ AUTHORIZATION ************************
 
-app.post(basePath + '/api/spotify-helper/get-tokens', async (req, res) => {
+app.post(BASE_PATH + '/api/spotify-helper/get-tokens', async (req, res) => {
     const code = req.body.code;
     const redirectUri = req.body.redirect_uri;
 
@@ -71,7 +71,7 @@ async function requestTokens(code, redirect_uri) {
 
 // ************************ RENEWING ACCESS TOKENS ************************
 
-app.post(basePath + '/api/spotify-helper/renew-access-token', async (req, res) => {
+app.post(BASE_PATH + '/api/spotify-helper/renew-access-token', async (req, res) => {
     const refreshToken = req.body.refresh_token;
 
     const data = await renewAccessToken(refreshToken)
@@ -111,7 +111,7 @@ async function renewAccessToken(refreshToken) {
 
 // ************************ GETTING TOP TRACKS/ARTISTS ************************ 
 
-app.post(basePath + '/api/spotify-helper/top-:type', async (req, res) => {
+app.post(BASE_PATH + '/api/spotify-helper/top-:type', async (req, res) => {
     const type = req.params.type;
     const accessToken = req.body.access_token
     const timeRange = req.body.time_range;
@@ -153,7 +153,7 @@ async function getTop(type, accessToken, timeRange, limit, offset) {
 
 // ************************ GETTING USER PLAYLISTS ************************ 
 
-app.post(basePath + '/api/spotify-helper/user-playlists', async (req, res) => {
+app.post(BASE_PATH + '/api/spotify-helper/user-playlists', async (req, res) => {
     const accessToken = req.body.access_token;
 
     const data = await getPlaylists(accessToken)
@@ -203,7 +203,7 @@ async function getPlaylists(accessToken) {
 
 // ************************ GETTING TRACK INFO ************************ 
 
-app.post(basePath + '/api/spotify-helper/tracks/:infotype', async (req, res) => {
+app.post(BASE_PATH + '/api/spotify-helper/tracks/:infotype', async (req, res) => {
     const infotype = req.params.infotype;
     const accessToken = req.body.access_token;
     const ids = req.body.ids;
@@ -241,7 +241,7 @@ app.post(basePath + '/api/spotify-helper/tracks/:infotype', async (req, res) => 
     res.status(status).send(data);
 });
 
-app.post(basePath + '/api/spotify-helper/tracks/:infotype/:id', async (req, res) => {
+app.post(BASE_PATH + '/api/spotify-helper/tracks/:infotype/:id', async (req, res) => {
     const infotype = req.params.infotype;
     const id = req.params.id;
     const accessToken = req.body.access_token;
@@ -270,7 +270,7 @@ app.post(basePath + '/api/spotify-helper/tracks/:infotype/:id', async (req, res)
     res.send(response.data);
 });
 
-app.post(basePath + '/api/spotify-helper/liked-tracks', async (req, res) => {
+app.post(BASE_PATH + '/api/spotify-helper/liked-tracks', async (req, res) => {
     const accessToken = req.body.access_token;
     const data = await getLikedTracks(accessToken)
         .catch(error => {
@@ -313,7 +313,7 @@ async function getLikedTracks(accessToken) {
 
 // ************************ GETTING  AUDIO FEATURES ************************ 
 
-app.post(basePath + '/api/spotify-helper/audio-features', async (req, res) => {
+app.post(BASE_PATH + '/api/spotify-helper/audio-features', async (req, res) => {
     const accessToken = req.body.access_token;
     const ids = req.body.track_ids;
     const data = await getAudioFeatures(accessToken, ids)
@@ -363,7 +363,7 @@ async function getAudioFeatures(accessToken, ids) {
 
 // ************************ CORE ************************ 
 
-app.get(basePath + '*', (req, res) => {
+app.get(BASE_PATH + '*', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/build/index.html'));
 })
 

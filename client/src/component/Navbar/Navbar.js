@@ -5,7 +5,7 @@ import './Navbar.css';
 
 const Navbar = (props) => {
 
-    const baseUrl = process.env.REACT_APP_ENVIRONMENT;
+    const BASE_URL = process.env.REACT_APP_BASE_URL;
 
     return (
         <nav className='navbar'>

@@ -22,8 +22,8 @@ function App() {
     const [refreshToken, setRefreshToken] = useState(null);
     const [isAccessTokenValid, setAccessTokenStatus] = useState(false);
 
-    const baseUrl = process.env.REACT_APP_ENVIRONMENT;
-    const basePath = process.env.REACT_APP_BASE_PATH;
+    const BASE_URL = process.env.REACT_APP_BASE_URL;
+    const BASE_PATH = process.env.REACT_APP_BASE_PATH;
 
     // ************************ MANAGE USER LOGGED IN STATE ************************
 
@@ -71,13 +71,13 @@ function App() {
     }
 
     async function requestTokens(code) {
-        console.log(baseUrl);
+        console.log(BASE_URL);
         const options = {
-            url: baseUrl + '/api/spotify-helper/get-tokens',
+            url: BASE_URL + '/api/spotify-helper/get-tokens',
             method: 'POST',
             data: {
                 code: code,
-                redirect_uri: baseUrl + '/'
+                redirect_uri: BASE_URL + '/'
             }
         }
 
@@ -141,7 +141,7 @@ function App() {
 
     async function renewAccessToken() {
         const options = {
-            url: baseUrl + '/api/spotify-helper/renew-access-token',
+            url: BASE_URL + '/api/spotify-helper/renew-access-token',
             method: 'POST',
             data: {
                 refresh_token: refreshToken
@@ -162,19 +162,19 @@ function App() {
             <div className="App">
                 <Navbar />
                 <Switch>
-                    <Route exact path={basePath + '/'}>
+                    <Route exact path={BASE_PATH + '/'}>
                         {isLoggedIn ? Gateway : Login}
                     </Route>
 
-                    <Route path={basePath + '/analyze'}>
+                    <Route path={BASE_PATH + '/analyze'}>
                         <Analyzer accessToken={accessToken} />
                     </Route>
 
-                    <Route path={basePath + '/top'}>
+                    <Route path={BASE_PATH + '/top'}>
                         <Tracker accessToken={accessToken} />
                     </Route>
 
-                    <Route path={basePath + '/explore'}>
+                    <Route path={BASE_PATH + '/explore'}>
 
                     </Route>
                 </Switch>

@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Login = () => {
-    const redirect_uri = process.env.REACT_APP_ENVIRONMENT + '/';
+    const redirect_uri = process.env.REACT_APP_BASE_URL + '/';
     const scope = 'user-top-read playlist-read-private user-library-read';
 
     function openSpotifyAuthorization() {

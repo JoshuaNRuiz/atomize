@@ -20,10 +20,10 @@ const Analyzer = (props) => {
     const [isLoaded, setIsLoaded] = useState(false);
     const [isChart, setIsChart] = useState(true);
 
-    const baseUrl = process.env.REACT_APP_ENVIRONMENT;
+    const BASE_URL = process.env.REACT_APP_BASE_URL;
 
     async function getUserData(type) {
-        let url = baseUrl;
+        let url = BASE_URL;
 
         switch (type) {
             case 'playlist':
@@ -68,7 +68,7 @@ const Analyzer = (props) => {
 
     async function getAudioFeatureData(trackIds) {
         const options = {
-            url: baseUrl + '/api/spotify-helper/audio-features',
+            url: BASE_URL + '/api/spotify-helper/audio-features',
             method: 'POST',
             data: {
                 access_token: accessToken,
