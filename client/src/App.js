@@ -165,15 +165,15 @@ function App() {
                         {isLoggedIn ? Gateway : Login}
                     </Route>
 
-                    <Route path='/analyze'>
+                    <Route path={baseUrl + '/analyze'}>
                         <Analyzer accessToken={accessToken} />
                     </Route>
 
-                    <Route path='/top'>
+                    <Route path={baseUrl + '/top'}>
                         <Tracker accessToken={accessToken} />
                     </Route>
 
-                    <Route path='/explorer'>
+                    <Route path={baseUrl + '/explore'}>
 
                     </Route>
                 </Switch>
