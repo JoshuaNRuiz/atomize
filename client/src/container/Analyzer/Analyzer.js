@@ -20,15 +20,17 @@ const Analyzer = (props) => {
     const [isLoaded, setIsLoaded] = useState(false);
     const [isChart, setIsChart] = useState(true);
 
+    const baseUrl = window.location.origin;
+
     async function getUserData(type) {
-        let url = "";
+        let url = baseUrl;
 
         switch (type) {
             case 'playlist':
-                url = 'http://localhost:8000/api/spotify-helper/user-playlists';
+                url += '/api/spotify-helper/user-playlists';
                 break;
             case 'liked-tracks':
-                url = 'http://localhost:8000/api/spotify-helper/liked-tracks';
+                url += '/api/spotify-helper/liked-tracks';
                 break;
             default:
                 throw new Error("requested user data not available");
@@ -66,7 +68,7 @@ const Analyzer = (props) => {
 
     async function getAudioFeatureData(trackIds) {
         const options = {
-            url: 'http://localhost:8000/api/spotify-helper/audio-features',
+            url: baseUrl + '/api/spotify-helper/audio-features',
             method: 'POST',
             data: {
                 access_token: accessToken,
