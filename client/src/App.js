@@ -71,7 +71,6 @@ function App() {
     }
 
     async function requestTokens(code) {
-        console.log(BASE_URL);
         const options = {
             url: BASE_URL + '/api/spotify-helper/get-tokens',
             method: 'POST',
