@@ -11,9 +11,9 @@ const Navbar = (props) => {
         <nav className='navbar'>
             <h4 className='logo'>atomize</h4>
                 <ul className="links">
-                    <li className="link"><Link to='analyze'>analyze</Link></li>
-                    <li className="link"><Link to='top'>top</Link></li>
-                    <li className="link"><Link to='explore'>explore</Link></li>
+                    <Link to='analyze' className="link"><li>analyze</li></Link>
+                    <Link to='top' className="link"><li>top</li></Link>
+                    <Link to='explore' className="link"><li>explore</li></Link>
                 </ul>
         </nav>
     )
