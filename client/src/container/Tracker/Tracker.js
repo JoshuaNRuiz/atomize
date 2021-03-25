@@ -60,10 +60,9 @@ const Tracker = (props) => {
             });
     }
 
-    useEffect(
-        () => {
-            getItems();
-        }, [type, timeRange, limit]);
+    useEffect(() => {
+        getItems();
+    }, [type, timeRange, limit]);
 
     return (
         <div className='tracker'>
