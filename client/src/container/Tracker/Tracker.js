@@ -37,10 +37,6 @@ const Tracker = (props) => {
         setLimit(e.target.value);
     }
 
-    function handleRefresh() {
-        getItems();
-    }
-
     async function getItems() {
         const options = {
             url: `${BASE_URL}/api/spotify-helper/top-${type}`,
@@ -64,7 +60,10 @@ const Tracker = (props) => {
             });
     }
 
-    useEffect(handleRefresh, [type]);
+    useEffect(
+        () => {
+            getItems();
+        }, [type, timeRange, limit]);
 
     return (
         <div className='tracker'>
@@ -72,8 +71,7 @@ const Tracker = (props) => {
                 limit={limit}
                 handleTypeChange={handleTypeChange}
                 handleTimeRangeChange={handleTimeRangeChange}
-                handleLimitChange={handleLimitChange}
-                handleRefresh={handleRefresh} />
+                handleLimitChange={handleLimitChange}/>
             <List type={type} items={items} />
         </div>
     )

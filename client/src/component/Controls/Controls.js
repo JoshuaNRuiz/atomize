@@ -42,9 +42,6 @@ const Controls = (props) => {
                     onClick={props.refresh}
                     onChange={props.handleLimitChange}/>
             </div>
-            <div className="control-input-container">
-                <button className='refresh-button' onClick={props.handleRefresh}></button>
-            </div>
         </div>
     )
 }
