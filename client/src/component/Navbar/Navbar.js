@@ -10,11 +10,11 @@ const Navbar = (props) => {
     return (
         <nav className='navbar'>
             <h4 className='logo'>atomize</h4>
-            <ul>
-                <li><Link to='analyze' className='link-item'>Analyze</Link></li>
-                <li><Link to='top' className='link-item'>Top</Link></li>
-                <li><Link to='explore' className='link-item'>Explore</Link></li>
-            </ul>
+                <ul className="links">
+                    <li className="link"><Link to='analyze'>analyze</Link></li>
+                    <li className="link"><Link to='top'>top</Link></li>
+                    <li className="link"><Link to='explore'>explore</Link></li>
+                </ul>
         </nav>
     )
 }

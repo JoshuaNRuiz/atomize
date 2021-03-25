@@ -10,9 +10,9 @@ const ArtistItem = (props) => {
     return (
         <div className="artist" >
             <img className='artist-image' 
-                src={images == null ? null : images[0].url} 
+                src={images === null ? null : images[0].url} 
                 alt='icon'/>
-            <p>{name}</p>
+            <span className="artist-name">{name}</span>
         </div>
     );
 }

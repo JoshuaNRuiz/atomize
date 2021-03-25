@@ -8,33 +8,43 @@ const Controls = (props) => {
 
     return (
         <div className='controls'>
-            <select
-                id='type-input'
-                className='type-input'
-                name='range'
-                onChange={props.handleTypeChange}>
-                <option value='tracks'>Tracks</option>
-                <option value='artists'>Artists</option>
-            </select>
-            <select
-                id='time-range-input'
-                className='time-range-input'
-                name='range'
-                onChange={props.handleTimeRangeChange}>
-                <option value='long_term'>All time</option>
-                <option value='medium_term'>6 Months</option>
-                <option value='short_term'>4 Weeks</option>
-            </select>
-            <input
-                type='number'
-                id='limit-input'
-                className='limit-input'
-                min={MIN_LIMIT}
-                max={MAX_LIMIT}
-                value={props.limit}
-                onClick={props.refresh}
-                onChange={props.handleLimitChange}/>
-            <button className='refresh-button' onClick={props.handleRefresh}>Refresh</button>
+            <div className="control-input-container">
+                <label>type</label>
+                <select
+                    name="type"
+                    className="type-select"
+                    onChange={props.handleTypeChange}>
+                    <option value="tracks">tracks</option>
+                    <option value="artists">artists</option>
+                </select>
+            </div>
+            <div className="control-input-container">
+                <label>range</label>
+                <select
+                    id='time-range-select'
+                    className='time-range-select'
+                    name='range'
+                    onChange={props.handleTimeRangeChange}>
+                    <option value='long_term'>all time</option>
+                    <option value='medium_term'>6 months</option>
+                    <option value='short_term'>4 weeks</option>
+                </select>
+            </div>
+            <div className="control-input-container">
+                <label>count</label>
+                <input
+                    type='number'
+                    id='limit-input'
+                    className='limit-input'
+                    min={MIN_LIMIT}
+                    max={MAX_LIMIT}
+                    value={props.limit}
+                    onClick={props.refresh}
+                    onChange={props.handleLimitChange}/>
+            </div>
+            <div className="control-input-container">
+                <button className='refresh-button' onClick={props.handleRefresh}></button>
+            </div>
         </div>
     )
 }

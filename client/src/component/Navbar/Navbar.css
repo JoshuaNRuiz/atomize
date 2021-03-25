@@ -5,10 +5,11 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    /* background-color: rgba(0, 0, 0, 0.2); */
+    background-color: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
-.logo {
+.navbar .logo {
     margin: 0 0 0 32px;
     padding: 0;
     color: white;
@@ -16,27 +17,28 @@
     font-weight: bold;
 }
 
-ul {
-    margin-right: 32px;
+.navbar .links {
+    display: flex;
+    align-items: center;
+    margin-right: 16px;
 }
 
-li {
-    min-width: 70px;
-    display: inline;
+.navbar .link {
+    margin: 0 8px;
+    padding: 16px 0;
+    height: 100%;
     list-style-type: none;
-    padding: 16px 8px;
 }
 
-li:hover {
-    background-color: #960f47;
-}
-
-.link-item {
+.navbar .link a {
     color: white;
     font-size: 14px;
     font-weight: lighter;
 }
 
-.link-item:hover {
+.navbar .link a:hover {
+    color: #960f47;
     text-decoration: none;
+    font-weight: lighter;
+    transition: 0.2s;
 }
