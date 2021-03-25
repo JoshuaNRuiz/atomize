@@ -39,18 +39,19 @@ const List = (props) => {
     };
 
     function makeArtistList() {
-        let name, genres, images, rank;
+        let name, genres, images, rank, key;
         return items.map((item, index) => {
             name = item.name;
             genres = item.genres;
             images = item.images;
             rank = index + 1;
-            return <ArtistItem name={name} genres={genres} images={images} />
+            key = name + " " + rank;
+            return <ArtistItem key={key} name={name} genres={genres} images={images} rank={rank}/>
         });
     };
 
     function makePlaylistList() {
-        let name, trackCount;
+        let name, trackCount, rank;
         return Object.values(items).map((item, index) => {
             name = item.name;
             trackCount = item.tracks.total;
