@@ -35,12 +35,7 @@ const Analyzer = (props) => {
                 throw new Error("requested user data not available");
         }
 
-        const options = {
-            url: url,
-            method: 'POST',
-        }
-
-        const data = await axios(options)
+        const data = await axios.get(url)
             .then(response => response.data);
 
         console.log(data);
@@ -63,15 +58,12 @@ const Analyzer = (props) => {
     }
 
     async function getAudioFeatureData(trackIds) {
-        const options = {
-            url: BASE_URL + '/api/spotify-helper/audio-features',
-            method: 'POST',
-            data: {
-                track_ids: trackIds,
-            }
+        const url = BASE_URL + '/api/spotify-helper/audio-features';
+        const reqData = {
+            track_ids: trackIds
         }
 
-        const data = await axios(options)
+        const data = await axios.post(url, reqData)
             .then(response => response.data);
             
         console.log(data);

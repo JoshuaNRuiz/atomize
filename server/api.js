@@ -211,7 +211,7 @@ module.exports = function (app) {
 
     // ************************ GETTING TRACK INFO ************************ 
 
-    app.post(BASE_PATH + '/api/spotify-helper/tracks/:infotype', async (req, res) => {
+    app.get(BASE_PATH + '/api/spotify-helper/tracks/:infotype', async (req, res) => {
         const infotype = req.params.infotype;
         const accessToken = req.cookies.access_token;
         const ids = req.body.ids;
@@ -234,25 +234,26 @@ module.exports = function (app) {
         }
 
         const data = await axios.get(url, options)
-            .then(response => response.data)
+            .then(response => {
+                res.status(200);
+                return response.data;
+            })
             .catch(error => {
+                if (error.response.status) res.status(error.response.status);
                 return {
                     error: error.message,
-                    status: error.response.status
                 }
             });
 
-        const status = data.error ? data.status : 200;
-
-        res.status(status).send(data);
+        res.send(data);
     });
 
-    app.post(BASE_PATH + '/api/spotify-helper/tracks/:infotype/:id', async (req, res) => {
+    app.get(BASE_PATH + '/api/spotify-helper/tracks/:infotype/:id', async (req, res) => {
         const infotype = req.params.infotype;
         const id = req.params.id;
         const accessToken = req.cookies.access_token;
 
-        let url = 'https://api.spotify.com/v1/'
+        let url = 'https://api.spotify.com/v1/';
 
         if (infotype === 'general') {
             url += `tracks/${id}`;
@@ -268,27 +269,36 @@ module.exports = function (app) {
             }
         }
 
-        const response = await axios.get(url, options)
+        const data = await axios.get(url, options)
+            .then(response => {
+                res.status(200);
+                return response.data;
+            })
             .catch(error => {
-                return error;
-            });
-
-        res.send(response.data);
-    });
-
-    app.post(BASE_PATH + '/api/spotify-helper/liked-tracks', async (req, res) => {
-        const accessToken = req.cookies.access_token;
-        const data = await getLikedTracks(accessToken)
-            .catch(error => {
+                if (error.response.status) res.status(error.response.status);
                 return {
-                    error: error.message,
-                    status: error.response.status
+                    error: error.message
                 }
             });
 
-        const status = data.error ? data.status : 200;
+        res.send(data);
+    });
 
-        res.status(status).send(data);
+    app.get(BASE_PATH + '/api/spotify-helper/liked-tracks', async (req, res) => {
+        const accessToken = req.cookies.access_token;
+        const data = await getLikedTracks(accessToken)
+            .then(data => {
+                res.status(200);
+                return data;
+            })
+            .catch(error => {
+                if (error.response.status) res.status(error.response.status);
+                return {
+                    error: error.message,
+                }
+            });
+
+        res.send(data);
     });
 
     async function getLikedTracks(accessToken) {
@@ -317,30 +327,31 @@ module.exports = function (app) {
         return { ...tracks };
     };
 
-    // ************************ GETTING  AUDIO FEATURES ************************ 
+    // ************************ GETTING AUDIO FEATURES ************************ 
 
     app.post(BASE_PATH + '/api/spotify-helper/audio-features', async (req, res) => {
         const accessToken = req.cookies.access_token;
         const ids = req.body.track_ids;
         const data = await getAudioFeatures(accessToken, ids)
+            .then(data => {
+                res.status(200);
+                return data;
+            })
             .catch(error => {
+                console.error(error);
+                if (error.response.status) res.status(error.response.status);
                 return {
                     error: error.message,
-                    status: error.response.status
                 }
             });
 
-        const status = data.error ? data.status : 200;
-
-        res.status(status).send(data);
+        res.send(data);
     });
 
     async function getAudioFeatures(accessToken, ids) {
         let audioFeatureData = []
-
+        let url = 'https://api.spotify.com/v1/audio-features/'
         let options = {
-            url: 'https://api.spotify.com/v1/audio-features/',
-            method: 'GET',
             headers: {
                 'Authorization': 'Bearer ' + accessToken
             },
@@ -356,7 +367,7 @@ module.exports = function (app) {
             trackIds = ids.slice(startIndex, endIndex).join(',');
             options.params.ids = trackIds;
 
-            await axios(options)
+            await axios.get(url, options)
                 .then(response => {
                     const audioFeatures = response.data.audio_features;
                     audioFeatureData.push(...audioFeatures);
