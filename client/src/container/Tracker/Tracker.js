@@ -36,16 +36,9 @@ const Tracker = (props) => {
     }
 
     function getItems() {
-        const url = `${BASE_URL}/api/spotify-helper/top-${type}`;
-        const options = {
-            params: {
-                'time_range': timeRange,
-                'limit': limit,
-                'offset': 0
-            }
-        }
-
-        axios.get(url, options)
+        let url = `${BASE_URL}/api/spotify-helper/top-${type}`;
+        url += `?time_range=${timeRange}&limit=${limit}&offset=${0}`
+        axios.get(url)
             .then(response => response.data.items)
             .then(items => setItems(items));
     }

@@ -23,22 +23,19 @@ module.exports = function (app) {
 
         const data = await requestTokens(code)
             .then(data => {
-                const accessToken = data.access_token;
-                const refreshToken = data.refresh_token;
-                const expirationTime = data.expires_in;
-                if (accessToken) res.cookie('access_token', accessToken, { maxAge: expirationTime * 1000 });
-                if (refreshToken) res.cookie('refresh_token', refreshToken);
+                const [accessToken, expirationTime, refreshToken]= extractData(data);
+                res.cookie('access_token', accessToken, { maxAge: expirationTime * 1000 });
+                res.cookie('refresh_token', refreshToken);
                 res.status(200);
                 return data;
             })
             .catch(error => {
-                console.error(error);
-                res.status(error.response.status);
+                if (error.response.status) res.status(error.response.status);
                 return {
                     error: error.message
                 }
             });
-        
+
         res.send(data);
     });
 
@@ -72,14 +69,13 @@ module.exports = function (app) {
 
         const data = await renewAccessToken(refreshToken)
             .then(data => {
-                const accessToken = data.access_token;
-                const expirationTime = data.expires_in;
-                if (accessToken) res.cookie('access_token', accessToken, { maxAge: expirationTime * 1000 });
-                res.status(status);
+                const [accessToken, expirationTime] = extractData(data);
+                res.cookie('access_token', accessToken, { maxAge: expirationTime * 1000 });
+                res.status(200);
                 return data;
             })
             .catch(error => {
-                res.status(error.response.status);
+                if (error.response.status) res.status(error.response.status);
                 return {
                     error: error.message
                 }
@@ -110,16 +106,16 @@ module.exports = function (app) {
         return data;
     }
 
-    function processData(data) {
-        const status = data.error ? data.status : 200;
-        const accessToken = data.access_token ? data.access_token : '';
+    function extractData(data) {
+        const accessToken = data.access_token;
         const refreshToken = data.refresh_token;
-        const expirationTime = data.expires_in ? data.expires_in : 0;
+        const expirationTime = data.expires_in;
 
-        return refreshToken ? 
-            [status, accessToken, refreshToken, expirationTime] :
-            [status, accessToken, expirationTime];
-            
+        return [
+            accessToken, 
+            expirationTime, 
+            refreshToken ? refreshToken : null
+        ];
     }
 
     // ************************ GETTING TOP TRACKS/ARTISTS ************************ 
@@ -132,32 +128,31 @@ module.exports = function (app) {
         const offset = req.query.offset;
 
         const data = await getTop(type, accessToken, timeRange, limit, offset)
+            .then(data => {
+                res.status(200);
+                return data;
+            })
             .catch(error => {
+                if (error.response.status) res.status(error.response.status);
                 return {
-                    error: error.message,
-                    status: error.response.status
+                    error: error.message
                 }
             });
 
-        const status = data.error ? data.status : 200;
-
-        res.status(status).send(data);
+        res.send(data);
     });
 
     async function getTop(type, accessToken, timeRange, limit, offset) {
         if (type == 'artists' || type == 'tracks') {
             const url = `https://api.spotify.com/v1/me/top/${type}?time_range=${timeRange}&limit=${limit}&offset=${offset}`;
-
             const options = {
-                url: url,
-                method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + accessToken
                 }
             }
 
-            const data = await axios(options)
+            const data = await axios.get(url, options)
                 .then(response => response.data);
 
             return data;

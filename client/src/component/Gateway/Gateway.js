@@ -1,9 +1,7 @@
 import React from 'react';
-import {Link, Redirect} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 
-const Gateway = (props) => {
-
-    const BASE_URL = process.env.REACT_APP_BASE_URL;
+const Gateway = () => {
 
     return (
         <div className='gateway'>
