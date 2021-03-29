@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { BrowserRouter as Router, Switch, Route, Redirect, useHistory } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import axios from 'axios';
+import Cookies from './helpers/Cookies';
 
 import Navbar from './component/Navbar/Navbar';
 import Login from './container/Login/Login';
@@ -12,149 +13,44 @@ import Explorer from './container/Explorer/Explorer';
 import './App.css'
 
 function App() {
-    const history = useHistory();
-
-    const tracker = () => <Tracker accessToken={accessToken} />
-    const analyzer = () => <Analyzer accessToken={accessToken} />
-
     const [isLoggedIn, setLoginStatus] = useState(false);
-    const [accessToken, setAccessToken] = useState(null);
-    const [refreshToken, setRefreshToken] = useState(null);
-    const [isAccessTokenValid, setAccessTokenStatus] = useState(false);
 
     const BASE_URL = process.env.REACT_APP_BASE_URL;
     const BASE_PATH = process.env.REACT_APP_BASE_PATH;
 
-    // ************************ MANAGE USER LOGGED IN STATE ************************
+    useEffect(handleLoginState, []);
 
-    useEffect(() => {
-        const userPreviouslyLoggedIn = hasUserPreviouslyLoggedIn();
-        if (userPreviouslyLoggedIn) {
-            setAccessToken(localStorage.getItem('accessToken'));
-            setRefreshToken(localStorage.getItem('refreshToken'));
-            setLoginStatus(true);
-        } else {
-            localStorage.clear();
-
-            const parameters = window.location.search;
-            const code = new URLSearchParams(parameters).get('code');
-            const codeIsInParameters = !!code;
-
-            if (codeIsInParameters && !isLoggedIn) {
-                requestTokens(code)
-                    .then(tokens => {
-                        setTokens(tokens);
-                        setLoginStatus(true);
-                    })
-                    .catch(error => {
-                        console.error(error);
-                        alert(error.message);
-                    });
-            }
-        }
-    }, []);
-
-    function hasUserPreviouslyLoggedIn() {
-        const localAccessToken = localStorage.getItem('accessToken');
-        const localRefreshToken = localStorage.getItem('refreshToken');
-        const localTokensExist = !!localAccessToken && !!localRefreshToken;
-
-        const localAccessTokenExpirationTime = localStorage.getItem('accessTokenExpirationTime');
-        const localAccessTokenExpirationTimeExists = !!localAccessTokenExpirationTime;
-
-        const userPreviouslyLoggedIn = (localAccessTokenExpirationTimeExists && localTokensExist);
-        return userPreviouslyLoggedIn;
-    }
-
-    function getTokens() {
-
-    }
-
-    async function requestTokens(code) {
-        const options = {
-            url: BASE_URL + '/api/spotify-helper/get-tokens',
-            method: 'POST',
-            data: {
-                code: code,
-                redirect_uri: BASE_URL + '/'
-            }
-        }
-
-        const response = await axios(options);
-
-        const tokens = {
-            accessToken: response.data.access_token,
-            refreshToken: response.data.refresh_token
-        }
-
-        return tokens;
-    }
-
-    function setTokens(tokens) {
-        const accessToken = tokens.accessToken;
-        const refreshToken = tokens.refreshToken;
-
-        setAccessToken(accessToken);
-        localStorage.setItem('accessToken', accessToken);
-
-        setRefreshToken(refreshToken);
-        localStorage.setItem('refreshToken', refreshToken);
-
-        const accessTokenExpirationTime = Math.floor((Date.now()) + 3600000);
-        localStorage.setItem('accessTokenExpirationTime', accessTokenExpirationTime);
-    }
-
-    // ************************ MANAGE EXPIRED TOKEN STATE ************************
-
-    useEffect(() => {
-        if (isLoggedIn) {
-            const accessTokenExpired = hasAccessTokenExpired();
-            const localRefreshToken = localStorage.getItem('refreshToken');
-            if (accessTokenExpired && !!localRefreshToken) {
-                console.error("Your access token has expired. Trying to renew.");
+    function handleLoginState() {
+        if (!isLoggedIn) {
+            const isAccessTokenValid = Cookies.isSet('access_token');
+            const refreshToken = Cookies.get('refresh_token');
+            if (isAccessTokenValid) {
+                setLoginStatus(true);
+            } else if (refreshToken) {
                 renewAccessToken()
-                    .then(accessToken => {
-                        setAccessToken(accessToken);
-                        const accessTokenExpirationTime = Math.floor((Date.now()) + 3600000);
-                        localStorage.setItem('accessTokenExpirationTime', accessTokenExpirationTime);
-                    })
-                    .catch(error => {
-                        console.error(error);
-                    });
-            } else if (accessTokenExpired && !localRefreshToken) {
-                localStorage.clear();
-                setLoginStatus(false);
+                    .then(() => setLoginStatus(true));
+            } else {
+                const parameters = window.location.search;
+                const code = new URLSearchParams(parameters).get('code');
+                const codeIsInParameters = !!code;
+
+                if (codeIsInParameters) {
+                    getTokens(code)
+                        .then(() => setLoginStatus(true));
+                }
             }
         }
-    });
-
-    function hasAccessTokenExpired() {
-        const currentTime = Date.now();
-        const accessTokenExpirationTime = localStorage.getItem('accessTokenExpirationTime');
-        if (!accessTokenExpirationTime) return true;
-
-        const accessTokenExpired = currentTime > accessTokenExpirationTime;
-
-        return accessTokenExpired;
     }
 
-    async function renewAccessToken() {
-        const options = {
-            url: BASE_URL + '/api/spotify-helper/renew-access-token',
-            method: 'POST',
-            data: {
-                refresh_token: refreshToken
-            }
-        }
-
-        const response = await axios(options);
-
-        const accessToken = response.data.access_token;
-
-        return accessToken;
+    async function getTokens(code) {
+        const url = BASE_URL + `/api/spotify-helper/get-tokens?code=${code}`;
+        await axios.get(url);
     }
 
-    // ************************ CORE ************************
+    async function renewAccessToken(token) {
+        const url = BASE_URL + '/api/spotify-helper/renew-access-token';
+        await axios.get(url);
+    }
 
     return (
         <Router>
@@ -164,17 +60,14 @@ function App() {
                     <Route exact path={BASE_PATH + '/'}>
                         {isLoggedIn ? Gateway : Login}
                     </Route>
-
                     <Route path={BASE_PATH + '/analyze'}>
-                        <Analyzer accessToken={accessToken} />
+                        <Analyzer />
                     </Route>
-
                     <Route path={BASE_PATH + '/top'}>
-                        <Tracker accessToken={accessToken} />
+                        <Tracker />
                     </Route>
-
                     <Route path={BASE_PATH + '/explore'}>
-
+                        <Explorer />
                     </Route>
                 </Switch>
             </div>
