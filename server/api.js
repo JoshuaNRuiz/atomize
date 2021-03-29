@@ -6,6 +6,7 @@ const axios = require('axios').default;
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const BASE_PATH = process.env.BASE_PATH;
+const REDIRECT_URI = process.env.REDIRECT_URI;
 
 module.exports = function (app) {
 
@@ -17,19 +18,21 @@ module.exports = function (app) {
 
     // ************************ AUTHORIZATION ************************
 
-    app.post(BASE_PATH + '/api/spotify-helper/get-tokens', async (req, res) => {
-        const code = req.body.code;
-        const redirectUri = req.body.redirect_uri;
+    app.get(BASE_PATH + '/api/spotify-helper/get-tokens', async (req, res) => {
+        const code = req.query.code;
 
-        const data = await requestTokens(code, redirectUri)
+        const data = await requestTokens(code)
             .then(data => {
-                const [status, accessToken, refreshToken, expirationTime] = processData(data);
+                const accessToken = data.access_token;
+                const refreshToken = data.refresh_token;
+                const expirationTime = data.expires_in;
                 if (accessToken) res.cookie('access_token', accessToken, { maxAge: expirationTime * 1000 });
                 if (refreshToken) res.cookie('refresh_token', refreshToken);
-                if (status) res.status(status);
+                res.status(200);
                 return data;
             })
             .catch(error => {
+                console.error(error);
                 res.status(error.response.status);
                 return {
                     error: error.message
@@ -39,7 +42,7 @@ module.exports = function (app) {
         res.send(data);
     });
 
-    async function requestTokens(code, redirect_uri) {
+    async function requestTokens(code) {
         const authorization = Buffer.from(CLIENT_ID + ':' + CLIENT_SECRET).toString('base64');
 
         const options = {
@@ -52,7 +55,7 @@ module.exports = function (app) {
             data: qs.stringify({
                 'grant_type': 'authorization_code',
                 'code': code,
-                'redirect_uri': redirect_uri,
+                'redirect_uri': REDIRECT_URI
             })
         };
 
@@ -64,13 +67,13 @@ module.exports = function (app) {
 
     // ************************ RENEWING ACCESS TOKENS ************************
 
-    app.post(BASE_PATH + '/api/spotify-helper/renew-access-token', async (req, res) => {
-        const refreshToken = req.body.refresh_token;
+    app.get(BASE_PATH + '/api/spotify-helper/renew-access-token', async (req, res) => {
+        const refreshToken = req.cookies.refresh_token;
 
         const data = await renewAccessToken(refreshToken)
             .then(data => {
-                console.log(data);
-                const [status, accessToken, expirationTime] = processData(data);
+                const accessToken = data.access_token;
+                const expirationTime = data.expires_in;
                 if (accessToken) res.cookie('access_token', accessToken, { maxAge: expirationTime * 1000 });
                 res.status(status);
                 return data;
@@ -121,12 +124,12 @@ module.exports = function (app) {
 
     // ************************ GETTING TOP TRACKS/ARTISTS ************************ 
 
-    app.post(BASE_PATH + '/api/spotify-helper/top-:type', async (req, res) => {
+    app.get(BASE_PATH + '/api/spotify-helper/top-:type', async (req, res) => {
         const type = req.params.type;
-        const accessToken = req.body.access_token
-        const timeRange = req.body.time_range;
-        const limit = req.body.limit;
-        const offset = req.body.offset;
+        const accessToken = req.cookies.access_token
+        const timeRange = req.query.time_range;
+        const limit = req.query.limit;
+        const offset = req.query.offset;
 
         const data = await getTop(type, accessToken, timeRange, limit, offset)
             .catch(error => {
@@ -164,7 +167,7 @@ module.exports = function (app) {
     // ************************ GETTING USER PLAYLISTS ************************ 
 
     app.post(BASE_PATH + '/api/spotify-helper/user-playlists', async (req, res) => {
-        const accessToken = req.body.access_token;
+        const accessToken = req.cookies.access_token;
 
         const data = await getPlaylists(accessToken)
             .catch(error => {
@@ -204,7 +207,7 @@ module.exports = function (app) {
 
         items.sort((a, b) => { // alphabetize before sending
             if (a.name < b.name) return -1;
-            if (a.name < b.name) return 1;
+            if (a.name > b.name) return 1;
             else return 0;
         });
 
@@ -215,7 +218,7 @@ module.exports = function (app) {
 
     app.post(BASE_PATH + '/api/spotify-helper/tracks/:infotype', async (req, res) => {
         const infotype = req.params.infotype;
-        const accessToken = req.body.access_token;
+        const accessToken = req.cookies.access_token;
         const ids = req.body.ids;
 
         let url = 'https://api.spotify.com/v1/';
@@ -227,8 +230,6 @@ module.exports = function (app) {
         }
 
         const options = {
-            url: url,
-            method: 'GET',
             headers: {
                 'Authorization': 'Bearer ' + accessToken
             },
@@ -237,7 +238,7 @@ module.exports = function (app) {
             }
         }
 
-        const data = await axios(options)
+        const data = await axios.get(url, options)
             .then(response => response.data)
             .catch(error => {
                 return {
@@ -254,7 +255,7 @@ module.exports = function (app) {
     app.post(BASE_PATH + '/api/spotify-helper/tracks/:infotype/:id', async (req, res) => {
         const infotype = req.params.infotype;
         const id = req.params.id;
-        const accessToken = req.body.access_token;
+        const accessToken = req.cookies.access_token;
 
         let url = 'https://api.spotify.com/v1/'
 
@@ -281,7 +282,7 @@ module.exports = function (app) {
     });
 
     app.post(BASE_PATH + '/api/spotify-helper/liked-tracks', async (req, res) => {
-        const accessToken = req.body.access_token;
+        const accessToken = req.cookies.access_token;
         const data = await getLikedTracks(accessToken)
             .catch(error => {
                 return {
@@ -324,7 +325,7 @@ module.exports = function (app) {
     // ************************ GETTING  AUDIO FEATURES ************************ 
 
     app.post(BASE_PATH + '/api/spotify-helper/audio-features', async (req, res) => {
-        const accessToken = req.body.access_token;
+        const accessToken = req.cookies.access_token;
         const ids = req.body.track_ids;
         const data = await getAudioFeatures(accessToken, ids)
             .catch(error => {

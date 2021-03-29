@@ -9,7 +9,6 @@ import Chart from '../../component/Chart/Chart';
 import './Analyzer.css';
 
 const Analyzer = (props) => {
-    const accessToken = props.accessToken || localStorage.getItem('accessToken');
 
     const [isSearch, setIsSearch] = useState(false);
     const [userPlaylists, setUserPlaylists] = useState({});
@@ -39,9 +38,6 @@ const Analyzer = (props) => {
         const options = {
             url: url,
             method: 'POST',
-            data: {
-                access_token: accessToken
-            }
         }
 
         const data = await axios(options)
@@ -71,7 +67,6 @@ const Analyzer = (props) => {
             url: BASE_URL + '/api/spotify-helper/audio-features',
             method: 'POST',
             data: {
-                access_token: accessToken,
                 track_ids: trackIds,
             }
         }

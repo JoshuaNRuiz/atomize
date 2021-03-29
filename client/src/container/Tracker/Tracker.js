@@ -11,8 +11,6 @@ const Tracker = (props) => {
     const LIMIT_DEFAULT = 10;
     const RANGE_DEFAULT = 'long_term';
 
-    const accessToken = props.accessToken || localStorage.getItem('accessToken');
-
     const [type, setType] = useState(TYPE_DEFAULT);
     const [limit, setLimit] = useState(LIMIT_DEFAULT);
     const [timeRange, setTimeRange] = useState(RANGE_DEFAULT);
@@ -37,32 +35,22 @@ const Tracker = (props) => {
         setLimit(e.target.value);
     }
 
-    async function getItems() {
+    function getItems() {
+        const url = `${BASE_URL}/api/spotify-helper/top-${type}`;
         const options = {
-            url: `${BASE_URL}/api/spotify-helper/top-${type}`,
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            data: {
-                'access_token': accessToken,
+            params: {
                 'time_range': timeRange,
                 'limit': limit,
                 'offset': 0
             }
         }
 
-        axios(options)
-            .then(response => {
-                const data = response.data;
-                setItems(data.items);
-            });
+        axios.get(url, options)
+            .then(response => response.data.items)
+            .then(items => setItems(items));
     }
 
-    useEffect(() => {
-        getItems();
-    }, [type, timeRange, limit]);
+    useEffect(getItems, [type, timeRange, limit]);
 
     return (
         <div className='tracker'>
