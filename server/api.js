@@ -2,7 +2,6 @@ require('dotenv').config({ path: __dirname + '/.env' });
 
 const qs = require('qs');
 const axios = require('axios').default;
-const bodyParser = require('body-parser');
 
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
@@ -23,16 +22,21 @@ module.exports = function (app) {
         const redirectUri = req.body.redirect_uri;
 
         const data = await requestTokens(code, redirectUri)
+            .then(data => {
+                const [status, accessToken, refreshToken, expirationTime] = processData(data);
+                if (accessToken) res.cookie('access_token', accessToken, { maxAge: expirationTime * 1000 });
+                if (refreshToken) res.cookie('refresh_token', refreshToken);
+                if (status) res.status(status);
+                return data;
+            })
             .catch(error => {
+                res.status(error.response.status);
                 return {
-                    error: error.message,
-                    status: error.response.status
+                    error: error.message
                 }
             });
-
-        const status = data.error ? data.status : 200;
-
-        res.status(status).send(data);
+        
+        res.send(data);
     });
 
     async function requestTokens(code, redirect_uri) {
@@ -64,16 +68,21 @@ module.exports = function (app) {
         const refreshToken = req.body.refresh_token;
 
         const data = await renewAccessToken(refreshToken)
+            .then(data => {
+                console.log(data);
+                const [status, accessToken, expirationTime] = processData(data);
+                if (accessToken) res.cookie('access_token', accessToken, { maxAge: expirationTime * 1000 });
+                res.status(status);
+                return data;
+            })
             .catch(error => {
+                res.status(error.response.status);
                 return {
-                    error: error.message,
-                    status: error.response.status
+                    error: error.message
                 }
             });
 
-        const status = data.error ? data.status : 200;
-
-        res.status(status).send(data);
+        res.send(data);
     });
 
     async function renewAccessToken(refreshToken) {
@@ -96,6 +105,18 @@ module.exports = function (app) {
             .then(response => response.data);
 
         return data;
+    }
+
+    function processData(data) {
+        const status = data.error ? data.status : 200;
+        const accessToken = data.access_token ? data.access_token : '';
+        const refreshToken = data.refresh_token;
+        const expirationTime = data.expires_in ? data.expires_in : 0;
+
+        return refreshToken ? 
+            [status, accessToken, refreshToken, expirationTime] :
+            [status, accessToken, expirationTime];
+            
     }
 
     // ************************ GETTING TOP TRACKS/ARTISTS ************************ 
