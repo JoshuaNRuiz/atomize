@@ -161,7 +161,7 @@ module.exports = function (app) {
 
     // ************************ GETTING USER PLAYLISTS ************************ 
 
-    app.post(BASE_PATH + '/api/spotify-helper/user-playlists', async (req, res) => {
+    app.get(BASE_PATH + '/api/spotify-helper/user-playlists', async (req, res) => {
         const accessToken = req.cookies.access_token;
 
         const data = await getPlaylists(accessToken)
@@ -200,7 +200,7 @@ module.exports = function (app) {
                 });
         } while (options.url !== null);
 
-        items.sort((a, b) => { // alphabetize before sending
+        playlists.sort((a, b) => { // alphabetize before sending
             if (a.name < b.name) return -1;
             if (a.name > b.name) return 1;
             else return 0;

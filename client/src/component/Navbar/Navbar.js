@@ -5,8 +5,6 @@ import './Navbar.css';
 
 const Navbar = (props) => {
 
-    const BASE_URL = process.env.REACT_APP_BASE_URL;
-
     return (
         <nav className='navbar'>
             <h4 className='logo'>atomize</h4>

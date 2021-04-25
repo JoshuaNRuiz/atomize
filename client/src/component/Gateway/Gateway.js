@@ -6,7 +6,7 @@ const Gateway = () => {
     return (
         <div className='gateway'>
             <Link to='analyze'> 
-                <button>Music Analysis</button> 
+                <button disabled>Music Analysis</button> 
             </Link>
 
             <Link to='top'> 
@@ -14,7 +14,7 @@ const Gateway = () => {
             </Link>
 
             <Link to='explore'> 
-                <button>Find New Music</button> 
+                <button disabled>Find New Music</button> 
             </Link>
         </div>
     )

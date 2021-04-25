@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 
-import Loader from '../../component/Loader/Loader';
 import List from '../../component/List/List';
-import searchicon from '../../resources/searchicon.svg';
 import Chart from '../../component/Chart/Chart';
+
+import searchicon from '../../resources/searchicon.svg';
 
 import './Analyzer.css';
 
@@ -16,8 +16,9 @@ const Analyzer = (props) => {
     const [audioFeatureData, setAudioFeatureData] = useState({});
     const [audioFeatureAverages, setAudioFeatureAverages] = useState({});
     const [searchItems, setSearchItems] = useState([]);
-    const [isLoaded, setIsLoaded] = useState(false);
     const [isChart, setIsChart] = useState(true);
+    const [mode, setMode] = useState(null);
+    const [isReady, setReady] = useState(false);
 
     const BASE_URL = process.env.REACT_APP_BASE_URL;
 
@@ -103,7 +104,7 @@ const Analyzer = (props) => {
     }
 
     // TODO: THIS HAS TO BE IMPROVED, WE ARE DUPLICATING DATA -- we just need to filter
-    const handleSearch = (e) => {
+    function handleSearch(e) {
         const searchString = e.target.value.toUpperCase().trim();
         if (searchString !== '') {
             const searchResults = Object.values(userPlaylists).filter(playlist => {
@@ -116,51 +117,63 @@ const Analyzer = (props) => {
         }
     }
 
-    /* MANAGING THE USERS INFORMATION */
 
     useEffect(() => {
-        async function getData() {
-            const tracks = await getUserData('liked-tracks');
-            const trackIds = getTrackIds(tracks);
-            const featureData = await getAudioFeatureData(trackIds);
-            const audioFeatureAverages = calculateAudioFeatureAverages(featureData);
+        
+    },[mode])
 
-            return {
-                tracks: tracks,
-                featureData: featureData,
-                audioFeatureAverages: audioFeatureAverages
-            }
-        }
+    useEffect(() => {
+        // async function getData() {
+        //     const tracks = await getUserData('liked-tracks');
+        //     const trackIds = getTrackIds(tracks);
+        //     const featureData = await getAudioFeatureData(trackIds);
+        //     const audioFeatureAverages = calculateAudioFeatureAverages(featureData);
 
-        getData()
-            .then(data => {
-                setUserTracks(data.tracks);
-                setAudioFeatureData(data.featureData);
-                setAudioFeatureAverages(data.audioFeatureAverages);
-            })
-            .then(() => {
-                setIsLoaded(true);
-            })
-            .catch(error => {
-                if (error.response) {
-                    const response = error.response;
-                    if (response.status === 401) {
-                        alert("Your access token has expired. Please renew it.");
-                    }
-                }
-                console.error(error);
-            });
+        //     return {
+        //         tracks: tracks,
+        //         featureData: featureData,
+        //         audioFeatureAverages: audioFeatureAverages
+        //     }
+        // }
+
+        // getData()
+        //     .then(data => {
+        //         setUserTracks(data.tracks);
+        //         setAudioFeatureData(data.featureData);
+        //         setAudioFeatureAverages(data.audioFeatureAverages);
+        //     })
+        //     .then(() => {
+        //         setIsLoaded(true);
+        //     })
+        //     .catch(error => {
+        //         if (error.response) {
+        //             const response = error.response;
+        //             if (response.status === 401) {
+        //                 alert("Your access token has expired. Please renew it.");
+        //             }
+        //         }
+        //         console.error(error);
+        //     });
+        (() => {
+            getUserData('playlist')
+                .then(data => {
+                    setUserPlaylists(data);
+                })
+                .then(() => setMode('playlist'));
+        })();
     }, [])
+
+    // 4 modes?
+    // gateway choice -> playlists -> playlist breakdown 
+    //               |-> track search -> track breakdown
 
     return (
         <div>
             <h2 className='page-title'>analyzer</h2>
-            {isLoaded ? <Chart title={"Vibe"} data={audioFeatureAverages} /> : <Loader />}
+            {mode === 'playlist' && <List type={'playlists'} items={userPlaylists}/>}
+            {isReady && <Chart title={"Vibe"} data={audioFeatureAverages}/> }
         </div>
     )
 }
-
-// {isLoaded ? <Chart title={"Vibe"} data={audioFeatureAverages} /> : <Loader />}
-
 
 export default Analyzer;
