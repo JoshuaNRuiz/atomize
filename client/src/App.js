@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from './helpers/Cookies';
 
@@ -58,7 +58,7 @@ function App() {
                 <Navbar />
                 <Switch>
                     <Route exact path={BASE_PATH + '/'}>
-                        {isLoggedIn ? Gateway : Login}
+                        {isLoggedIn ? Gateway : Login }
                     </Route>
                     <Route path={BASE_PATH + '/analyze'}>
                         <Analyzer />

@@ -118,6 +118,27 @@ module.exports = function (app) {
         ];
     }
 
+    // WORKIJNG HEREEEEEEEEEEEEEEEEEEEEEee
+
+    app.get(BASE_PATH + '/api/spotify-helper/data/:type', async (req, res) => {
+        const type = req.params.type;
+        const accessToken = req.cookies.access_token
+        let data = null;
+
+        if (type === 'user-playlists') {
+            data = await getPlaylists(accessToken)
+                if (error.response.status) res.status(error.response.status);
+                return {
+                    error: error.message
+                }
+        } else if (type === 'liked-tracks') {
+            data = await getLikedTracks(accessToken);
+        }
+
+        res.send(data);
+
+    });
+
     // ************************ GETTING TOP TRACKS/ARTISTS ************************ 
 
     app.get(BASE_PATH + '/api/spotify-helper/top-:type', async (req, res) => {

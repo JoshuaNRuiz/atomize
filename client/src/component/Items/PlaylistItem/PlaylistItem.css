@@ -24,6 +24,10 @@
     color: #960f47;
 }
 
+.playlist:hover {
+    cursor: pointer;
+}
+
 .playlist p {
     margin: 0;
     padding: 0;

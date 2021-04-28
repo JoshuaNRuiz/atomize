@@ -20,6 +20,8 @@ const Analyzer = (props) => {
     const [mode, setMode] = useState(null);
     const [isReady, setReady] = useState(false);
 
+    const MODES = ['SELECTION', 'PLAYLIST', 'TRACK'];
+
     const BASE_URL = process.env.REACT_APP_BASE_URL;
 
     async function getUserData(type) {
