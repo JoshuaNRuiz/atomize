@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 
 import List from '../../component/List/List';
-import Chart from '../../component/Chart/Chart';
 
 import searchicon from '../../resources/searchicon.svg';
 
@@ -11,38 +10,16 @@ import './Analyzer.css';
 const Analyzer = (props) => {
 
     const [isSearch, setIsSearch] = useState(false);
-    const [userPlaylists, setUserPlaylists] = useState({});
-    const [userTracks, setUserTracks] = useState({});
-    const [audioFeatureData, setAudioFeatureData] = useState({});
-    const [audioFeatureAverages, setAudioFeatureAverages] = useState({});
+    const [items, setItems] = useState({})
     const [searchItems, setSearchItems] = useState([]);
-    const [isChart, setIsChart] = useState(true);
     const [mode, setMode] = useState(null);
     const [isReady, setReady] = useState(false);
-
-    const MODES = ['SELECTION', 'PLAYLIST', 'TRACK'];
 
     const BASE_URL = process.env.REACT_APP_BASE_URL;
 
     async function getUserData(type) {
-        let url = BASE_URL;
-
-        switch (type) {
-            case 'playlist':
-                url += '/api/spotify-helper/user-playlists';
-                break;
-            case 'liked-tracks':
-                url += '/api/spotify-helper/liked-tracks';
-                break;
-            default:
-                throw new Error("requested user data not available");
-        }
-
-        const data = await axios.get(url)
-            .then(response => response.data);
-
-        console.log(data);
-
+        const url = `${BASE_URL}/api/spotify-helper/user-data/${type}`;
+        const data = await axios.get(url).then(response => response.data);
         return data;
     }
 
@@ -56,21 +33,15 @@ const Analyzer = (props) => {
         } else {
             throw new Error("Tried to get track ids for an empty list of tracks");
         }
-        console.log(ids);
         return ids;
     }
 
     async function getAudioFeatureData(trackIds) {
-        const url = BASE_URL + '/api/spotify-helper/audio-features';
-        const reqData = {
+        const url = `${BASE_URL}/api/spotify-helper/audio-features`
+        const requestData = {
             track_ids: trackIds
         }
-
-        const data = await axios.post(url, reqData)
-            .then(response => response.data);
-            
-        console.log(data);
-
+        const data = await axios.post(url, requestData);
         return data;
     }
 
@@ -109,71 +80,29 @@ const Analyzer = (props) => {
     function handleSearch(e) {
         const searchString = e.target.value.toUpperCase().trim();
         if (searchString !== '') {
-            const searchResults = Object.values(userPlaylists).filter(playlist => {
-                playlist.name.toUpperCase().includes(searchString);
+            const searchResults = Object.values(items).filter(playlist => {
+                return playlist.name.toUpperCase().includes(searchString);
             });
             setSearchItems({...searchResults});
             if (!isSearch) setIsSearch(true);
         } else {
             setIsSearch(false);
         }
-    }
-
-
-    useEffect(() => {
-        
-    },[mode])
+    } 
 
     useEffect(() => {
-        // async function getData() {
-        //     const tracks = await getUserData('liked-tracks');
-        //     const trackIds = getTrackIds(tracks);
-        //     const featureData = await getAudioFeatureData(trackIds);
-        //     const audioFeatureAverages = calculateAudioFeatureAverages(featureData);
-
-        //     return {
-        //         tracks: tracks,
-        //         featureData: featureData,
-        //         audioFeatureAverages: audioFeatureAverages
-        //     }
-        // }
-
-        // getData()
-        //     .then(data => {
-        //         setUserTracks(data.tracks);
-        //         setAudioFeatureData(data.featureData);
-        //         setAudioFeatureAverages(data.audioFeatureAverages);
-        //     })
-        //     .then(() => {
-        //         setIsLoaded(true);
-        //     })
-        //     .catch(error => {
-        //         if (error.response) {
-        //             const response = error.response;
-        //             if (response.status === 401) {
-        //                 alert("Your access token has expired. Please renew it.");
-        //             }
-        //         }
-        //         console.error(error);
-        //     });
-        (() => {
-            getUserData('playlist')
-                .then(data => {
-                    setUserPlaylists(data);
-                })
-                .then(() => setMode('playlist'));
-        })();
-    }, [])
-
-    // 4 modes?
-    // gateway choice -> playlists -> playlist breakdown 
-    //               |-> track search -> track breakdown
+        getUserData('playlists')
+            .then(data => {
+                setItems(data);
+                setReady(true);
+            })
+    }, []);
 
     return (
         <div>
             <h2 className='page-title'>analyzer</h2>
-            {mode === 'playlist' && <List type={'playlists'} items={userPlaylists}/>}
-            {isReady && <Chart title={"Vibe"} data={audioFeatureAverages}/> }
+            <input type='text' className='search' onChange={handleSearch}></input>
+            {isReady && <List type={'playlist'} items={isSearch ? searchItems : items}/>}
         </div>
     )
 }
