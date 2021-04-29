@@ -2,8 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 
 import List from '../../component/List/List';
-
-import searchicon from '../../resources/searchicon.svg';
+import Selector from '../../component/Selector/Selector';
 
 import './Analyzer.css';
 
@@ -13,7 +12,6 @@ const Analyzer = (props) => {
     const [items, setItems] = useState({})
     const [searchItems, setSearchItems] = useState([]);
     const [mode, setMode] = useState(null);
-    const [isReady, setReady] = useState(false);
 
     const BASE_URL = process.env.REACT_APP_BASE_URL;
 
@@ -90,19 +88,42 @@ const Analyzer = (props) => {
         }
     } 
 
+    function handleSelection(e) {
+        const value = e.target.value;
+        setMode(value);
+    }
+
+    const testOptions = [
+        {
+            name: 'Playlists',
+            imgUrl: ''
+        },
+        {
+            name: 'Tracks',
+            imgUrl: ''
+        },
+    ];
+
+    function displayComponent() {
+        if (mode == 'PLAYLISTS') {
+            getUserData('playlists')
+                .then(data => {
+                    setItems(data);
+                });
+        } else if (mode === 'TRACKS') {
+
+        }
+    }
+
     useEffect(() => {
-        getUserData('playlists')
-            .then(data => {
-                setItems(data);
-                setReady(true);
-            })
-    }, []);
+        
+    },[mode])
 
     return (
         <div>
             <h2 className='page-title'>analyzer</h2>
-            <input type='text' className='search' onChange={handleSearch}></input>
-            {isReady && <List type={'playlist'} items={isSearch ? searchItems : items}/>}
+            {!!mode ? displayComponent() : <Selector options={testOptions} handleSelection={handleSelection}/>}
+            {mode === 'playlists' && <List type={'playlists'} items={items}/>}
         </div>
     )
 }

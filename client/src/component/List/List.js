@@ -18,7 +18,7 @@ const List = (props) => {
             list = makeTrackList();
         } else if (type === 'artists' && items[0].type === 'artist') {
             list = makeArtistList();
-        } else if (type === 'playlist' && items[0].type === 'playlist') {
+        } else if (type === 'playlists' && items[0].type === 'playlist') {
             list = makePlaylistList();
         }
 
