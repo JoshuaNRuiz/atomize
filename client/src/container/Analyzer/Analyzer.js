@@ -105,15 +105,15 @@ const Analyzer = (props) => {
         },
     ];
 
-    function updateData() {
+    function updateItems() {
         if ((mode === 'playlists' || mode === 'tracks') && !isLoaded) {
             getUserData(mode)
                 .then(data => setItems(data))
-                .then(() => setLoaded(true))
+                .then(() => setLoaded(true));
         }
     }
 
-    useEffect(updateData, [mode]);
+    useEffect(updateItems, [mode]);
 
     return (
         <div>
