@@ -10,7 +10,7 @@ const Selector = (props) => {
         const radios = options.map(option => {
             const name = option.name;
             return (
-                <button className='selector__option' onClick={handleSelection} value={name.toUpperCase()}>
+                <button className='selector__option' onClick={handleSelection} value={name.toLowerCase()}>
                     {name}
                 </button>
             )

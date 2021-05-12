@@ -11,7 +11,8 @@ const Analyzer = (props) => {
     const [isSearch, setIsSearch] = useState(false);
     const [items, setItems] = useState({})
     const [searchItems, setSearchItems] = useState([]);
-    const [mode, setMode] = useState(null);
+    const [mode, setMode] = useState('select');
+    const [isLoaded, setLoaded] = useState(false);
 
     const BASE_URL = process.env.REACT_APP_BASE_URL;
 
@@ -104,26 +105,21 @@ const Analyzer = (props) => {
         },
     ];
 
-    function displayComponent() {
-        if (mode == 'PLAYLISTS') {
-            getUserData('playlists')
-                .then(data => {
-                    setItems(data);
-                });
-        } else if (mode === 'TRACKS') {
-
+    function updateData() {
+        if ((mode === 'playlists' || mode === 'tracks') && !isLoaded) {
+            getUserData(mode)
+                .then(data => setItems(data))
+                .then(() => setLoaded(true))
         }
     }
 
-    useEffect(() => {
-        
-    },[mode])
+    useEffect(updateData, [mode]);
 
     return (
         <div>
             <h2 className='page-title'>analyzer</h2>
-            {!!mode ? displayComponent() : <Selector options={testOptions} handleSelection={handleSelection}/>}
-            {mode === 'playlists' && <List type={'playlists'} items={items}/>}
+            {mode === 'select' && <Selector options={testOptions} handleSelection={handleSelection}/>}
+            {(mode === 'playlists' || mode === 'tracks') && isLoaded && <List type={mode} items={items}/>}
         </div>
     )
 }

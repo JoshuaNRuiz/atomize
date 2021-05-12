@@ -27,7 +27,7 @@ const List = (props) => {
 
     function makeTrackList() {
         let title, artist, album, rank, key;
-        return props.items.map((item, index) => {
+        return Object.values(items).map((item, index) => {
             title = item.name;
             artist = item.artists[0].name;
             album = item.album;
