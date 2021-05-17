@@ -6,12 +6,13 @@ const PlaylistItem = (props) => {
     const {id, name, trackCount, handleClick } = props;
 
     return (
-        <div className='playlist-item' id={id} onClick={handleClick}>
+        <button className='playlist-item' value={id}>
             <p className='title'>{name}</p>
             <div className='count-container'>
                 <p className='track-count'>{trackCount}</p>
             </div>
-        </div>
+            <div id={id} className='playlist-item__overlay' onClick={handleClick} />
+        </button>
     )
 };
 

@@ -313,6 +313,40 @@ module.exports = function (app) {
         res.send(data);
     });
 
+    // playlist info
+
+    app.get(BASE_PATH + '/api/spotify-helper/playlist/:id', async (req, res) => {
+        const id = req.params.id;
+        const accessToken = req.cookies.access_token;
+
+        
+        let url = `https://api.spotify.com/v1/playlists/${id}/tracks?offset=0&limit=100`;
+
+        const options = {
+            headers: {
+                'Authorization': 'Bearer ' + accessToken
+            }
+        }
+
+        const data = await axios.get(url, options)
+            .then(response => {
+                res.status(200);
+                return response.data;
+            })
+            .catch(error => {
+                if (error.response.status) res.status(error.response.status);
+                return {
+                    error: error.message
+                }
+            });
+
+        res.send(data);
+    });
+
+    async function getPlaylistTracks(accessToken) {
+        
+    }
+
     // ************************ GETTING AUDIO FEATURES ************************ 
 
     app.post(BASE_PATH + '/api/spotify-helper/audio-features', async (req, res) => {
@@ -321,7 +355,7 @@ module.exports = function (app) {
         const data = await getAudioFeatures(accessToken, ids)
             .then(response => {
                 res.status(200);
-                return response.data;
+                return response;
             })
             .catch(error => {
                 console.error(error);
@@ -330,7 +364,7 @@ module.exports = function (app) {
                     error: error.message,
                 }
             });
-
+        
         res.send(data);
     });
 

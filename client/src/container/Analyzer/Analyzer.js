@@ -4,6 +4,8 @@ import axios from 'axios';
 
 import List from '../../component/List/List';
 import Selector from '../../component/Selector/Selector';
+import TrackAnalyzer from './TrackAnalyzer/TrackAnalyzer';
+import PlaylistAnalyzer from './PlaylistAnalyzer/PlaylistAnalyzer';
 
 import './Analyzer.css';
 
@@ -23,58 +25,15 @@ const Analyzer = (props) => {
         return data;
     }
 
-    function getTrackIds(tracks) {
-        let ids = [];
-        const tracksArray = Object.values(items);
-        if (tracksArray.length > 0) {
-            for (const track of tracksArray) {
-                ids.push(track.id);
-            }
-        } else {
-            throw new Error("Tried to get track ids for an empty list of tracks");
+    function updateItems() {
+        if ((mode === Constants.MODE_PLAYLIST|| mode === Constants.MODE_TRACK) && !isLoaded) {
+            getUserData(mode)
+                .then(data => setItems(data))
+                .then(() => setLoaded(true));
         }
-        return ids;
     }
 
-    async function getAudioFeatureData(trackIds) {
-        const url = `${BASE_URL}/api/spotify-helper/audio-features`
-        const requestData = {
-            track_ids: trackIds
-        }
-        const data = await axios.post(url, requestData);
-        return data;
-    }
-
-    function calculateAudioFeatureAverages(featureData) {
-        let featureAverages = {
-            danceability: 0,
-            energy: 0,
-            tempo: 0,
-            valence: 0,
-            liveness: 0,
-            instrumentalness: 0,
-            speechiness: 0
-        }
-
-        for (const data of Object.values(featureData)) {
-            featureAverages.danceability += data.danceability;
-            featureAverages.energy += data.energy;
-            featureAverages.tempo += data.tempo;
-            featureAverages.valence += data.valence;
-            featureAverages.liveness += data.liveness;
-            featureAverages.instrumentalness += data.instrumentalness;
-            featureAverages.speechiness += data.speechiness;
-        }
-
-        const count = Object.keys(featureData).length;
-
-        Object.keys(featureAverages).forEach(key => {
-            featureAverages[key] = featureAverages[key] / count;
-        })
-
-        console.log(featureAverages);
-        return featureAverages;
-    }
+    useEffect(updateItems, [mode]);
 
     // TODO: THIS HAS TO BE IMPROVED, WE ARE DUPLICATING DATA -- we just need to filter
     function handleSearch(e) {
@@ -90,11 +49,6 @@ const Analyzer = (props) => {
         }
     } 
 
-    function handleSelection(e) {
-        const value = e.target.value;
-        setMode(Constants.TYPE_PLAYLIST);
-    }
-
     const testOptions = [
         {
             name: 'playlist',
@@ -106,25 +60,11 @@ const Analyzer = (props) => {
         },
     ];
 
-    function updateItems() {
-        if ((mode === Constants.MODE_PLAYLIST|| mode === Constants.MODE_TRACK) && !isLoaded) {
-            getUserData(mode)
-                .then(data => setItems(data))
-                .then(() => setLoaded(true));
-        }
-    }
-
-    function handleListClick(e) {
-
-    }
-
-    useEffect(updateItems, [mode]);
-
     return (
         <div>
             <h2 className='page-title'>analyzer</h2>
             {mode === Constants.MODE_SELECT && <Selector options={testOptions} handleSelection={handleSelection}/>}
-            {mode === Constants.MODE_PLAYLIST && isLoaded && <List items={items} handleClick={handleListClick}/>}
+            {mode === Constants.MODE_PLAYLIST && isLoaded && <PlaylistAnalyzer items={items}/>}
             {mode === Constants.MODE_TRACK && <input type='text' onChange={handleSearch}/>}
         </div>
     )
