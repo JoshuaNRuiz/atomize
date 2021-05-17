@@ -49,6 +49,11 @@ const Analyzer = (props) => {
         }
     } 
 
+    function handleSelection(e) {
+        const value = e.target.value;
+        setMode(Constants.TYPE_PLAYLIST);
+    }
+
     const testOptions = [
         {
             name: 'playlist',
