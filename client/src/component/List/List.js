@@ -1,3 +1,4 @@
+import * as Constants from '../../helpers/Constants';
 import React from 'react';
 import TrackItem from '../Items/TrackItem/TrackItem';
 import ArtistItem from '../Items/ArtistItem/ArtistItem';
@@ -14,11 +15,11 @@ const List = (props) => {
 
         let list = undefined;
 
-        if (type === 'tracks' && items[0].type === 'track') {
+        if (type === Constants.TYPE_TRACK && items[0].type === Constants.TYPE_TRACK) {
             list = makeTrackList();
-        } else if (type === 'artists' && items[0].type === 'artist') {
+        } else if (type === Constants.TYPE_ARTIST && items[0].type === Constants.TYPE_ARTIST) {
             list = makeArtistList();
-        } else if (type === 'playlists' && items[0].type === 'playlist') {
+        } else if (type === Constants.TYPE_PLAYLIST && items[0].type === Constants.TYPE_PLAYLIST) {
             list = makePlaylistList();
         }
 

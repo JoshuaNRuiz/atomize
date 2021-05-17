@@ -12,7 +12,7 @@
     font-size: 24px;
 }
 
-.playlist {
+.playlist-item {
     display: flex;
     align-items: center;
     width: 280px;
@@ -24,11 +24,11 @@
     color: #960f47;
 }
 
-.playlist:hover {
+.playlist-item:hover {
     cursor: pointer;
 }
 
-.playlist p {
+.playlist-item p {
     margin: 0;
     padding: 0;
     font-family: 'Montserrat';
@@ -36,7 +36,7 @@
     font-size: 14px;
 }
 
-.playlist .title {
+.playlist-item .title {
     min-width: 0;
     max-width: 85%;
     margin-left: 8px;
@@ -46,7 +46,7 @@
     text-overflow: ellipsis;
 }
 
-.playlist .count-container {
+.playlist-item .count-container {
     display:flex;
     min-width: 48px;
     margin: 0 0 auto auto;
@@ -58,7 +58,7 @@
     border-radius: 2px;
 }
 
-.playlist .track-count {
+.playlist-item .track-count {
     font-weight: 500;
     color: white;
 }

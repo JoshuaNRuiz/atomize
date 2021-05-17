@@ -24,7 +24,7 @@ const Analyzer = (props) => {
 
     function getTrackIds(tracks) {
         let ids = [];
-        const tracksArray = Object.values(tracks);
+        const tracksArray = Object.values(items);
         if (tracksArray.length > 0) {
             for (const track of tracksArray) {
                 ids.push(track.id);
