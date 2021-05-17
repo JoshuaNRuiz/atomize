@@ -167,9 +167,9 @@ module.exports = function (app) {
         let data = null;
 
         try {
-            if (type === 'playlists') {
+            if (type === 'playlist') {
                 data = await getPlaylists(accessToken);
-            } else if (type === 'tracks') {
+            } else if (type === 'track') {
                 data = await getLikedTracks(accessToken);
             }
         } catch (error) {

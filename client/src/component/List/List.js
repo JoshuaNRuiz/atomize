@@ -8,22 +8,20 @@ import './List.css';
 
 const List = (props) => {
 
-    const { type, items, handleClick } = props;
+    const { items, handleClick } = props;
 
     function makeList() {
-        if (!type || items.length === 0) return null;
+        if (items.length === 0) return null;
 
-        let list = undefined;
-
-        if (type === Constants.TYPE_TRACK && items[0].type === Constants.TYPE_TRACK) {
-            list = makeTrackList();
-        } else if (type === Constants.TYPE_ARTIST && items[0].type === Constants.TYPE_ARTIST) {
-            list = makeArtistList();
-        } else if (type === Constants.TYPE_PLAYLIST && items[0].type === Constants.TYPE_PLAYLIST) {
-            list = makePlaylistList();
+        if (items[0].type === Constants.TYPE_TRACK) {
+            return makeTrackList();
+        } else if (items[0].type === Constants.TYPE_ARTIST) {
+            return makeArtistList();
+        } else if (items[0].type === Constants.TYPE_PLAYLIST) {
+            return makePlaylistList();
         }
 
-        return list || null;
+        return null;
     }
 
     function makeTrackList() {
@@ -36,7 +34,6 @@ const List = (props) => {
             key = title + artist;
             return <TrackItem key={key} title={title} artists={artist} album={album} rank={rank} handleClick={handleClick}/>
         });
-
     };
 
     function makeArtistList() {

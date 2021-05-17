@@ -1,3 +1,4 @@
+import * as Constants from '../../helpers/Constants';
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 
@@ -91,22 +92,22 @@ const Analyzer = (props) => {
 
     function handleSelection(e) {
         const value = e.target.value;
-        setMode(value);
+        setMode(Constants.TYPE_PLAYLIST);
     }
 
     const testOptions = [
         {
-            name: 'Playlists',
+            name: 'playlist',
             imgUrl: ''
         },
         {
-            name: 'Tracks',
+            name: 'track',
             imgUrl: ''
         },
     ];
 
     function updateItems() {
-        if ((mode === 'playlists' || mode === 'tracks') && !isLoaded) {
+        if ((mode === Constants.MODE_PLAYLIST|| mode === Constants.MODE_TRACK) && !isLoaded) {
             getUserData(mode)
                 .then(data => setItems(data))
                 .then(() => setLoaded(true));
@@ -114,7 +115,7 @@ const Analyzer = (props) => {
     }
 
     function handleListClick(e) {
-        console.log(e.target);
+
     }
 
     useEffect(updateItems, [mode]);
@@ -122,9 +123,9 @@ const Analyzer = (props) => {
     return (
         <div>
             <h2 className='page-title'>analyzer</h2>
-            {mode === 'select' && <Selector options={testOptions} handleSelection={handleSelection}/>}
-            {mode === 'playlists' && isLoaded && <List type={mode} items={items} handleClick={handleListClick}/>}
-            {mode === 'tracks' && <input type='text' onChange={handleSearch}/>}
+            {mode === Constants.MODE_SELECT && <Selector options={testOptions} handleSelection={handleSelection}/>}
+            {mode === Constants.MODE_PLAYLIST && isLoaded && <List items={items} handleClick={handleListClick}/>}
+            {mode === Constants.MODE_TRACK && <input type='text' onChange={handleSearch}/>}
         </div>
     )
 }
