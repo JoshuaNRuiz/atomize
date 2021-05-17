@@ -313,14 +313,28 @@ module.exports = function (app) {
         res.send(data);
     });
 
-    // playlist info
+    // ************************ GETTING PLAYLIST INFO ************************ 
 
     app.get(BASE_PATH + '/api/spotify-helper/playlist/:id', async (req, res) => {
-        const id = req.params.id;
+        const playlistId = req.params.id;
         const accessToken = req.cookies.access_token;
 
-        
-        let url = `https://api.spotify.com/v1/playlists/${id}/tracks?offset=0&limit=100`;
+        const data = await getPlaylistTracks(accessToken, playlistId)
+            .then(data => {
+                res.status(200);
+                return data;
+            })
+            .catch(error => {
+                if (error.response.status) res.status(error.response.status);
+                return {
+                    error: error.message
+                }
+            });
+        res.send(data);
+    });
+
+    async function getPlaylistTracks(accessToken, playlistId) {
+        let url = `https://api.spotify.com/v1/playlists/${playlistId}/tracks?offset=0&limit=100`;
 
         const options = {
             headers: {
@@ -329,22 +343,9 @@ module.exports = function (app) {
         }
 
         const data = await axios.get(url, options)
-            .then(response => {
-                res.status(200);
-                return response.data;
-            })
-            .catch(error => {
-                if (error.response.status) res.status(error.response.status);
-                return {
-                    error: error.message
-                }
-            });
-
-        res.send(data);
-    });
-
-    async function getPlaylistTracks(accessToken) {
+            .then(response => response.data);
         
+        return data;
     }
 
     // ************************ GETTING AUDIO FEATURES ************************ 

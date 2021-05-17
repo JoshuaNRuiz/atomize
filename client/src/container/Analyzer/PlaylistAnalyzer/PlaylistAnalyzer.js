@@ -85,8 +85,9 @@ const PlaylistAnalyzer = (props) => {
         return featureAverages;
     }
 
-    function handleClick(e) {
-        const id = e.target.id;
+    const handleClick = (e) => {
+        e.stopPropagation();
+        const id = e.currentTarget.value;
         setPlaylistId(id);
         setIsReady(true);
     }

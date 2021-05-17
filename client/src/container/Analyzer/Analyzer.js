@@ -19,21 +19,21 @@ const Analyzer = (props) => {
 
     const BASE_URL = process.env.REACT_APP_BASE_URL;
 
-    async function getUserData(type) {
-        const url = `${BASE_URL}/api/spotify-helper/user-data/${type}`;
-        const data = await axios.get(url).then(response => response.data);
-        return data;
-    }
+    useEffect(updateItems, [mode]);
 
     function updateItems() {
-        if ((mode === Constants.MODE_PLAYLIST|| mode === Constants.MODE_TRACK) && !isLoaded) {
+        if (mode === Constants.MODE_PLAYLIST && !isLoaded) {
             getUserData(mode)
                 .then(data => setItems(data))
                 .then(() => setLoaded(true));
         }
     }
 
-    useEffect(updateItems, [mode]);
+    async function getUserData(type) {
+        const url = `${BASE_URL}/api/spotify-helper/user-data/${type}`;
+        const data = await axios.get(url).then(response => response.data);
+        return data;
+    }
 
     // TODO: THIS HAS TO BE IMPROVED, WE ARE DUPLICATING DATA -- we just need to filter
     function handleSearch(e) {
@@ -51,16 +51,16 @@ const Analyzer = (props) => {
 
     function handleSelection(e) {
         const value = e.target.value;
-        setMode(Constants.TYPE_PLAYLIST);
+        setMode(value);
     }
 
-    const testOptions = [
+    const selectorOptions = [
         {
-            name: 'playlist',
-            imgUrl: ''
+            value: Constants.MODE_PLAYLIST,
+            imgUrl: '',
         },
         {
-            name: 'track',
+            value: Constants.MODE_TRACK,
             imgUrl: ''
         },
     ];
@@ -68,9 +68,9 @@ const Analyzer = (props) => {
     return (
         <div>
             <h2 className='page-title'>analyzer</h2>
-            {mode === Constants.MODE_SELECT && <Selector options={testOptions} handleSelection={handleSelection}/>}
+            {mode === Constants.MODE_SELECT && <Selector options={selectorOptions} handleSelection={handleSelection}/>}
             {mode === Constants.MODE_PLAYLIST && isLoaded && <PlaylistAnalyzer items={items}/>}
-            {mode === Constants.MODE_TRACK && <input type='text' onChange={handleSearch}/>}
+            {mode === Constants.MODE_TRACK && <TrackAnalyzer />}
         </div>
     )
 }

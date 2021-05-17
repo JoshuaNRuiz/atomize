@@ -8,20 +8,14 @@ const Selector = (props) => {
     const handleSelection = props.handleSelection;
 
     function makeSelector() {
-        const radios = options.map(option => {
-            const name = option.name;
+        return options.map(option => {
+            const value = option.value;
             return (
-                <button className='selector__option' onClick={handleSelection} value={name.toLowerCase()}>
-                    {name}
+                <button className='selector__option' onClick={handleSelection} value={value}>
+                    {value.toUpperCase()}
                 </button>
             )
         });
-
-        return (
-            <div className='selector'>
-                {radios}
-            </div>
-        )
     }
 
     return (
