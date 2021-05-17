@@ -37,7 +37,7 @@ const Analyzer = (props) => {
 
     // TODO: THIS HAS TO BE IMPROVED, WE ARE DUPLICATING DATA -- we just need to filter
     function handleSearch(e) {
-        const searchString = e.target.value.toUpperCase().trim();
+        const searchString = e.currentTarget.value.toUpperCase().trim();
         if (searchString !== '') {
             const searchResults = Object.values(items).filter(playlist => {
                 return playlist.name.toUpperCase().includes(searchString);
@@ -57,10 +57,12 @@ const Analyzer = (props) => {
     const selectorOptions = [
         {
             value: Constants.MODE_PLAYLIST,
+            title: '',
             imgUrl: '',
         },
         {
             value: Constants.MODE_TRACK,
+            title: '',
             imgUrl: ''
         },
     ];

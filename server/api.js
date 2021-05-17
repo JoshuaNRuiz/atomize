@@ -398,4 +398,44 @@ module.exports = function (app) {
 
         return audioFeatureData;
     }
+
+    // *********** SEARCHING
+
+    app.get(BASE_PATH + '/api/spotify-helper/search', async (req, res) => {
+        const accessToken = req.cookies.access_token;
+        const query = req.query.q;
+        const type = req.query.type;
+
+        const data = await search(accessToken, query, type)
+            .then(response => {
+                res.status(200);
+                return response;
+            })
+            .catch(error => {
+                console.error(error);
+                if (error.response.status) res.status(error.response.status);
+                return {
+                    error: error.message,
+                }
+            });
+        
+        res.send(data);
+    });
+
+    async function search(accessToken, query, type) {
+        const encodedQuery = encodeURIComponent(query)
+        const url = `https://api.spotify.com/v1/search?q=${encodedQuery}&type=${type}`;
+
+        const options = {
+            headers: {
+                Authorization: 'Bearer ' + accessToken
+            }
+        }
+
+        const data = await axios.get(url, options)
+            .then(response => response.data)
+            .catch(error => console.log(error.message));
+
+        return data;
+    }
 }
