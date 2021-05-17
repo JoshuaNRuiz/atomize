@@ -113,13 +113,18 @@ const Analyzer = (props) => {
         }
     }
 
+    function handleListClick(e) {
+        console.log(e.target);
+    }
+
     useEffect(updateItems, [mode]);
 
     return (
         <div>
             <h2 className='page-title'>analyzer</h2>
             {mode === 'select' && <Selector options={testOptions} handleSelection={handleSelection}/>}
-            {(mode === 'playlists' || mode === 'tracks') && isLoaded && <List type={mode} items={items}/>}
+            {mode === 'playlists' && isLoaded && <List type={mode} items={items} handleClick={handleListClick}/>}
+            {mode === 'tracks' && <input type='text' onChange={handleSearch}/>}
         </div>
     )
 }
