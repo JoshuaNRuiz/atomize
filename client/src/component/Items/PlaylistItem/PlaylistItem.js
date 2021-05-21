@@ -6,10 +6,10 @@ const PlaylistItem = (props) => {
     const {id, name, trackCount, handleClick } = props;
 
     return (
-        <button className='playlist-item' value={id} onClick={handleClick}>
-            <p className='title'>{name}</p>
-            <div className='count-container'>
-                <p className='track-count'>{trackCount}</p>
+        <button className='PlaylistItem' value={id} onClick={handleClick}>
+            <p className='PlaylistItem__Title'>{name}</p>
+            <div className='PlaylistItem__CountContainer'>
+                <p className='PlaylistItem__CountContainer__TrackCount'>{trackCount}</p>
             </div>
         </button>
     )

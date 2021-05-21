@@ -16,9 +16,9 @@ const Login = () => {
     };
 
     return (
-        <div className='container'>
+        <div className='Login'>
             <h1>This app requires permission to access your Spotify information.</h1>
-            <button className='auth-button' onClick={openSpotifyAuthorization}>Authorize</button>
+            <button className='Login__auth-button' onClick={openSpotifyAuthorization}>Authorize</button>
         </div>
     )
 }

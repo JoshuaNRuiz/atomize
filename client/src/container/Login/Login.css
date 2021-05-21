@@ -3,7 +3,7 @@ h1 {
     font-size: 20px;
 }
 
-.container {
+.Login {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -15,7 +15,7 @@ h1 {
     border: 1px solid rgba(0, 0, 0, 0.6);
 }
 
-.auth-button {
+.Login__auth-button {
     background-color: green;
     border: 1px solid rgba(0, 0, 0, 0.5);
     border-radius: 2px;
@@ -24,6 +24,6 @@ h1 {
     width: 100px;
 }
 
-.auth-button:hover {
+.Login__auth-button:hover {
     cursor: pointer;
 }

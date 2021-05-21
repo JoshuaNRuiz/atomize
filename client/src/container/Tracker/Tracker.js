@@ -46,7 +46,7 @@ const Tracker = (props) => {
     useEffect(getItems, [type, timeRange, limit]);
 
     return (
-        <div className='tracker'>
+        <div className='Tracker'>
             <Controls
                 limit={limit}
                 handleTypeChange={handleTypeChange}

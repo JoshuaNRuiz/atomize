@@ -1,18 +1,4 @@
-.search-container {
-    margin-bottom: 16px;
-}
-
-.search-icon img {
-    width: 24px;
-    height: 24px;
-    margin-right: 4px;
-}
-
-.search-container input {
-    font-size: 24px;
-}
-
-.playlist-item {
+.PlaylistItem {
     position: relative;
     display: flex;
     align-items: center;
@@ -25,19 +11,16 @@
     color: #960f47;
 }
 
-.playlist-item:hover {
+.PlaylistItem:hover {
     cursor: pointer;
 }
 
-.playlist-item p {
+.PlaylistItem__Title {
     margin: 0;
     padding: 0;
     font-family: 'Montserrat';
     display: inline;
     font-size: 14px;
-}
-
-.playlist-item .title {
     min-width: 0;
     max-width: 85%;
     margin-left: 8px;
@@ -47,7 +30,7 @@
     text-overflow: ellipsis;
 }
 
-.playlist-item .count-container {
+.PlaylistItem__CountContainer{
     display:flex;
     min-width: 48px;
     margin: 0 0 auto auto;
@@ -59,17 +42,7 @@
     border-radius: 2px;
 }
 
-.playlist-item .track-count {
+.PlaylistItem__CountContainer__TrackCount {
     font-weight: 500;
     color: white;
-}
-
-.playlist-item__overlay {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    top: 0;
-    left: 0;
 }

@@ -40,7 +40,7 @@ const TrackAnalyzer = (props) => {
     }
 
     return (
-        <div classname='track-analyzer'>
+        <div classname='TrackAnalyzer'>
             <input type="text" onKeyDown={searchForTrack}/>
             {isLoaded && !isTrackSelected && <List items={searchResults} handleClick={handleClick}/>}
             {isTrackSelected && <div>THE DATA WILL BE SHOWN IN A CHART HERE</div>}

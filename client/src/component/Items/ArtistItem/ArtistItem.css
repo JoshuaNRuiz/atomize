@@ -1,4 +1,4 @@
-.artist {
+.ArtistItem {
     display:flex;
     align-items: center;
     justify-content: center;
@@ -15,7 +15,7 @@
     border-image-slice: 1;
 }
 
-.artist-image {
+.ArtistItem__Image {
     width: 80px;
     height: 80px;
     flex-shrink: 0;
@@ -23,7 +23,7 @@
     align-self: flex-start;
   }
 
-  .artist-name {
+  .ArtistItem__Name{
     margin-right: 16px;
     flex-grow: 3;
   }

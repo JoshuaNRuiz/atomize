@@ -14,13 +14,13 @@ const TrackItem = (props) => {
     const handleClick = props.handleClick;
 
     return (
-        <div className="track-item" id={id} onClick={handleClick}>
-            <img className='album-image' src={albumImage} alt='icon'/>
-            <div className="track-details"> 
-                <p className="title">{title}</p>
-                <p className="artist-album">{artistName} — {`${albumName}`} </p>
+        <div className="TrackItem" id={id} onClick={handleClick}>
+            <img className='TrackItem__Image' src={albumImage} alt='icon'/>
+            <div className="TrackItem__Details"> 
+                <p className="TrackItem__Details__Title">{title}</p>
+                <p className="TrackItem__Details__ArtistAlbum">{artistName} — {`${albumName}`} </p>
             </div>
-            <p className="rank">{rank}</p>
+            <p className="TrackItem__Rank">{rank}</p>
         </div>
     );
 }

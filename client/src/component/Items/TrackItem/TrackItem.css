@@ -1,4 +1,4 @@
-.track-item {
+.TrackItem {
   display:flex;
   align-items: center;
   width: 300px;
@@ -14,35 +14,31 @@
   border-image-slice: 1;
 }
 
-.track-item:hover {
+.TrackItem:hover {
   border: 2px solid red;
 }
   
-.album-image {
+.TrackItem__Image {
   width: 80px;
   height: 80px;
   flex-shrink: 0;
   border: 1px solid rgb(0, 0, 0, 30%);
 }
-
-.album-image:hover {
-  border: 1px solid red;
-}
   
-.track-details {
+.TrackItem__Details {
   text-align: left;
   display: inline;
   margin-left: 0.5em;
 }
 
-.title {
+.TrackItem__Details__Title {
   text-align: left;
   margin: 0;
   padding: 0;
   font-size: 1.2rem;
 }
 
-.artist-album {
+.TrackItem__Details__ArtistAlbum {
   margin: 0;
   padding: 0;
   text-align: left;
@@ -50,6 +46,6 @@
   font-weight: 200;
 }
 
-.rank {
+.TrackItem__Rank {
   margin: 0 0 auto auto;
 }

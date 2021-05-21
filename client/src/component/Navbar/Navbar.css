@@ -1,4 +1,4 @@
-.navbar {
+.Navbar {
     margin: 8px auto;
     height: 50px;
     display: flex;
@@ -8,7 +8,7 @@
     border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
-.navbar .logo {
+.Navbar__Logo{
     margin: 0 0 0 32px;
     padding: 0;
     color: white;
@@ -16,14 +16,14 @@
     font-weight: bold;
 }
 
-.navbar .links {
+.Navbar__Links {
     display: flex;
     align-items: center;
     margin-right: 16px;
     list-style-type: none;
 }
 
-.navbar .link {
+.Navbar__Link {
     margin: 0 4px;
     padding: 14px 0px;
     width: 60px;
@@ -32,7 +32,7 @@
     font-weight: lighter;
 }
 
-.navbar .link:hover {
+.Navbar__Link:hover {
     color: #960f47;
     text-decoration: none;
     font-weight: lighter;

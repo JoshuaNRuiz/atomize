@@ -4,7 +4,7 @@ import {Link} from 'react-router-dom';
 const Gateway = () => {
 
     return (
-        <div className='gateway'>
+        <div className='Gateway'>
             <Link to='analyze'> 
                 <button disabled>Music Analysis</button> 
             </Link>

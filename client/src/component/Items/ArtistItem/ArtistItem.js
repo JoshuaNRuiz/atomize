@@ -8,11 +8,11 @@ const ArtistItem = (props) => {
     const images = props.images;
 
     return (
-        <div className="artist" >
-            <img className='artist-image' 
+        <div className="ArtistItem" >
+            <img className='ArtistItem__Image' 
                 src={images === null ? null : images[0].url} 
                 alt='icon'/>
-            <span className="artist-name">{name}</span>
+            <span className="ArtistItem__Name">{name}</span>
         </div>
     );
 }

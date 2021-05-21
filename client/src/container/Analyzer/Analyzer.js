@@ -68,8 +68,8 @@ const Analyzer = (props) => {
     ];
 
     return (
-        <div className='analyzer'>
-            <h2 className='page-title'>analyzer</h2>
+        <div className='Analyzer'>
+            <h2 className='Analyzer__page-title'>analyzer</h2>
             {mode === Constants.MODE_SELECT && <Selector options={selectorOptions} handleSelection={handleSelection}/>}
             {mode === Constants.MODE_PLAYLIST && isLoaded && <PlaylistAnalyzer items={items}/>}
             {mode === Constants.MODE_TRACK && <TrackAnalyzer />}

@@ -11,7 +11,7 @@ const Selector = (props) => {
         return options.map(option => {
             const value = option.value;
             return (
-                <button className='selector__option' onClick={handleSelection} value={value}>
+                <button className='Selector__Option' onClick={handleSelection} value={value}>
                     {value.toUpperCase()}
                 </button>
             )
@@ -19,7 +19,7 @@ const Selector = (props) => {
     }
 
     return (
-        <div className='selector'>
+        <div className='Selector'>
             {makeSelector()}
         </div>
     )

@@ -1,11 +1,11 @@
-.selector {
+.Selector {
     width: 100%;
     margin: 0 auto;
     display: flex;
     justify-content: space-evenly;
 }
 
-.selector__option {
+.Selector__Option {
     height: 250px;
     width: 250px;
     margin: 0;
@@ -14,11 +14,6 @@
     background-color: white;
 }
 
-.selector__option:hover {
+.Selector__Option:hover {
     cursor: pointer;
-}
-
-.selector__option__title {
-    font-size: 32px;
-    font-family: serif;
 }

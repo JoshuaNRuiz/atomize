@@ -101,7 +101,7 @@ const PlaylistAnalyzer = (props) => {
     }
 
     return (
-        <div className='playlist-analyzer'>
+        <div className='PlaylistAnalyzer'>
             {isReady ? DataAnalyzer() : <List items={items} handleClick={handleClick}/>}
         </div>
     )

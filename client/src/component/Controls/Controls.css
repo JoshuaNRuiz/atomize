@@ -1,4 +1,4 @@
-.controls {
+.Controls {
     display: flex;
     justify-content: center;    
     padding: 4px;
@@ -6,7 +6,7 @@
     margin: 16px auto 16px;
 }
 
-.control-input-container {
+.Controls__Container {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -17,11 +17,13 @@
     font-weight: 500;
 }
 
-.control-input-container > label {
+.Controls__Container__Label {
     margin-bottom: 4px;
 }
 
-.control-input-container > select {
+.Controls__Container__TypeSelect,
+.Controls__Container__TimeRangeSelect,
+.Controls__Container__LimitInput {
     padding: 4px;
     appearance: none;
     outline: none;
@@ -33,13 +35,9 @@
     color: white;
 }
 
-.control-input-container > select:hover {
-    cursor: pointer;
-}
-
 /* ********** SONG LIMIT ********** */
 
-.limit-input {
+.Controls__Container__LimitInput {
     padding: 5px; 
     width: 40px;
     border: 1px solid rgba(0, 0, 0, 0.5);
@@ -50,29 +48,14 @@
     color: white;
 }
 
-.limit-input::-webkit-outer-spin-button, 
-.limit-input::-webkit-inner-spin-button {
+.Controls__Container__LimitInput::-webkit-outer-spin-button, 
+.Controls__Container__LimitInput::-webkit-inner-spin-button {
     -webkit-appearance: none;
     appearance: none;
 }
 
-.limit-input[type=number] {
+.Controls__Container__LimitInput[type=number] {
     -moz-appearance: textfield;
     text-align: center;
 
-}
-
-/* ********** REFRESH BUTTON ********** */
-
-.refresh-button {
-    height: 30px;
-    width: 30px;
-    border: 1px solid black;
-    border-radius: 100%;
-    text-align: center;
-}
-
-.refresh-button:hover {
-    cursor: pointer;
-    background-color: white;
 }

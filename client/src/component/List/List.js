@@ -61,7 +61,7 @@ const List = (props) => {
     }
 
     return (
-        <div className='list'>
+        <div className='List'>
             {makeList()}
         </div>
     )
