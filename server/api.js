@@ -402,7 +402,6 @@ module.exports = function (app) {
     app.get(BASE_PATH + '/api/spotify-helper/audio-features/:id', async (req, res) => {
         const accessToken = req.cookies.access_token;
         const id = req.params.id;
-        console.log("called");
         const data = await getTrackAudioFeatures(accessToken, id)
             .then(response => {
                 res.status(200);
