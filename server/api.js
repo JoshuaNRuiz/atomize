@@ -399,14 +399,11 @@ module.exports = function (app) {
         return audioFeatureData;
     }
 
-    // *********** SEARCHING
-
-    app.get(BASE_PATH + '/api/spotify-helper/search', async (req, res) => {
+    app.get(BASE_PATH + '/api/spotify-helper/audio-features/:id', async (req, res) => {
         const accessToken = req.cookies.access_token;
-        const query = req.query.q;
-        const type = req.query.type;
-
-        const data = await search(accessToken, query, type)
+        const id = req.params.id;
+        console.log("called");
+        const data = await getTrackAudioFeatures(accessToken, id)
             .then(response => {
                 res.status(200);
                 return response;
@@ -422,7 +419,44 @@ module.exports = function (app) {
         res.send(data);
     });
 
-    async function search(accessToken, query, type) {
+    async function getTrackAudioFeatures(accessToken, id) {
+        const url = `https://api.spotify.com/v1/audio-features/${id}`
+        const options = {
+            headers: {
+                'Authorization': 'Bearer ' + accessToken
+            }
+        }
+
+        const data = await axios.get(url, options)
+            .then(response => response.data);
+
+        return data;
+    }
+
+    // *********** SEARCHING
+
+    app.get(BASE_PATH + '/api/spotify-helper/search', async (req, res) => {
+        const accessToken = req.cookies.access_token;
+        const query = req.query.q;
+        const type = req.query.type;
+
+        const data = await searchSpotify(accessToken, query, type)
+            .then(response => {
+                res.status(200);
+                return response;
+            })
+            .catch(error => {
+                console.error(error);
+                if (error.response.status) res.status(error.response.status);
+                return {
+                    error: error.message,
+                }
+            });
+        
+        res.send(data);
+    });
+
+    async function searchSpotify(accessToken, query, type) {
         const encodedQuery = encodeURIComponent(query)
         const url = `https://api.spotify.com/v1/search?q=${encodedQuery}&type=${type}`;
 

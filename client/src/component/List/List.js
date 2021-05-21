@@ -25,14 +25,15 @@ const List = (props) => {
     }
 
     function makeTrackList() {
-        let title, artist, album, rank, key;
+        let title, artist, album, rank, key, trackId;
         return Object.values(items).map((item, index) => {
             title = item.name;
             artist = item.artists[0].name;
             album = item.album;
             rank = index + 1;
+            trackId = item.id;
             key = title + artist;
-            return <TrackItem key={key} title={title} artists={artist} album={album} rank={rank} handleClick={handleClick}/>
+            return <TrackItem id={trackId} key={key} title={title} artists={artist} album={album} rank={rank} handleClick={handleClick}/>
         });
     };
 

@@ -1,4 +1,4 @@
-.track {
+.track-item {
   display:flex;
   align-items: center;
   width: 300px;
@@ -14,7 +14,7 @@
   border-image-slice: 1;
 }
 
-.track:hover {
+.track-item:hover {
   border: 2px solid red;
 }
   
