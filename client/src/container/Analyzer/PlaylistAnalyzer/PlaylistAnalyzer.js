@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 import List from '../../../component/List/List';
@@ -8,37 +8,43 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const PlaylistAnalyzer = (props) => {
 
-    const [playlistId, setPlaylistId] = useState('');
+    const [playlists, setPlaylists] = useState({})
+    const [isSearch, setIsSearch] = useState(false);
+    const [searchItems, setSearchItems] = useState([]);
     const [isReady, setIsReady] = useState(false);
     const [audioFeatureData, setAudioFeatureData] = useState([]);
 
-    const items = props.items;
+    useEffect(getUsersPlaylists, []);
 
-    useEffect(getData,[isReady]);
-
-    function getData() {
-        if (isReady) {
-            getPlaylistItems()
-                .then(items => getTrackIds(items))
-                .then(trackIds => getAudioFeatures(trackIds))
-                .then(audioFeatureData => {
-                    setAudioFeatureData(audioFeatureData);
-                });
-        }
+    async function getUsersPlaylists() {
+        const url = `${BASE_URL}/api/spotify-helper/user-data/playlists`;
+        axios.get(url)
+            .then(response => {
+                const playlists = response.data;
+                setPlaylists(playlists);
+            })
+            .then(() => setIsReady(true));
     }
 
-    async function getPlaylistItems() {
+    function getData(playlistId) {
+        getTracksFromPlaylist(playlistId)
+            .then(tracks => getTrackIds(tracks))
+            .then(trackIds => getAudioFeatures(trackIds))
+            .then(audioFeatureData => setAudioFeatureData(audioFeatureData));
+    }
+
+    async function getTracksFromPlaylist(playlistId) {
         const url = `${BASE_URL}/api/spotify-helper/playlist/${playlistId}`;
-        return await axios.get(url)
+        const tracks = await axios.get(url)
             .then(response => response.data.items);
+        return tracks;
     }
 
-    function getTrackIds(arrayOfTrackObjects) {
+    function getTrackIds(tracks) {
         let trackIds = [];
-        for (const track of arrayOfTrackObjects) {
+        for (const track of tracks) {
             trackIds.push(track.track.id);
         }
-        console.log(trackIds);
         return trackIds;
     }
 
@@ -85,24 +91,32 @@ const PlaylistAnalyzer = (props) => {
         return featureAverages;
     }
 
-    const handleClick = (e) => {
-        e.stopPropagation();
-        const id = e.currentTarget.value;
-        setPlaylistId(id);
-        setIsReady(true);
+    // TODO: THIS HAS TO BE IMPROVED, WE ARE DUPLICATING DATA -- we just need to filter
+    function handleSearch(event) {
+        const searchString = event.currentTarget.value.toUpperCase().trim();
+        if (searchString !== '') {
+            const searchResults = Object.values(playlists).filter(playlist => {
+                return playlist.name.toUpperCase().includes(searchString);
+            });
+            setSearchItems({ ...searchResults });
+            if (!isSearch) setIsSearch(true);
+        } else {
+            setIsSearch(false);
+        }
     }
 
-    function DataAnalyzer() {
-        return (
-            <div>
-                <span>{calculateAudioFeatureAverages(audioFeatureData).danceability}</span>
-            </div>
-        )
+    const handleClick = (event) => {
+        event.stopPropagation();
+        const playlistId = event.currentTarget.value;
+        if (!!playlistId) {
+            getData(playlistId);
+        }
     }
 
     return (
         <div className='PlaylistAnalyzer'>
-            {isReady ? DataAnalyzer() : <List items={items} handleClick={handleClick}/>}
+            {isReady && <input type="text" className="Analyzer__SearchBar" onChange={handleSearch}/>}
+            {isReady && <List items={isSearch ? searchItems : playlists} handleClick={handleClick}/>}
         </div>
     )
 }

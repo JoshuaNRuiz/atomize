@@ -11,50 +11,9 @@ import './Analyzer.css';
 
 const Analyzer = (props) => {
 
-    const [isSearch, setIsSearch] = useState(false);
-    const [items, setItems] = useState({})
-    const [searchItems, setSearchItems] = useState([]);
     const [mode, setMode] = useState('select');
-    const [isLoaded, setLoaded] = useState(false);
 
-    const BASE_URL = process.env.REACT_APP_BASE_URL;
-
-    useEffect(updateItems, [mode]);
-
-    function updateItems() {
-        if (mode === Constants.MODE_PLAYLIST && !isLoaded) {
-            getUserData(mode)
-                .then(data => setItems(data))
-                .then(() => setLoaded(true));
-        }
-    }
-
-    async function getUserData(type) {
-        const url = `${BASE_URL}/api/spotify-helper/user-data/${type}`;
-        const data = await axios.get(url).then(response => response.data);
-        return data;
-    }
-
-    // TODO: THIS HAS TO BE IMPROVED, WE ARE DUPLICATING DATA -- we just need to filter
-    function handleSearch(e) {
-        const searchString = e.currentTarget.value.toUpperCase().trim();
-        if (searchString !== '') {
-            const searchResults = Object.values(items).filter(playlist => {
-                return playlist.name.toUpperCase().includes(searchString);
-            });
-            setSearchItems({...searchResults});
-            if (!isSearch) setIsSearch(true);
-        } else {
-            setIsSearch(false);
-        }
-    } 
-
-    function handleSelection(e) {
-        const value = e.target.value;
-        setMode(value);
-    }
-
-    const selectorOptions = [
+    const modes = [
         {
             value: Constants.MODE_TRACK,
             title: '',
@@ -67,11 +26,16 @@ const Analyzer = (props) => {
         },
     ];
 
+    function handleSelection(e) {
+        e.stopPropagation();
+        const value = e.currentTarget.value;
+        setMode(value);
+    }
+
     return (
         <div className='Analyzer'>
-            <h2 className='Analyzer__page-title'>analyzer</h2>
-            {mode === Constants.MODE_SELECT && <Selector options={selectorOptions} handleSelection={handleSelection}/>}
-            {mode === Constants.MODE_PLAYLIST && isLoaded && <PlaylistAnalyzer items={items}/>}
+            {mode === Constants.MODE_SELECT && <Selector options={modes} handleSelection={handleSelection}/>}
+            {mode === Constants.MODE_PLAYLIST && <PlaylistAnalyzer />}
             {mode === Constants.MODE_TRACK && <TrackAnalyzer />}
         </div>
     )
