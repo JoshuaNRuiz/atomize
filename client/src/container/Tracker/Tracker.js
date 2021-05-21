@@ -15,32 +15,37 @@ const Tracker = (props) => {
     const [limit, setLimit] = useState(LIMIT_DEFAULT);
     const [timeRange, setTimeRange] = useState(RANGE_DEFAULT);
     const [items, setItems] = useState([]);
+    const [isReady, setIsReady] = useState(false);
 
     const BASE_URL = process.env.REACT_APP_BASE_URL;
 
-    function handleTypeChange(e) {
-        setType(e.target.value);
+    function handleTypeChange(event) {
+        setType(event.target.value);
     }
 
-    function handleTimeRangeChange(e) {
-        setTimeRange(e.target.value);
+    function handleTimeRangeChange(event) {
+        setTimeRange(event.target.value);
     }
 
-    function handleLimitChange(e) {
-        if (e.target.value > 50) {
-            e.target.value = 50;
-        } else if (e.target.value < 0) {
-            e.target.value = 0
+    function handleLimitChange(event) {
+        if (event.target.value > 50) {
+            event.target.value = 50;
+        } else if (event.target.value < 0) {
+            event.target.value = 0
         }
-        setLimit(e.target.value);
+        setLimit(event.target.value);
     }
 
     function getItems() {
         let url = `${BASE_URL}/api/spotify-helper/top-${type}`;
         url += `?time_range=${timeRange}&limit=${limit}&offset=${0}`
         axios.get(url)
-            .then(response => response.data.items)
-            .then(items => setItems(items));
+            .then(response => {
+                const items = response.data.items;
+                console.log(items);
+                setItems(items);
+            })
+            .then(() => setIsReady(true))
     }
 
     useEffect(getItems, [type, timeRange, limit]);
@@ -52,7 +57,7 @@ const Tracker = (props) => {
                 handleTypeChange={handleTypeChange}
                 handleTimeRangeChange={handleTimeRangeChange}
                 handleLimitChange={handleLimitChange}/>
-            <List type={type} items={items} />
+            {isReady && <List items={items} />}
         </div>
     )
 }

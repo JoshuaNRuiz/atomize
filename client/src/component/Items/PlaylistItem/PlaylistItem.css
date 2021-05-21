@@ -30,8 +30,8 @@
     text-overflow: ellipsis;
 }
 
-.PlaylistItem__CountContainer{
-    display:flex;
+.PlaylistItem__CountContainer {
+    display: flex;
     min-width: 48px;
     margin: 0 0 auto auto;
     align-items: center;

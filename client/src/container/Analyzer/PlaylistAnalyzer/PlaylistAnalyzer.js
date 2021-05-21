@@ -26,6 +26,14 @@ const PlaylistAnalyzer = (props) => {
             .then(() => setIsReady(true));
     }
 
+    function handleClick(event) {
+        event.stopPropagation();
+        const playlistId = event.currentTarget.value;
+        if (!!playlistId) {
+            getData(playlistId);
+        }
+    }
+
     function getData(playlistId) {
         getTracksFromPlaylist(playlistId)
             .then(tracks => getTrackIds(tracks))
@@ -103,14 +111,6 @@ const PlaylistAnalyzer = (props) => {
             if (!isSearch) setIsSearch(true);
         } else {
             setIsSearch(false);
-        }
-    }
-
-    const handleClick = (event) => {
-        event.stopPropagation();
-        const playlistId = event.currentTarget.value;
-        if (!!playlistId) {
-            getData(playlistId);
         }
     }
 

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 import List from '../../../component/List/List';
+import Chart from "../../../component/Chart/Chart";
 
 const TrackAnalyzer = (props) => {
 
@@ -39,11 +40,17 @@ const TrackAnalyzer = (props) => {
             .then(() => setIsTrackSelected(true));
     }
 
+    const testData = {
+        item1: 0.1,
+        item2: 0.2,
+        item3: 0.3,
+    }
+
     return (
         <div classname='TrackAnalyzer'>
             <input type="text" onKeyDown={searchForTrack}/>
             {isLoaded && !isTrackSelected && <List items={searchResults} handleClick={handleClick}/>}
-            {isTrackSelected && <div>THE DATA WILL BE SHOWN IN A CHART HERE</div>}
+            {isTrackSelected && <Chart title={"vibe"} data={testData} />}
         </div>
     )
 }
