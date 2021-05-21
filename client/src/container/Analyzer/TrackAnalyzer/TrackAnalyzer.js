@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 import List from '../../../component/List/List';
-import Chart from "../../../component/Chart/Chart";
+import Chart from "../../../component/Chart/CustomChart";
 
 const TrackAnalyzer = (props) => {
 

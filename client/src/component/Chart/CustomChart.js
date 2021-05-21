@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
-import ChartJS from 'chart.js';
+import Chart from 'chart.js/auto';
 
-const Chart = (props) => {
+const CustomChart = (props) => {
 
     const { title, data, colors } = props;
     const [labels, values] = [Object.keys(data), Object.values(data)];
@@ -19,42 +19,6 @@ const Chart = (props) => {
 
         const backgroundColors = [danceabilityColor, energyColor, livenessColor,
             instrumentalnessColor, speechinessColor, valenceColor];
-
-        // new ChartJS(chartReference, {
-        //     type: 'polarArea',
-        //     data: {
-        //         labels: labels,
-        //         datasets: [{
-        //             label: 'value',
-        //             data: values,
-        //             backgroundColor: backgroundColors,
-        //             borderColor: "rgba(46, 46, 46, 0.8)",
-        //             borderWidth: 1
-        //         }],
-        //     },
-        //     options: {
-        //         aspectRatio: 1,
-        //         scale: {
-        //             ticks: {
-        //                 suggestedMin: 0,
-        //                 suggestedMax: 1,
-        //                 stepSize: 0.2,
-        //                 showLabelBackdrop: false,
-        //             },
-        //             gridLines: {
-        //                 color: 'rgba(0, 0, 0, 0.2)',
-        //                 z: -1
-        //             },
-        //             pointLabels: {
-        //                 fontSize: 16
-        //             }
-        //         },
-        //         legend: {
-        //             position: 'right',
-        //             align: 'left'
-        //         }
-        //     }
-        // });
 
         const data = {
             labels: labels,
@@ -85,11 +49,6 @@ const Chart = (props) => {
 
         const options = {
             indexAxis: 'y',
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
         }
 
         const config = {
@@ -98,7 +57,7 @@ const Chart = (props) => {
             options: options
         }
 
-        new ChartJS(chartReference, config);
+        new Chart(chartReference, config);
     }
 
     useEffect(() => {
@@ -113,4 +72,4 @@ const Chart = (props) => {
     );
 }
 
-export default Chart;
+export default CustomChart;
