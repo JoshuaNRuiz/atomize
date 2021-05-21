@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 import List from '../../../component/List/List';
-import Chart from "../../../component/Chart/CustomChart";
+import CustomChart from "../../../component/Chart/CustomChart";
 
 const TrackAnalyzer = (props) => {
 
@@ -34,23 +34,29 @@ const TrackAnalyzer = (props) => {
         const url = `${BASE_URL}/api/spotify-helper/audio-features/${trackId}`;
         await axios.get(url)
             .then(response => {
-                const data = response.data;
+                const data = filterData(response.data);
                 setTrackFeatures(data);
             })
             .then(() => setIsTrackSelected(true));
     }
 
-    const testData = {
-        item1: 0.1,
-        item2: 0.2,
-        item3: 0.3,
+    function filterData(data) {
+        console.log(data);
+        const {acousticness, danceability, energy, liveness, speechiness} = data;
+        return {
+            acousticness: acousticness,
+            danceability: danceability,
+            energy: energy,
+            liveness: liveness,
+            speechiness: speechiness,
+        }
     }
 
     return (
         <div classname='TrackAnalyzer'>
             <input type="text" onKeyDown={searchForTrack}/>
             {isLoaded && !isTrackSelected && <List items={searchResults} handleClick={handleClick}/>}
-            {isTrackSelected && <Chart title={"vibe"} data={testData} />}
+            {isTrackSelected && <CustomChart title={"vibe"} data={trackFeatures} />}
         </div>
     )
 }
