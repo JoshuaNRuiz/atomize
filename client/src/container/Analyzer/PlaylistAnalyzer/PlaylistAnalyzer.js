@@ -10,7 +10,7 @@ const PlaylistAnalyzer = (props) => {
 
     const [playlists, setPlaylists] = useState({})
     const [isSearch, setIsSearch] = useState(false);
-    const [searchItems, setSearchItems] = useState([]);
+    const [searchResults, setSearchResults] = useState([]);
     const [isReady, setIsReady] = useState(false);
     const [audioFeatureData, setAudioFeatureData] = useState([]);
 
@@ -93,12 +93,13 @@ const PlaylistAnalyzer = (props) => {
 
     // TODO: THIS HAS TO BE IMPROVED, WE ARE DUPLICATING DATA -- we just need to filter
     function handleSearch(event) {
-        const searchString = event.currentTarget.value.toUpperCase().trim();
+        const searchString = event.currentTarget.value.trim().toUpperCase();
         if (searchString !== '') {
-            const searchResults = Object.values(playlists).filter(playlist => {
+            let results = Object.values(playlists).filter(playlist => {
                 return playlist.name.toUpperCase().includes(searchString);
             });
-            setSearchItems({ ...searchResults });
+            if (results.length === 0) results = {};
+            setSearchResults(results)
             if (!isSearch) setIsSearch(true);
         } else {
             setIsSearch(false);
@@ -115,8 +116,8 @@ const PlaylistAnalyzer = (props) => {
 
     return (
         <div className='PlaylistAnalyzer'>
-            {isReady && <input type="text" className="Analyzer__SearchBar" onChange={handleSearch}/>}
-            {isReady && <List items={isSearch ? searchItems : playlists} handleClick={handleClick}/>}
+            {isReady && <input type="text" className="Analyzer__SearchBar" onChange={handleSearch} />}
+            {isReady && <List items={isSearch ? searchResults : playlists} handleClick={handleClick} />}
         </div>
     )
 }

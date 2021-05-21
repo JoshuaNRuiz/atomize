@@ -11,7 +11,11 @@ const List = (props) => {
     const { items, handleClick } = props;
 
     function makeList() {
-        if (items.length === 0) return null;
+        if (Object.keys(items).length === 0) {
+            return (
+                <div className='List--Empty'></div>
+            )
+        }
 
         if (items[0].type === Constants.TYPE_TRACK) {
             return makeTrackList();
