@@ -9,9 +9,9 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 const PlaylistAnalyzer = (props) => {
 
     const [playlists, setPlaylists] = useState({})
+    const [isReady, setIsReady] = useState(false);
     const [isSearch, setIsSearch] = useState(false);
     const [searchResults, setSearchResults] = useState([]);
-    const [isReady, setIsReady] = useState(false);
     const [audioFeatureData, setAudioFeatureData] = useState([]);
 
     useEffect(getUsersPlaylists, []);
