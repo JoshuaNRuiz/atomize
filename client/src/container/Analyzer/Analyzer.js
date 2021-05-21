@@ -56,14 +56,14 @@ const Analyzer = (props) => {
 
     const selectorOptions = [
         {
-            value: Constants.MODE_PLAYLIST,
-            title: '',
-            imgUrl: '',
-        },
-        {
             value: Constants.MODE_TRACK,
             title: '',
             imgUrl: ''
+        },
+        {
+            value: Constants.MODE_PLAYLIST,
+            title: '',
+            imgUrl: '',
         },
     ];
 
