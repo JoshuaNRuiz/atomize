@@ -20,13 +20,13 @@ const TrackAnalyzer = (props) => {
     const BASE_URL = process.env.REACT_APP_BASE_URL;
 
     async function searchForTrack(event) {
-        if (event.key == 'Enter') {
+        if (event.key === 'Enter') {
             const searchText = event.target.value.trim();
             const url = `${BASE_URL}/api/spotify-helper/search?q=${searchText}&type=track`;
             await axios.get(url)
                 .then(response => response.data.tracks.items)
                 .then(items => {
-                    setSearchResults(items);;
+                    setSearchResults(items);
                 })
                 .then(() => setMode(Constants.MODE_SEARCH));
         }
@@ -49,12 +49,11 @@ const TrackAnalyzer = (props) => {
     };
 
     function filterData(data) {
-        const { acousticness, danceability, energy, liveness, speechiness, valence } = data;
+        const { danceability, energy, instrumentalness, speechiness, valence } = data;
         return {
-            acousticness: acousticness,
             danceability: danceability,
             energy: energy,
-            liveness: liveness,
+            instrumentalness: instrumentalness,
             speechiness: speechiness,
             valence: valence
         }

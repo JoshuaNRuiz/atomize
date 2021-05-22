@@ -15,12 +15,11 @@ const CustomChart = (props) => {
 
         const danceabilityColor = 'rgba(255, 202, 58, 0.2)';
         const energyColor = 'rgba(106, 76, 147, 0.2)';
-        const livenessColor = 'rgba(255, 89, 94, 0.2)';
         const instrumentalnessColor = 'rgba(25, 130, 196, 0.2)';
         const speechinessColor = 'rgba(93, 103, 91, 0.2)';
         const valenceColor = 'rgba(138, 201, 38, 0.2)';
 
-        const backgroundColors = [danceabilityColor, energyColor, livenessColor,
+        const backgroundColors = [danceabilityColor, energyColor,
             instrumentalnessColor, speechinessColor, valenceColor];
 
         const data = {
