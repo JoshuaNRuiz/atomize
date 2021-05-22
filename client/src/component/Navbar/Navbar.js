@@ -7,7 +7,7 @@ const Navbar = (props) => {
 
     return (
         <nav className='Navbar'>
-            <h4 className='Navbar__Logo'>atomize</h4>
+            <Link to='/'><h4 className='Navbar__Logo'>atomize</h4></Link>
             <ul className="Navbar__Links">
                 <Link to='analyze' className="Navbar__Link" disabled><li>analyze</li></Link>
                 <Link to='top' className="Navbar__Link"><li>top</li></Link>
