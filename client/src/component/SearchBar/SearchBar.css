@@ -1,8 +1,10 @@
 .SearchBar {
-    
+    margin: 16px;
 }
 
 .SearchBar__Input {
+    -webkit-appearance: none;
+    -moz-appearance: none;
     padding: 12px;
     background-color: rgba(0, 0, 0, 0.2);
     border: 1px solid black;

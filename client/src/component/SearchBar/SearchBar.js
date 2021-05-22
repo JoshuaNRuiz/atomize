@@ -8,7 +8,8 @@ const SearchBar = (props) => {
 
     return (
         <div className="SearchBar">
-            <input className="SearchBar__Input" type="text" autoFocus onKeyDown={handleSearch}/>
+            <input className="SearchBar__Input" type="text" autoFocus onKeyDown={handleSearch}>
+            </input>
         </div>
     )
 }

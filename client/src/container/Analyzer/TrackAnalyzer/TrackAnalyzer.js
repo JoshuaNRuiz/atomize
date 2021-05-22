@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import * as Constants from '../../../helpers/Constants';
 
 import List from '../../../component/List/List';
 import CustomChart from "../../../component/Chart/CustomChart";
@@ -14,6 +15,8 @@ const TrackAnalyzer = (props) => {
     const [trackFeatures, setTrackFeatures] = useState({});
     const [targetTrack, setTargetTrack] = useState({});
 
+    const [mode, setMode] = useState('');
+
     const BASE_URL = process.env.REACT_APP_BASE_URL;
 
     async function searchForTrack(event) {
@@ -23,9 +26,9 @@ const TrackAnalyzer = (props) => {
             await axios.get(url)
                 .then(response => response.data.tracks.items)
                 .then(items => {
-                    setSearchResults(items);
-                    if (!isLoaded) setIsLoaded(true);
-                });
+                    setSearchResults(items);;
+                })
+                .then(() => setMode(Constants.MODE_CHOOSE));
         }
     }
 
@@ -42,7 +45,7 @@ const TrackAnalyzer = (props) => {
                 const data = filterData(response.data);
                 setTrackFeatures(data);
             })
-            .then(() => setIsTrackSelected(true));
+            .then(() => setMode(Constants.MODE_ANALYZE));
     }
 
     function filterData(data) {
@@ -59,8 +62,8 @@ const TrackAnalyzer = (props) => {
     return (
         <div classname='TrackAnalyzer'>
             <SearchBar handleSearch={searchForTrack} />
-            {isLoaded && !isTrackSelected && <List items={searchResults} handleClick={handleTrackSelection}/>}
-            {isTrackSelected && <CustomChart title={targetTrack.name + ' -- ' + targetTrack.artists[0].name} data={trackFeatures} />}
+            {mode === Constants.MODE_CHOOSE && <List items={searchResults} handleClick={handleTrackSelection}/>}
+            {mode === Constants.MODE_ANALYZE && <CustomChart title={targetTrack.name + ' -- ' + targetTrack.artists[0].name} data={trackFeatures} />}
         </div>
     )
 }

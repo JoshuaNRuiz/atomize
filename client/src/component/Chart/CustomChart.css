@@ -1,7 +1,22 @@
 .CustomChart {
-    background-color: white;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: 500px;
+}
+
+.CustomChart__Title {
+    color: white;
 }
 
 .CustomChart__Canvas {
     background-color: white;
+}
+
+@media screen and (max-width: 600px) {
+    .CustomChart {
+        width: 95%;
+    }
 }

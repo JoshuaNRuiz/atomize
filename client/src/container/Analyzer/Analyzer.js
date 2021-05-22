@@ -35,6 +35,7 @@ const Analyzer = (props) => {
     return (
         <div className='Analyzer'>
             {mode === Constants.MODE_SELECT && <Selector options={modes} handleSelection={handleSelection}/>}
+            {mode !== Constants.MODE_SELECT && <div>return</div>}
             {mode === Constants.MODE_PLAYLIST && <PlaylistAnalyzer />}
             {mode === Constants.MODE_TRACK && <TrackAnalyzer />}
         </div>

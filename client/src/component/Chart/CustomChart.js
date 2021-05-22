@@ -6,6 +6,7 @@ import './CustomChart.css';
 const CustomChart = (props) => {
 
     const { title, data, colors } = props;
+
     const [labels, values] = [Object.keys(data), Object.values(data)];
     const reference = useRef(null);
 
@@ -25,23 +26,33 @@ const CustomChart = (props) => {
         const data = {
             labels: labels,
             datasets: [{
+                label: 'Musical Breakdown',
                 data: values,
                 backgroundColor: backgroundColors,
                 borderColor: [
-                    'rgb(255, 99, 132)',
-                    'rgb(255, 159, 64)',
-                    'rgb(255, 205, 86)',
-                    'rgb(75, 192, 192)',
-                    'rgb(54, 162, 235)',
-                    'rgb(153, 102, 255)',
+                    'rgb(255, 202, 58)',
+                    'rgb(106, 76, 147)',
+                    'rgb(255, 89, 94)',
+                    'rgb(25, 130, 196)',
+                    'rgb(93, 103, 91)',
+                    'rgb(138, 201, 38)',
                     'rgb(201, 203, 207)'
                 ],
-                borderWidth: 1
+                borderWidth: 1,
+                barPercentage: 0.5,
             }]
         };
 
         const options = {
             indexAxis: 'y',
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+
+            }
         }
 
         const config = {
@@ -53,9 +64,7 @@ const CustomChart = (props) => {
         new Chart(chartReference, config);
     }
 
-    useEffect(() => {
-        buildChart();
-    })
+    useEffect(buildChart, [data]);
 
     return (
         <div className='CustomChart'>

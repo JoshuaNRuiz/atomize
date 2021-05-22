@@ -8,3 +8,6 @@ export const MODE_SELECT = 'select';
 export const MODE_PLAYLIST = TYPE_PLAYLIST;
 export const MODE_TRACK = TYPE_TRACK;
 export const MODE_ARTIST = TYPE_ARTIST;
+export const MODE_SEARCH = 'search';
+export const MODE_ANALYZE = 'analyze';
+export const MODE_CHOOSE = 'choose';
