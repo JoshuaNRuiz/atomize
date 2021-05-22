@@ -36,10 +36,10 @@ const CustomChart = (props) => {
                     'rgb(25, 130, 196)',
                     'rgb(93, 103, 91)',
                     'rgb(138, 201, 38)',
-                    'rgb(201, 203, 207)'
+                    'rgb(138, 201, 38)'
                 ],
                 borderWidth: 1,
-                barPercentage: 0.5,
+                barPercentage: 0.6,
             }]
         };
 
@@ -47,11 +47,20 @@ const CustomChart = (props) => {
             indexAxis: 'y',
             plugins: {
                 legend: {
-                    display: false
+                    display: false,
+                },
+                tooltip: {
+                    enabled: false
                 }
             },
             scales: {
-
+                x: {
+                    min: 0,
+                    max: 1,
+                    ticks: {
+                        count: 10,
+                    }
+                }
             }
         }
 

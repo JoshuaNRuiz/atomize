@@ -49,13 +49,14 @@ const TrackAnalyzer = (props) => {
     };
 
     function filterData(data) {
-        const { acousticness, danceability, energy, liveness, speechiness } = data;
+        const { acousticness, danceability, energy, liveness, speechiness, valence } = data;
         return {
             acousticness: acousticness,
             danceability: danceability,
             energy: energy,
             liveness: liveness,
             speechiness: speechiness,
+            valence: valence
         }
     };
 
