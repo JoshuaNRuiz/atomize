@@ -3,6 +3,7 @@ import axios from 'axios';
 
 import List from '../../../component/List/List';
 import CustomChart from "../../../component/Chart/CustomChart";
+import SearchBar from '../../../component/SearchBar/SearchBar';
 
 const TrackAnalyzer = (props) => {
 
@@ -11,6 +12,7 @@ const TrackAnalyzer = (props) => {
     const [isSearch, setIsSearch] = useState(false);
     const [isTrackSelected, setIsTrackSelected] = useState(false);
     const [trackFeatures, setTrackFeatures] = useState({});
+    const [targetTrack, setTargetTrack] = useState({});
 
     const BASE_URL = process.env.REACT_APP_BASE_URL;
 
@@ -27,9 +29,12 @@ const TrackAnalyzer = (props) => {
         }
     }
 
-    async function handleClick(event) {
+    async function handleTrackSelection(event) {
         event.stopPropagation();
+
         const trackId = event.currentTarget.id;
+        const track = searchResults.find(item => item.id === trackId);
+        setTargetTrack(track);
 
         const url = `${BASE_URL}/api/spotify-helper/audio-features/${trackId}`;
         await axios.get(url)
@@ -41,7 +46,6 @@ const TrackAnalyzer = (props) => {
     }
 
     function filterData(data) {
-        console.log(data);
         const {acousticness, danceability, energy, liveness, speechiness} = data;
         return {
             acousticness: acousticness,
@@ -54,9 +58,9 @@ const TrackAnalyzer = (props) => {
 
     return (
         <div classname='TrackAnalyzer'>
-            <input type="text" onKeyDown={searchForTrack}/>
-            {isLoaded && !isTrackSelected && <List items={searchResults} handleClick={handleClick}/>}
-            {isTrackSelected && <CustomChart title={"vibe"} data={trackFeatures} />}
+            <SearchBar handleSearch={searchForTrack} />
+            {isLoaded && !isTrackSelected && <List items={searchResults} handleClick={handleTrackSelection}/>}
+            {isTrackSelected && <CustomChart title={targetTrack.name + ' -- ' + targetTrack.artists[0].name} data={trackFeatures} />}
         </div>
     )
 }

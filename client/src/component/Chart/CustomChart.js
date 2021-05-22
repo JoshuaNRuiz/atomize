@@ -1,6 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
 
+import './CustomChart.css';
+
 const CustomChart = (props) => {
 
     const { title, data, colors } = props;
@@ -10,12 +12,12 @@ const CustomChart = (props) => {
     const buildChart = () => {
         const chartReference = reference.current.getContext("2d");
 
-        const danceabilityColor = 'rgba(255, 202, 58, 1)';
-        const energyColor = 'rgba(106, 76, 147, 1)';
-        const livenessColor = 'rgba(255, 89, 94, 1)';
-        const instrumentalnessColor = 'rgba(25, 130, 196, 1)';
-        const speechinessColor = 'rgba(93, 103, 91, 1)';
-        const valenceColor = 'rgba(138, 201, 38, 1)';
+        const danceabilityColor = 'rgba(255, 202, 58, 0.2)';
+        const energyColor = 'rgba(106, 76, 147, 0.2)';
+        const livenessColor = 'rgba(255, 89, 94, 0.2)';
+        const instrumentalnessColor = 'rgba(25, 130, 196, 0.2)';
+        const speechinessColor = 'rgba(93, 103, 91, 0.2)';
+        const valenceColor = 'rgba(138, 201, 38, 0.2)';
 
         const backgroundColors = [danceabilityColor, energyColor, livenessColor,
             instrumentalnessColor, speechinessColor, valenceColor];
@@ -23,17 +25,8 @@ const CustomChart = (props) => {
         const data = {
             labels: labels,
             datasets: [{
-                label: 'My First Dataset',
                 data: values,
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(255, 159, 64, 0.2)',
-                    'rgba(255, 205, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(201, 203, 207, 0.2)'
-                ],
+                backgroundColor: backgroundColors,
                 borderColor: [
                     'rgb(255, 99, 132)',
                     'rgb(255, 159, 64)',
@@ -65,9 +58,9 @@ const CustomChart = (props) => {
     })
 
     return (
-        <div className='chart-container'>
-            <h2 className='chart-title'>{title}</h2>
-            <canvas id="" ref={reference} />
+        <div className='CustomChart'>
+            <h2 className='CustomChart__Title'>{title}</h2>
+            <canvas className="CustomChart__Canvas" ref={reference} />
         </div>
     );
 }
