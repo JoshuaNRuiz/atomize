@@ -5,15 +5,15 @@ import * as Constants from '../../../helpers/Constants';
 import List from '../../../component/List/List';
 import CustomChart from "../../../component/Chart/CustomChart";
 import SearchBar from '../../../component/SearchBar/SearchBar';
+import TrackItem from '../../../component/Items/TrackItem/TrackItem';
+
+import './TrackAnalyzer.css';
 
 const TrackAnalyzer = (props) => {
 
     const [searchResults, setSearchResults] = useState({});
-    const [isLoaded, setIsLoaded] = useState(false);
-    const [isSearch, setIsSearch] = useState(false);
-    const [isTrackSelected, setIsTrackSelected] = useState(false);
-    const [trackFeatures, setTrackFeatures] = useState({});
     const [targetTrack, setTargetTrack] = useState({});
+    const [trackFeatures, setTrackFeatures] = useState({});
 
     const [mode, setMode] = useState('');
 
@@ -28,9 +28,9 @@ const TrackAnalyzer = (props) => {
                 .then(items => {
                     setSearchResults(items);;
                 })
-                .then(() => setMode(Constants.MODE_CHOOSE));
+                .then(() => setMode(Constants.MODE_SEARCH));
         }
-    }
+    };
 
     async function handleTrackSelection(event) {
         event.stopPropagation();
@@ -46,10 +46,10 @@ const TrackAnalyzer = (props) => {
                 setTrackFeatures(data);
             })
             .then(() => setMode(Constants.MODE_ANALYZE));
-    }
+    };
 
     function filterData(data) {
-        const {acousticness, danceability, energy, liveness, speechiness} = data;
+        const { acousticness, danceability, energy, liveness, speechiness } = data;
         return {
             acousticness: acousticness,
             danceability: danceability,
@@ -57,13 +57,24 @@ const TrackAnalyzer = (props) => {
             liveness: liveness,
             speechiness: speechiness,
         }
-    }
+    };
+
+    function buildHeader(track) {
+        const id = track.id;
+        const title = track.name;
+        const artistName = track.artists[0].name;
+        const album = track.album;
+        return (
+            <TrackItem id={id} title={title} artists={artistName} album={album}/>
+        )
+    };
 
     return (
-        <div classname='TrackAnalyzer'>
+        <div className='TrackAnalyzer'>
             <SearchBar handleSearch={searchForTrack} />
-            {mode === Constants.MODE_CHOOSE && <List items={searchResults} handleClick={handleTrackSelection}/>}
-            {mode === Constants.MODE_ANALYZE && <CustomChart title={targetTrack.name + ' -- ' + targetTrack.artists[0].name} data={trackFeatures} />}
+            {mode === Constants.MODE_SEARCH && <List items={searchResults} handleClick={handleTrackSelection} />}
+            {mode === Constants.MODE_ANALYZE && buildHeader(targetTrack)}
+            {mode === Constants.MODE_ANALYZE && <CustomChart data={trackFeatures} />}
         </div>
     )
 }
