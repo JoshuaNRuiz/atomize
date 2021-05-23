@@ -9,33 +9,34 @@
 }
 
 .Navbar__Logo{
-    margin: 0 0 0 32px;
+    margin: 0 0 0 16px;
     padding: 0;
     color: white;
     font-size: 16px;
     font-weight: bold;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .Navbar__Links {
+    margin-right: 16px;
     display: flex;
     align-items: center;
-    margin-right: 16px;
     list-style-type: none;
 }
 
-.Navbar__Link {
-    margin: 0 4px;
+.Navbar__Link,
+.Navbar__Link:visited {
     padding: 14px 0px;
     width: 60px;
     color: white;
     font-size: 14px;
-    font-weight: lighter;
+    font-weight: normal;
+    text-decoration: none;
 }
 
 .Navbar__Link:hover {
-    color: #960f47;
     text-decoration: none;
-    font-weight: lighter;
     background-color: rgba(255, 255, 255, 0.9);
-    transition: 0.25s;
+    color: black;
+    transition: 0.5s;
 }
