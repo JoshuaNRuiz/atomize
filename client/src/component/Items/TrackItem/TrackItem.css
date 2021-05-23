@@ -5,7 +5,7 @@
     justify-content: space-around;
     width: 270px;
     height: 100px;
-    background-color: black;
+    background-color: rgba(0, 0, 0, 0.6);
     border-radius: 2px;
     border: 1px solid black;
     position: relative;
@@ -54,4 +54,5 @@
     color: white;
     margin: 0 0 auto auto;
     padding-right: 8px;
+    font-family: 'Montserrat', sans-serif;
 }
