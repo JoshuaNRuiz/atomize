@@ -5,18 +5,19 @@
     grid-template-columns: 85px auto;
     grid-template-rows: 1;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: #121212;
     border-radius: 2px;
     border: 1px solid black;
     position: relative;
     margin: 8px;
     float: right;
+    transition: border 0.7s;
 }
 
 .TrackItem:hover {
     border: 1px solid #ffc608;
     cursor: pointer;
-    transition: border 1s;
+    transition: border 0.7s;
 }
 
 .TrackItem__Image {

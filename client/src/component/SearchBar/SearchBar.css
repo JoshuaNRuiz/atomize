@@ -1,12 +1,32 @@
 .SearchBar {
     margin: 16px;
+    padding: 8px 12px;
+    display: grid;
+    grid-template-columns: 24px 1fr;
+    align-items: center;
+    background-color: #252525;
+    border: 1px solid black;
+    border-radius: 4px;
+    transition: outline 0.5s;
+}
+
+.SearchBar:focus,
+.SearchBar:hover {
+    outline: 1px solid #ffc608;
+    transition: outline 0.5s;
+}
+
+.SearchBar__Icon {
+    padding: 0;
+    color: white;
 }
 
 .SearchBar__Input {
     -webkit-appearance: none;
     -moz-appearance: none;
-    padding: 8px 12px;
-    background-color: rgba(0, 0, 0, 0.2);
-    border: 1px solid black;
     color: white;
+    transition: outline 0.5s;
+    background-color: transparent;
+    border: none;
+    outline: none;
 }

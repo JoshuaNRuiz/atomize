@@ -1,4 +1,5 @@
 import React from 'react';
+import '@fortawesome/fontawesome-free/js/all';
 
 import './SearchBar.css';
 
@@ -8,7 +9,8 @@ const SearchBar = (props) => {
 
     return (
         <div className="SearchBar">
-            <input className="SearchBar__Input" type="text" autoFocus onKeyDown={handleSearch}>
+            <i class="fas fa-search SearchBar__Icon"></i>
+            <input className="SearchBar__Input" type="text" autoFocus placeholder="search" onKeyDown={handleSearch}>
             </input>
         </div>
     )

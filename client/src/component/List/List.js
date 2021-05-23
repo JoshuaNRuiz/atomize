@@ -29,15 +29,14 @@ const List = (props) => {
     }
 
     function makeTrackList() {
-        let title, artist, album, rank, key, trackId;
+        let title, artist, album, rank, trackId;
         return Object.values(items).map((item, index) => {
             title = item.name;
             artist = item.artists[0].name;
             album = item.album;
             rank = index + 1;
             trackId = item.id;
-            key = title + artist;
-            return <TrackItem id={trackId} key={key} title={title} artists={artist} album={album} rank={rank} handleClick={handleClick}/>
+            return <TrackItem id={index} key={trackId} title={title} artists={artist} album={album} rank={rank} handleClick={handleClick}/>
         });
     };
 
@@ -54,13 +53,12 @@ const List = (props) => {
     };
 
     function makePlaylistList() {
-        let name, trackCount, playlistId, key;
-        return Object.values(items).map((playlist, index) => {
+        let name, trackCount, playlistId;
+        return Object.values(items).map((playlist) => {
             playlistId = playlist.id
             name = playlist.name;
             trackCount = playlist.tracks.total;
-            key = index;
-            return <PlaylistItem id={playlistId} name={name} trackCount={trackCount} handleClick={handleClick}/>
+            return <PlaylistItem key={playlistId} id={playlistId} name={name} trackCount={trackCount} handleClick={handleClick}/>
         });
     }
 

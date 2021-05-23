@@ -20,7 +20,7 @@ const TrackItem = (props) => {
                 <span className="TrackItem__Details__Title">{title}</span>
                 <span className="TrackItem__Details__Artist">{artistName}</span>
             </div>
-            <span className="TrackItem__Rank">{rank}</span>
+            <span className="TrackItem__Rank">{rank ? rank : null}</span>
         </div>
     );
 }
