@@ -7,5 +7,5 @@
 
 #### Tools:
 * **Tracker** _[working]_: view your top artists and tracks.
-* **Analyzer** _[under development]_: get an analysis of your music library - either by individual playlists or your liked tracks.
+* **Analyzer** _[under development]_: get an analysis of any track or an analytical breakdown of a selected playlist.
 * **Explorer** _[planned]_: get recommendations based on your music library
