@@ -1,51 +1,57 @@
 .TrackItem {
-  display:flex;
-  align-items: center;
-  width: 300px;
-  height: 80px;
-  padding: 4px;
-  margin: 0.5em 1.0em;
-  background: linear-gradient(90deg, #e3ffe7 0%, #d9e7ff 100%);
-  -webkit-box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.19);
-  -moz-box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.19);
-  box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.19);
-  border: 2px solid transparent;
-  border-image: linear-gradient(to bottom right, #b827fc 0%, #2c90fc 25%, #b8fd33 50%, #fec837 75%, #fd1892 100%);
-  border-image-slice: 1;
+    display: flex;
+    flex-wrap: none;
+    align-items: center;
+    justify-content: space-around;
+    width: 270px;
+    height: 100px;
+    background-color: black;
+    border-radius: 2px;
+    border: 1px solid black;
+    position: relative;
+    margin: 8px;
 }
 
 .TrackItem:hover {
-  border: 2px solid red;
+    border: 1px solid white;
+    transition: border 1s;
 }
-  
+
 .TrackItem__Image {
-  width: 80px;
-  height: 80px;
-  flex-shrink: 0;
-  border: 1px solid rgb(0, 0, 0, 30%);
+    height: 75px;
+    width: 75px;
+    margin-left: 8px;
+    object-fit: cover;
+    border-radius: 100%;
 }
-  
+
 .TrackItem__Details {
-  text-align: left;
-  display: inline;
-  margin-left: 0.5em;
+    margin: 0 8px;
+    font-family: 'Ubuntu', sans-serif;
+    overflow: hidden;
+    text-align: left;
+}
+
+.TrackItem__Details__Title,
+.TrackItem__Details__Artist {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .TrackItem__Details__Title {
-  text-align: left;
-  margin: 0;
-  padding: 0;
-  font-size: 1.2rem;
+    color: #d90762;
+    font-size: 18px;
 }
 
-.TrackItem__Details__ArtistAlbum {
-  margin: 0;
-  padding: 0;
-  text-align: left;
-  font-size: 0.8em;
-  font-weight: 200;
+.TrackItem__Details__Artist {
+    color: white;
+    font-size: 14px;
 }
 
 .TrackItem__Rank {
-  margin: 0 0 auto auto;
+    color: white;
+    margin: 0 0 auto auto;
+    padding-right: 8px;
 }
