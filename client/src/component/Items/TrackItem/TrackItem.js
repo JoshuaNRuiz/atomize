@@ -15,11 +15,12 @@ const TrackItem = (props) => {
     return (
         <div className="TrackItem" id={id} onClick={handleClick}>
             <img className='TrackItem__Image' src={albumImage} alt='icon'/>
+            
             <div className="TrackItem__Details"> 
                 <span className="TrackItem__Details__Title">{title}</span>
                 <span className="TrackItem__Details__Artist">{artistName}</span>
             </div>
-            <p className="TrackItem__Rank">{rank}</p>
+            <span className="TrackItem__Rank">{rank}</span>
         </div>
     );
 }
