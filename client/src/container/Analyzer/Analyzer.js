@@ -1,27 +1,27 @@
 import * as Constants from '../../helpers/Constants';
-import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
 
-import List from '../../component/List/List';
 import Selector from '../../component/Selector/Selector';
 import TrackAnalyzer from './TrackAnalyzer/TrackAnalyzer';
 import PlaylistAnalyzer from './PlaylistAnalyzer/PlaylistAnalyzer';
 
+import vinyl from '../../resources/vinyl-background.jpg'
+
 import './Analyzer.css';
 
-const Analyzer = (props) => {
+const Analyzer = () => {
 
     const [mode, setMode] = useState('select');
 
     const modes = [
         {
             value: Constants.MODE_TRACK,
-            title: '',
-            imgUrl: ''
+            title: 'Select a track',
+            imgUrl: vinyl,
         },
         {
             value: Constants.MODE_PLAYLIST,
-            title: '',
+            title: 'Select a playlist',
             imgUrl: '',
         },
     ];

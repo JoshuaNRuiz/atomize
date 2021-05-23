@@ -1,3 +1,8 @@
 .Tracker {
+    display: grid;
+    justify-content: center;
     height: 100vh;
+    grid-template-columns: 1;
+    grid-template-rows: auto 1fr;
+    align-items: start;
 }
