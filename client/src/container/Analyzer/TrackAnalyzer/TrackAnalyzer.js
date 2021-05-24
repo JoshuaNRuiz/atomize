@@ -68,10 +68,15 @@ const TrackAnalyzer = () => {
         return <TrackItem id={id} name={name} artists={artists} album={album} />;
     };
 
+    function returnToSearch() {
+        setMode(Constants.MODE_SEARCH);
+    }
+
     return (
         <div className='TrackAnalyzer'>
             <SearchBar handleSearch={searchForTrack} />
             {mode === Constants.MODE_SEARCH && <List items={searchResults} handleClick={handleTrackSelection} />}
+            {mode === Constants.MODE_ANALYZE && <button onClick={returnToSearch}>back</button>}
             {mode === Constants.MODE_ANALYZE && buildHeader(trackDetails)}
             {mode === Constants.MODE_ANALYZE && <CustomChart data={trackFeatures} />}
         </div>

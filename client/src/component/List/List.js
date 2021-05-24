@@ -27,8 +27,8 @@ const List = ({items, handleClick}) => {
     }
 
     function makeTrackList() {
-        return Object.values(items).map((item, index) => {
-            const {id, name, artists, album} = item;
+        return Object.values(items).map((track, index) => {
+            const {id, name, artists, album} = track;
             const rank = index + 1;
             return (
                 <TrackItem key={id} 
@@ -43,24 +43,31 @@ const List = ({items, handleClick}) => {
     };
 
     function makeArtistList() {
-        let name, genres, images, rank, key;
-        return items.map((item, index) => {
-            name = item.name;
-            genres = item.genres;
-            images = item.images;
-            rank = index + 1;
-            key = name + " " + rank;
-            return <ArtistItem key={key} name={name} genres={genres} images={images} rank={rank} handleClick={handleClick}/>
+        return items.map((artist, index) => {
+            const {id, name, genres, images} = artist;
+            const rank = index + 1;
+            return (
+                <ArtistItem key={id} 
+                    id={id}
+                    name={name} 
+                    genres={genres} 
+                    images={images} 
+                    rank={rank} 
+                    handleClick={handleClick}/>
+            )
         });
     };
 
     function makePlaylistList() {
-        let name, trackCount, playlistId;
         return Object.values(items).map((playlist) => {
-            playlistId = playlist.id
-            name = playlist.name;
-            trackCount = playlist.tracks.total;
-            return <PlaylistItem key={playlistId} id={playlistId} name={name} trackCount={trackCount} handleClick={handleClick}/>
+            const {id, name, tracks: {total}} = playlist;
+            return (
+                <PlaylistItem key={id} 
+                    id={id} 
+                    name={name} 
+                    trackCount={total} 
+                    handleClick={handleClick}/>
+            )
         });
     }
 

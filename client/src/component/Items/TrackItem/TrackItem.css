@@ -9,7 +9,6 @@
     border: 1px solid black;
     position: relative;
     margin: 8px;
-    float: right;
     transition: border 0.7s;
 }
 

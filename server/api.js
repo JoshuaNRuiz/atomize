@@ -457,7 +457,7 @@ module.exports = function (app) {
 
     async function searchSpotify(accessToken, query, type) {
         const encodedQuery = encodeURIComponent(query)
-        const url = `https://api.spotify.com/v1/search?q=${encodedQuery}&type=${type}`;
+        const url = `https://api.spotify.com/v1/search?q=${encodedQuery}&type=${type}&limit=10`;
 
         const options = {
             headers: {
