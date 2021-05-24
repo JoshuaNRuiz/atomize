@@ -5,7 +5,9 @@ import Controls from '../../component/Controls/Controls';
 import List from '../../component/List/List';
 import './Tracker.css'
 
-const Tracker = (props) => {
+const Tracker = () => {
+
+    const BASE_URL = process.env.REACT_APP_BASE_URL;
 
     const TYPE_DEFAULT = 'tracks';
     const LIMIT_DEFAULT = 10;
@@ -16,8 +18,6 @@ const Tracker = (props) => {
     const [timeRange, setTimeRange] = useState(RANGE_DEFAULT);
     const [items, setItems] = useState([]);
     const [isReady, setIsReady] = useState(false);
-
-    const BASE_URL = process.env.REACT_APP_BASE_URL;
 
     function handleTypeChange(event) {
         setType(event.target.value);
@@ -42,10 +42,9 @@ const Tracker = (props) => {
         axios.get(url)
             .then(response => {
                 const items = response.data.items;
-                console.log(items);
                 setItems(items);
-            })
-            .then(() => setIsReady(true))
+                setIsReady(true);
+            });
     }
 
     useEffect(getItems, [type, timeRange, limit]);

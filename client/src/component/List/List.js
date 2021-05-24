@@ -6,9 +6,7 @@ import PlaylistItem from '../Items/PlaylistItem/PlaylistItem';
 
 import './List.css';
 
-const List = (props) => {
-
-    const { items, handleClick } = props;
+const List = ({items, handleClick}) => {
 
     function makeList() {
         if (Object.keys(items).length === 0) {
@@ -29,14 +27,18 @@ const List = (props) => {
     }
 
     function makeTrackList() {
-        let title, artist, album, rank, trackId;
         return Object.values(items).map((item, index) => {
-            title = item.name;
-            artist = item.artists[0].name;
-            album = item.album;
-            rank = index + 1;
-            trackId = item.id;
-            return <TrackItem id={index} key={trackId} title={title} artists={artist} album={album} rank={rank} handleClick={handleClick}/>
+            const {id, name, artists, album} = item;
+            const rank = index + 1;
+            return (
+                <TrackItem key={id} 
+                    id={index} 
+                    name={name} 
+                    artists={artists} 
+                    album={album} 
+                    rank={rank} 
+                    handleClick={handleClick}/>
+            )
         });
     };
 

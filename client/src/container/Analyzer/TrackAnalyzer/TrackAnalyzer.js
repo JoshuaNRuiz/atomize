@@ -23,7 +23,6 @@ const TrackAnalyzer = () => {
             axios.get(url)
                 .then(response => response.data.tracks.items)
                 .then(items => {
-                    console.log(items);
                     setSearchResults(items);
                     if (mode !== Constants.MODE_SEARCH) setMode(Constants.MODE_SEARCH);
                 });
@@ -65,13 +64,8 @@ const TrackAnalyzer = () => {
     };
 
     function buildHeader() {
-        const id = trackDetails.id;
-        const title = trackDetails.name;
-        const artistName = trackDetails.artists[0].name;
-        const album = trackDetails.album;
-        return (
-            <TrackItem id={id} title={title} artists={artistName} album={album} />
-        )
+        const {id, name, artists, album} = trackDetails
+        return <TrackItem id={id} name={name} artists={artists} album={album} />;
     };
 
     return (

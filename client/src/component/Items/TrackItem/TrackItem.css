@@ -2,8 +2,7 @@
     width: 270px;
     height: 100px;
     display: grid;
-    grid-template-columns: 85px auto;
-    grid-template-rows: 1;
+    grid-template-columns: 85px 1fr;
     align-items: center;
     background-color: #121212;
     border-radius: 2px;
@@ -38,7 +37,7 @@
     margin: 0 4px;
 }
 
-.TrackItem__Details__Title,
+.TrackItem__Details__Name,
 .TrackItem__Details__Artist {
     display: block;
     overflow: hidden;
@@ -47,7 +46,7 @@
     text-align: left;
 }
 
-.TrackItem__Details__Title {
+.TrackItem__Details__Name {
     color: #ffc608;
     font-size: 18px;
 }
