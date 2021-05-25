@@ -32,12 +32,9 @@ const TrackAnalyzer = () => {
     function handleTrackSelection(event) {
         event.stopPropagation();
         const index = event.currentTarget.id;
-
         const trackDetails = searchResults[index];
         const trackId = trackDetails.id;
-
         setTrackDetails(trackDetails);
-
         getAudioFeatures(trackId)
             .then(audioFeatures => {
                 setTrackFeatures(audioFeatures);
@@ -62,23 +59,43 @@ const TrackAnalyzer = () => {
             valence: valence
         }
     };
-
-    function buildHeader() {
-        const {id, name, artists, album} = trackDetails
-        return <TrackItem id={id} name={name} artists={artists} album={album} />;
-    };
-
+    
     function returnToSearch() {
         setMode(Constants.MODE_SEARCH);
+    }
+
+    function renderSearchList() {
+        return (mode === Constants.MODE_SEARCH) 
+            ? <List items={searchResults} handleClick={handleTrackSelection}/> 
+            : null;
+    }
+
+    function renderAnalyticalComponents() {
+        if (mode === Constants.MODE_ANALYZE) {
+            const { id, name, artists, album } = trackDetails;
+            const analyzeHeader = (
+                <div className="TrackAnalyzer__AnalyzerHeader">
+                    <button className="TrackAnalyzer__BackButton" onClick={returnToSearch}><i class="fas fa-chevron-left"></i></button>
+                    <TrackItem id={id} name={name} artists={artists} album={album}/>
+                </div>
+            );
+
+            const components = [
+                analyzeHeader,
+                <CustomChart data={trackFeatures} />,
+            ];
+
+            return components;
+        } else {
+            return null;
+        }
     }
 
     return (
         <div className='TrackAnalyzer'>
             <SearchBar handleSearch={searchForTrack} />
-            {mode === Constants.MODE_SEARCH && <List items={searchResults} handleClick={handleTrackSelection} />}
-            {mode === Constants.MODE_ANALYZE && <button onClick={returnToSearch}>back</button>}
-            {mode === Constants.MODE_ANALYZE && buildHeader(trackDetails)}
-            {mode === Constants.MODE_ANALYZE && <CustomChart data={trackFeatures} />}
+            {renderSearchList()}
+            {renderAnalyticalComponents()}
         </div>
     )
 }
