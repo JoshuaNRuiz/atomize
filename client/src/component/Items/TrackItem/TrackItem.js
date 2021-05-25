@@ -6,8 +6,10 @@ const TrackItem = ({id, name, artists, album, rank, handleClick}) => {
     const primaryArtist = artists[0].name;
     const albumImage = album.images[0].url;
 
+    const classes = handleClick ? 'TrackItem TrackItem--Link' : 'TrackItem'
+
     return (
-        <div className="TrackItem" id={id} onClick={handleClick}>
+        <div className={classes} id={id} onClick={handleClick}>
             <img className='TrackItem__Image' src={albumImage} alt='icon'/>
             <div className="TrackItem__Details"> 
                 <span className="TrackItem__Details__Name">{name}</span>

@@ -8,11 +8,10 @@
     border-radius: 2px;
     border: 1px solid black;
     position: relative;
-    /* margin: 8px; */
     transition: border 0.7s;
 }
 
-.TrackItem:hover {
+.TrackItem--Link:hover {
     border: 1px solid #ffc608;
     cursor: pointer;
     transition: border 0.7s;
