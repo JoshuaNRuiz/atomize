@@ -14,12 +14,13 @@
 }
 
 .Selector__Option__Title {
-    padding: 8px;
+    padding: 8px 16px;
     color: white;
-    background-color: rgba(0, 0, 0, 0.50);
-    font-family:'Courier New', Courier, monospace;
-    font-weight: 500;
-    font-size: 36px;
+    background-color: black;
+    font-family:'Source Code Pro', monospace;
+    font-weight: 300;
+    font-style: italic;
+    font-size: 32px;
 }
 
 .Selector__Option:hover {

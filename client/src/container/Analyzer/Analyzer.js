@@ -17,12 +17,12 @@ const Analyzer = () => {
     const modes = [
         {
             value: Constants.MODE_TRACK,
-            title: 'Select a track',
+            title: 'select a track',
             image: vinyl,
         },
         {
             value: Constants.MODE_PLAYLIST,
-            title: 'Select a playlist',
+            title: 'select a playlist',
             image: playlist,
         },
     ];
