@@ -16,25 +16,24 @@ const TrackAnalyzer = () => {
     const [trackDetails, setTrackDetails] = useState({});
     const [trackFeatures, setTrackFeatures] = useState({});
 
-    function searchForTrack(event) {
-        if (event.key === 'Enter') {
-            const searchText = event.target.value.trim();
-            const url = `${BASE_URL}/api/spotify-helper/search?q=${searchText}&type=track`;
-            axios.get(url)
-                .then(response => response.data.tracks.items)
-                .then(items => {
-                    setSearchResults(items);
-                    if (mode !== Constants.MODE_SEARCH) setMode(Constants.MODE_SEARCH);
-                });
-        }
+    function searchForTrack(track) {
+        const url = `${BASE_URL}/api/spotify-helper/search?q=${track}&type=track`;
+        axios.get(url)
+            .then(response => response.data.tracks.items)
+            .then(items => {
+                setSearchResults(items);
+                if (mode !== Constants.MODE_SEARCH) setMode(Constants.MODE_SEARCH);
+            });
     };
 
     function handleTrackSelection(event) {
         event.stopPropagation();
         const index = event.currentTarget.id;
+
         const trackDetails = searchResults[index];
-        const trackId = trackDetails.id;
         setTrackDetails(trackDetails);
+
+        const trackId = trackDetails.id;
         getAudioFeatures(trackId)
             .then(audioFeatures => {
                 setTrackFeatures(audioFeatures);
@@ -59,14 +58,14 @@ const TrackAnalyzer = () => {
             valence: valence
         }
     };
-    
+
     function returnToSearch() {
         setMode(Constants.MODE_SEARCH);
     }
 
     function renderSearchList() {
-        return (mode === Constants.MODE_SEARCH) 
-            ? <List items={searchResults} handleClick={handleTrackSelection}/> 
+        return (mode === Constants.MODE_SEARCH)
+            ? <List items={searchResults} handleClick={handleTrackSelection} />
             : null;
     }
 
@@ -76,7 +75,7 @@ const TrackAnalyzer = () => {
             const analyzeHeader = (
                 <div className="TrackAnalyzer__AnalyzerHeader">
                     <button className="TrackAnalyzer__BackButton" onClick={returnToSearch}><i class="fas fa-chevron-left"></i></button>
-                    <TrackItem id={id} name={name} artists={artists} album={album}/>
+                    <TrackItem id={id} name={name} artists={artists} album={album} />
                 </div>
             );
 
