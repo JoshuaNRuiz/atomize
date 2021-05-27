@@ -1,19 +1,39 @@
 .Selector {
-    width: 100%;
-    margin: 0 auto;
     display: flex;
-    justify-content: space-evenly;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
 }
 
 .Selector__Option {
-    height: 250px;
-    width: 250px;
-    margin: 0;
-    padding: 0;
+    height: 300px;
+    width: 100%;
     border: 2px solid black;
+    margin: 8px 0;
     background-color: white;
+}
+
+.Selector__Option__Title {
+    padding: 8px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.50);
+    font-family:'Courier New', Courier, monospace;
+    font-weight: 500;
+    font-size: 36px;
 }
 
 .Selector__Option:hover {
     cursor: pointer;
+}
+
+@media only screen and (max-width: 480px) {
+    .Selector__Option {
+        width: 80%;
+        height: 150px;
+    }
+
+    .Selector__Option__Title {
+        padding: 4px;
+        font-size: 24px;
+    }
 }

@@ -5,7 +5,8 @@ import Selector from '../../component/Selector/Selector';
 import TrackAnalyzer from './TrackAnalyzer/TrackAnalyzer';
 import PlaylistAnalyzer from './PlaylistAnalyzer/PlaylistAnalyzer';
 
-import vinyl from '../../resources/vinyl-background.jpg'
+import vinyl from '../../resources/vinyl-background.jpg';
+import playlist from '../../resources/playlist-image.jpg';
 
 import './Analyzer.css';
 
@@ -17,12 +18,12 @@ const Analyzer = () => {
         {
             value: Constants.MODE_TRACK,
             title: 'Select a track',
-            imgUrl: vinyl,
+            image: vinyl,
         },
         {
             value: Constants.MODE_PLAYLIST,
             title: 'Select a playlist',
-            imgUrl: '',
+            image: playlist,
         },
     ];
 
@@ -35,8 +36,8 @@ const Analyzer = () => {
     return (
         <div className='Analyzer'>
             {mode === Constants.MODE_SELECT && <Selector options={modes} handleSelection={handleSelection}/>}
-            {mode === Constants.MODE_PLAYLIST && <PlaylistAnalyzer />}
             {mode === Constants.MODE_TRACK && <TrackAnalyzer />}
+            {mode === Constants.MODE_PLAYLIST && <PlaylistAnalyzer />}
         </div>
     )
 }
