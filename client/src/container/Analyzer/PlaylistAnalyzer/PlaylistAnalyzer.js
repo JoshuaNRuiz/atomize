@@ -16,9 +16,9 @@ const PlaylistAnalyzer = (props) => {
 
     useEffect(getUsersPlaylists, []);
 
-    async function getUsersPlaylists() {
+    function getUsersPlaylists() {
         const url = `${BASE_URL}/api/spotify-helper/user-data/playlists`;
-        await axios.get(url)
+        axios.get(url)
             .then(response => {
                 const playlists = response.data;
                 setPlaylists(playlists);
