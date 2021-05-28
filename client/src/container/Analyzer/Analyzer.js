@@ -25,7 +25,7 @@ const Analyzer = () => {
     const [track, setTrack] = useState(null);
     const [playlist, setPlaylist] = useState({});
     const [userPlaylists, setUserPlaylists] = useState({});
-    const [searchInput, setSearchInput] = useState('');
+    const [searchText, setSearchText] = useState('');
     const [searchResults, setSearchResults] = useState(null);
     const [audioFeatures, setAudioFeatures] = useState(null);
     const [isReady, setReady] = useState(false);
@@ -46,6 +46,41 @@ const Analyzer = () => {
         setMode(mode);
     }
 
+    function handleSearchTextInput(event) {
+        const value = event.target.value.trim();
+        setSearchText(value);
+    }
+
+    function buildSearchBar() {
+        let handleSearch = null;
+
+        async function handleTrackSearch(event) {
+            if (event.key === 'Enter' && !!searchText) {
+                const tracks = await searchForTrack(searchText);
+                if (tracks) setSearchResults(tracks);
+                setReady(false);
+            }
+        }
+
+        function filterPlaylists() {
+            const search = searchText.toUpperCase();
+            const results = Object.values(userPlaylists).filter(playlist => {
+                return playlist.name.toUpperCase().includes(search);
+            });
+            setSearchResults(results);
+        }
+
+        if (mode === Constants.MODE_TRACK) {
+            handleSearch = handleTrackSearch;
+        } else if (mode === Constants.MODE_PLAYLIST) {
+            handleSearch = filterPlaylists;
+        }
+
+        return (
+            <SearchBar value={searchText} handleSearch={handleSearch} handleChange={handleSearchTextInput}/>
+        )
+    }
+
     function renderAnalyzer() {
         switch(mode) {
             case Constants.MODE_TRACK:
@@ -59,15 +94,6 @@ const Analyzer = () => {
 
     function TrackAnalyzer() {
         if (mode !== Constants.MODE_TRACK) return null;
-
-        async function handleTrackSearch(event) {
-            if (event.key === 'Enter') {
-                const value = event.target.value;
-                const tracks = await searchForTrack(value);
-                setSearchResults(tracks);
-                setReady(false);
-            }
-        }
 
         async function handleTrackSelection(event) {
             event.stopPropagation();
@@ -84,8 +110,7 @@ const Analyzer = () => {
         };
 
         return (
-            <div>
-                <SearchBar handleSearch={handleTrackSearch} />
+            <div className='TrackAnalyzezr'>
                 {!isReady && <List
                     items={searchResults ? searchResults : null}
                     handleClick={handleTrackSelection}
@@ -96,14 +121,6 @@ const Analyzer = () => {
 
     function PlaylistAnalyzer() {
         if (mode !== Constants.MODE_PLAYLIST) return null;
-
-        function filterPlaylists(event) {
-            const search = event.target.value.trim().toUpperCase();
-            const results = Object.values(userPlaylists).filter(playlist => {
-                return playlist.name.toUpperCase().includes(search);
-            });
-            setSearchResults(results);
-        }
 
         function handlePlaylistSelection(event) {
             event.stopPropagation();
@@ -116,8 +133,7 @@ const Analyzer = () => {
         }
 
         return (
-            <div>
-                <SearchBar handleChange={filterPlaylists} />
+            <div className='PlaylistAnalyzer'>
                 <List
                     items={searchResults ? searchResults : userPlaylists}
                     handleClick={handlePlaylistSelection}
@@ -144,20 +160,20 @@ const Analyzer = () => {
         return components;
     }
 
-    function changeMode() {
+    useEffect(() => {
         setSearchResults(null);
         setReady(false);
+        setSearchText('');
         if (mode === Constants.MODE_PLAYLIST) {
             getUsersPlaylists()
                 .then(playlists => setUserPlaylists(playlists));
         }
-    }
-
-    useEffect(changeMode, [mode]);
+    }, [mode]);
 
     return (
         <div className='Analyzer'>
             {ModeChooser()}
+            {buildSearchBar()}
             {renderAnalyzer()}
             {renderAnalyticalComponents()}
         </div>
