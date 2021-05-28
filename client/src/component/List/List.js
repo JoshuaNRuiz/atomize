@@ -9,11 +9,7 @@ import './List.css';
 const List = ({items, handleClick}) => {
 
     function makeList() {
-        if (Object.keys(items).length === 0) {
-            return (
-                <div className='List--Empty'></div>
-            )
-        }
+        if (!items || Object.keys(items).length === 0) return null;
 
         if (items[0].type === Constants.TYPE_TRACK) {
             return makeTrackList();
@@ -59,11 +55,11 @@ const List = ({items, handleClick}) => {
     };
 
     function makePlaylistList() {
-        return Object.values(items).map((playlist) => {
+        return Object.values(items).map((playlist, index) => {
             const {id, name, tracks: {total}} = playlist;
             return (
                 <PlaylistItem key={id} 
-                    id={id} 
+                    id={index} 
                     name={name} 
                     trackCount={total} 
                     handleClick={handleClick}/>

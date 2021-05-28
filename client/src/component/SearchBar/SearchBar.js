@@ -3,14 +3,10 @@ import '@fortawesome/fontawesome-free/js/all';
 
 import './SearchBar.css';
 
-const SearchBar = ({handleSearch, handleChange}) => {
+const SearchBar = (props) => {
 
-    function search(event) {
-        const searchText = event.target.value.trim();
-        if (!!handleSearch && event.key === 'Enter') {
-            handleSearch(searchText);
-        }
-    }
+    const handleSearch = props.handleSearch;
+    const handleChange = props.handleChange;
 
     return (
         <div className="SearchBar">
@@ -18,8 +14,8 @@ const SearchBar = ({handleSearch, handleChange}) => {
             <input className="SearchBar__Input" 
                 type="text" 
                 autoFocus 
-                placeholder="search" 
-                onKeyDown={search}
+                placeholder="search"
+                onKeyDown={handleSearch} 
                 onChange={handleChange}>
             </input>
         </div>

@@ -101,7 +101,7 @@ const PlaylistAnalyzer = (props) => {
     }
 
     // TODO: THIS HAS TO BE IMPROVED, WE ARE DUPLICATING DATA -- we just need to filter
-    function searchPlaylists(event) {
+    function searchForPlaylist(event) {
         const formattedString = event.target.value.trim().toUpperCase();
         if (formattedString !== '') {
             let results = Object.values(playlists).filter(playlist => {
@@ -117,7 +117,7 @@ const PlaylistAnalyzer = (props) => {
 
     return (
         <div className='PlaylistAnalyzer'>
-            {isReady && <SearchBar handleChange={searchPlaylists} />}
+            {isReady && <SearchBar handleChange={searchForPlaylist} />}
             {isReady && <List items={isSearch ? searchResults : playlists} handleClick={handleClick} />}
         </div>
     )
