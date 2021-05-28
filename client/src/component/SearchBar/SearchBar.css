@@ -12,7 +12,7 @@
 
 .SearchBar:focus,
 .SearchBar:hover {
-    outline: 1px solid #ffc608;
+    outline: 1px solid white;
     transition: outline 0.5s;
 }
 

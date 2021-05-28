@@ -3,6 +3,7 @@ import axios from 'axios';
 
 import List from '../../../component/List/List';
 import './PlaylistAnalyzer.css'
+import SearchBar from '../../../component/SearchBar/SearchBar';
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
@@ -100,11 +101,11 @@ const PlaylistAnalyzer = (props) => {
     }
 
     // TODO: THIS HAS TO BE IMPROVED, WE ARE DUPLICATING DATA -- we just need to filter
-    function handleSearch(event) {
-        const searchString = event.currentTarget.value.trim().toUpperCase();
-        if (searchString !== '') {
+    function searchPlaylists(event) {
+        const formattedString = event.target.value.trim().toUpperCase();
+        if (formattedString !== '') {
             let results = Object.values(playlists).filter(playlist => {
-                return playlist.name.toUpperCase().includes(searchString);
+                return playlist.name.toUpperCase().includes(formattedString);
             });
             if (results.length === 0) results = {};
             setSearchResults(results)
@@ -116,7 +117,7 @@ const PlaylistAnalyzer = (props) => {
 
     return (
         <div className='PlaylistAnalyzer'>
-            {isReady && <input type="text" className="Analyzer__SearchBar" onChange={handleSearch} />}
+            {isReady && <SearchBar handleChange={searchPlaylists} />}
             {isReady && <List items={isSearch ? searchResults : playlists} handleClick={handleClick} />}
         </div>
     )

@@ -3,14 +3,11 @@ import '@fortawesome/fontawesome-free/js/all';
 
 import './SearchBar.css';
 
-const SearchBar = (props) => {
-
-    const handleSearch = props.handleSearch;
+const SearchBar = ({handleSearch, handleChange}) => {
 
     function search(event) {
-        event.stopPropagation();
-        const searchText = event.currentTarget.value.trim();
-        if (event.key === 'Enter') {
+        const searchText = event.target.value.trim();
+        if (!!handleSearch && event.key === 'Enter') {
             handleSearch(searchText);
         }
     }
@@ -18,7 +15,12 @@ const SearchBar = (props) => {
     return (
         <div className="SearchBar">
             <i class="fas fa-search SearchBar__Icon"></i>
-            <input className="SearchBar__Input" type="text" autoFocus placeholder="search" onKeyDown={search}>
+            <input className="SearchBar__Input" 
+                type="text" 
+                autoFocus 
+                placeholder="search" 
+                onKeyDown={search}
+                onChange={handleChange}>
             </input>
         </div>
     )
