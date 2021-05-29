@@ -6,72 +6,83 @@ import PlaylistItem from '../Items/PlaylistItem/PlaylistItem';
 
 import './List.css';
 
-const List = ({items, handleClick}) => {
-
+const List = ({ items, handleClick }) => {
     function makeList() {
         if (!items || Object.keys(items).length === 0) return null;
-
-        if (items[0].type === Constants.TYPE_TRACK) {
-            return makeTrackList();
-        } else if (items[0].type === Constants.TYPE_ARTIST) {
-            return makeArtistList();
-        } else if (items[0].type === Constants.TYPE_PLAYLIST) {
-            return makePlaylistList();
+        
+        const type = items[0].type;
+        let list = null;
+        
+        if (type === Constants.TYPE_TRACK) {
+            list = TrackList();
+        } else if (type === Constants.TYPE_ARTIST) {
+            list = ArtistList();
+        } else if (type === Constants.TYPE_PLAYLIST) {
+            list = PlaylistList();
         }
+    
+        const capitalizedTypeName = type.charAt(0).toUpperCase() + type.slice(1);
+        const cName = `List ${capitalizedTypeName}List`;
 
-        return null;
+        return (
+            <div className={cName}>
+                {list}
+            </div>
+        )
     }
 
-    function makeTrackList() {
-        return Object.values(items).map((track, index) => {
-            const {id, name, artists, album} = track;
+    function TrackList() {
+        const trackList = Object.values(items).map((track, index) => {
+            const { id, name, artists, album } = track;
             const rank = index + 1;
             return (
-                <TrackItem key={id} 
-                    id={index} 
-                    name={name} 
-                    artists={artists} 
-                    album={album} 
-                    rank={rank} 
-                    handleClick={handleClick}/>
+                <TrackItem key={id}
+                    id={index}
+                    name={name}
+                    artists={artists}
+                    album={album}
+                    rank={rank}
+                    handleClick={handleClick} />
             )
         });
+
+        return trackList;
     };
 
-    function makeArtistList() {
-        return items.map((artist, index) => {
-            const {id, name, genres, images} = artist;
+    function ArtistList() {
+        const artistList = items.map((artist, index) => {
+            const { id, name, genres, images } = artist;
             const rank = index + 1;
             return (
-                <ArtistItem key={id} 
+                <ArtistItem key={id}
                     id={id}
-                    name={name} 
-                    genres={genres} 
-                    images={images} 
-                    rank={rank} 
-                    handleClick={handleClick}/>
+                    name={name}
+                    genres={genres}
+                    images={images}
+                    rank={rank}
+                    handleClick={handleClick} />
             )
         });
+
+        return artistList;
     };
 
-    function makePlaylistList() {
-        return Object.values(items).map((playlist, index) => {
-            const {id, name, tracks: {total}} = playlist;
+    function PlaylistList() {
+        const playlistList = Object.values(items).map((playlist, index) => {
+            const { id, name, tracks: { total } } = playlist;
             return (
-                <PlaylistItem key={id} 
-                    id={index} 
-                    name={name} 
-                    trackCount={total} 
-                    handleClick={handleClick}/>
+                <PlaylistItem key={id}
+                    id={index}
+                    name={name}
+                    trackCount={total}
+                    handleClick={handleClick} />
             )
         });
+
+        return playlistList;
     }
 
-    return (
-        <div className='List'>
-            {makeList()}
-        </div>
-    )
+    return makeList();
 }
 
 export default List;
