@@ -1,181 +1,170 @@
-import * as Constants from '../../helpers/Constants';
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 
-import Selector from '../../component/Selector/Selector';
 import TrackAnalyzer from './TrackAnalyzer/TrackAnalyzer';
 import PlaylistAnalyzer from './PlaylistAnalyzer/PlaylistAnalyzer';
-
-import trackImage from '../../resources/vinyl-background.jpg';
-import playlistImage from '../../resources/playlist-image.jpg';
-
-import './Analyzer.css';
 import SearchBar from '../../component/SearchBar/SearchBar';
 import List from '../../component/List/List';
+import Toggle from '../../component/Toggle/Toggle';
 
-import { searchForTrack, getAudioFeatures, getUsersPlaylists } from '../../helpers/functions';
-import TrackItem from '../../component/Items/TrackItem/TrackItem';
-import CustomChart from '../../component/Chart/CustomChart';
+import * as Constants from '../../helpers/Constants';
+import { searchForTrack, getUsersPlaylists } from '../../helpers/functions';
+import './Analyzer.css';
 
 const Analyzer = () => {
 
     const BASE_URL = process.env.REACT_APP_BASE_URL;
 
-    const [mode, setMode] = useState(Constants.MODE_TRACK);
+    const [mode, setMode] = useState(null);
+    const [type, setType] = useState(Constants.TYPE_TRACK);
+
     const [track, setTrack] = useState(null);
     const [playlist, setPlaylist] = useState({});
-    const [userPlaylists, setUserPlaylists] = useState({});
+    const [userPlaylists, setUserPlaylists] = useState(null);
+
     const [searchText, setSearchText] = useState('');
     const [searchResults, setSearchResults] = useState(null);
-    const [audioFeatures, setAudioFeatures] = useState(null);
-    const [isReady, setReady] = useState(false);
+    const [handleSearch, setSearchHandler] = useState(null);
+
+    const [isReady, setReadyStatus] = useState(false);
 
     function ModeChooser() {
-        return (
-            <div>
-                <span>tracks</span>
-                <input type="radio" name="mode" value={Constants.MODE_TRACK} onChange={handleModeChange} />
-                <span>playlists</span>
-                <input type="radio" name="mode" value={Constants.MODE_PLAYLIST} onChange={handleModeChange} />
-            </div>
-        )
+        function handleModeChange(event) {
+            const mode = event.target.value;
+            setMode(mode);
+            console.log(mode);
+        }
+
+        const options = {
+            name: 'mode',
+            values: [Constants.MODE_SEARCH, Constants.MODE_LIBRARY]
+        }
+
+        return <Toggle options={options} handleChange={handleModeChange}/>
     }
 
-    function handleModeChange(event) {
-        const mode = event.target.value;
-        setMode(mode);
+    function TypeChooser() {
+        function handleTypeChange(event) {
+            const type = event.target.value;
+            setType(type);
+            console.log(type);
+        }
+
+        const options = {
+            name: 'type',
+            values: [Constants.TYPE_TRACK, Constants.TYPE_PLAYLIST]
+        }
+
+        return <Toggle options={options} handleChange={handleTypeChange}/>
     }
 
-    function handleSearchTextInput(event) {
-        const value = event.target.value.trim();
-        setSearchText(value);
+    function reset() {
+        setSearchText('');
+        setSearchResults(null);
+        setReadyStatus(false);
     }
 
     function buildSearchBar() {
-        let handleSearch = null;
+        let searchFunction;
 
-        async function handleTrackSearch(event) {
-            if (event.key === 'Enter' && !!searchText) {
-                const tracks = await searchForTrack(searchText);
-                if (tracks) setSearchResults(tracks);
-                setReady(false);
-            }
+        if (type === Constants.TYPE_TRACK) {
+            searchFunction = handleTrackSearch;
+        } else if (type === Constants.TYPE_PLAYLIST) {
+            searchFunction = filterPlaylists;
         }
 
-        function filterPlaylists() {
-            const search = searchText.toUpperCase();
-            const results = Object.values(userPlaylists).filter(playlist => {
-                return playlist.name.toUpperCase().includes(search);
-            });
-            setSearchResults(results);
+        setSearchHandler(() => searchFunction);
+    }
+
+    async function handleTrackSearch(event) {
+        console.log(event);
+        if (event.key === 'Enter') {
+            const tracks = await searchForTrack(searchText);
+            if (tracks) setSearchResults(tracks);
+            setReadyStatus(false);
+        }
+    }
+
+    function filterPlaylists() {
+        const search = searchText.toUpperCase();
+        const results = Object.values(userPlaylists).filter(playlist => {
+            return playlist.name.toUpperCase().includes(search);
+        });
+        setSearchResults(results);
+    }
+
+    function handleSearchTextInput(event) {
+        const value = event.target.value;
+        console.log(value);
+        setSearchText(value);
+    }
+
+    function buildSearchList() {
+        async function handleTrackSelection(event) {
+            event.stopPropagation();
+            const index = event.currentTarget.value;
+            const track = searchResults[index];
+            setTrack(track);
+            setReadyStatus(true);
+        };
+
+        function handlePlaylistSelection(event) {
+            event.stopPropagation();
+            const index = event.currentTarget.value;
+            const playlist = userPlaylists[index];
+            setPlaylist(playlist);
+            // now draw a list of tracks
         }
 
-        if (mode === Constants.MODE_TRACK) {
-            handleSearch = handleTrackSearch;
-        } else if (mode === Constants.MODE_PLAYLIST) {
-            handleSearch = filterPlaylists;
+        let items, handleClick;
+
+        if (mode === Constants.MODE_SEARCH) {
+            items = searchResults;
+            handleClick = handleTrackSelection;
+        } else if (type === Constants.TYPE_PLAYLIST) {
+            items = searchResults ? searchResults : userPlaylists;
+            handleClick = handlePlaylistSelection;
         }
 
         return (
-            <SearchBar value={searchText} handleSearch={handleSearch} handleChange={handleSearchTextInput}/>
+            <List
+                items={items}
+                handleClick={handleClick} />
         )
     }
 
     function renderAnalyzer() {
-        switch(mode) {
-            case Constants.MODE_TRACK:
-                return TrackAnalyzer();
-            case Constants.MODE_PLAYLIST:
-                return PlaylistAnalyzer();
-            default: 
+        switch (type) {
+            case Constants.TYPE_TRACK:
+                return <TrackAnalyzer track={track} />;
+            case Constants.TYPE_PLAYLIST:
+                return <PlaylistAnalyzer playlist={playlist} />;
+            default:
                 return null;
         }
     }
 
-    function TrackAnalyzer() {
-        if (mode !== Constants.MODE_TRACK) return null;
-
-        async function handleTrackSelection(event) {
-            event.stopPropagation();
-
-            const index = event.currentTarget.id;
-            const track = searchResults[index];
-            setTrack(track);
-
-            const trackId = track.id;
-            const filteredAudioFeatures = await getAudioFeatures(trackId);
-            setAudioFeatures(filteredAudioFeatures);
-
-            setReady(true);
-        };
-
-        return (
-            <div className='TrackAnalyzezr'>
-                {!isReady && <List
-                    items={searchResults ? searchResults : null}
-                    handleClick={handleTrackSelection}
-                />}
-            </div>
-        )
-    }
-
-    function PlaylistAnalyzer() {
-        if (mode !== Constants.MODE_PLAYLIST) return null;
-
-        function handlePlaylistSelection(event) {
-            event.stopPropagation();
-
-            const index = event.currentTarget.id
-            const playlist = userPlaylists[index]
-            setPlaylist(playlist);
-
-            // now draw a list of tracks
-        }
-
-        return (
-            <div className='PlaylistAnalyzer'>
-                <List
-                    items={searchResults ? searchResults : userPlaylists}
-                    handleClick={handlePlaylistSelection}
-                />
-            </div>
-        )
-    }
-
-    function renderAnalyticalComponents() {
-        if (!isReady) return null;
-        
-        const { id, name, artists, album } = track;
-        const analyzeHeader = (
-            <div className="TrackAnalyzer__AnalyzerHeader">
-                <TrackItem id={id} name={name} artists={artists} album={album} />
-            </div>
-        );
-
-        const components = [
-            analyzeHeader,
-            <CustomChart data={audioFeatures} />,
-        ];
-
-        return components;
-    }
-
-    useEffect(() => {
-        setSearchResults(null);
-        setReady(false);
-        setSearchText('');
-        if (mode === Constants.MODE_PLAYLIST) {
+    function retrieveUserPlaylists() {
+        if (mode === Constants.MODE_LIBRARY && type === Constants.TYPE_PLAYLIST) {
             getUsersPlaylists()
-                .then(playlists => setUserPlaylists(playlists));
+                .then(playlists => {
+                    setUserPlaylists(playlists);
+                });
         }
-    }, [mode]);
+    }
+
+    useEffect(retrieveUserPlaylists, [mode])
+    useEffect(buildSearchBar, [type, searchText])
 
     return (
         <div className='Analyzer'>
-            {ModeChooser()}
-            {buildSearchBar()}
-            {renderAnalyzer()}
-            {renderAnalyticalComponents()}
+            {mode === null ? ModeChooser() : TypeChooser()}
+            <SearchBar
+                value={searchText}
+                handleSearch={handleSearch}
+                handleChange={event => setSearchText(event.target.value)}/>
+            {isReady
+                ? renderAnalyzer()
+                : buildSearchList()}
         </div>
     )
 }

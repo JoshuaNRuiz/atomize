@@ -445,7 +445,7 @@ module.exports = function (app) {
                 return response;
             })
             .catch(error => {
-                console.error(error);
+                console.error(error.message);
                 if (error.response.status) res.status(error.response.status);
                 return {
                     error: error.message,
@@ -467,7 +467,6 @@ module.exports = function (app) {
 
         const data = await axios.get(url, options)
             .then(response => response.data)
-            .catch(error => console.log(error.message));
 
         return data;
     }

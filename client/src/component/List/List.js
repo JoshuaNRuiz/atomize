@@ -1,4 +1,5 @@
 import * as Constants from '../../helpers/Constants';
+
 import React from 'react';
 import TrackItem from '../Items/TrackItem/TrackItem';
 import ArtistItem from '../Items/ArtistItem/ArtistItem';
@@ -7,12 +8,12 @@ import PlaylistItem from '../Items/PlaylistItem/PlaylistItem';
 import './List.css';
 
 const List = ({ items, handleClick }) => {
+
     function makeList() {
         if (!items || Object.keys(items).length === 0) return null;
         
-        const type = items[0].type;
         let list = null;
-        
+        const type = items[0].type;
         if (type === Constants.TYPE_TRACK) {
             list = TrackList();
         } else if (type === Constants.TYPE_ARTIST) {
@@ -22,10 +23,10 @@ const List = ({ items, handleClick }) => {
         }
     
         const capitalizedTypeName = type.charAt(0).toUpperCase() + type.slice(1);
-        const cName = `List ${capitalizedTypeName}List`;
+        const classes = `List ${capitalizedTypeName}List`;
 
         return (
-            <div className={cName}>
+            <div className={classes}>
                 {list}
             </div>
         )
@@ -37,13 +38,14 @@ const List = ({ items, handleClick }) => {
             const rank = index + 1;
             return (
                 <TrackItem key={id}
-                    id={index}
+                    id={id}
+                    index={index}
                     name={name}
                     artists={artists}
                     album={album}
                     rank={rank}
-                    handleClick={handleClick} />
-            )
+                    handleClick={handleClick || null} />
+            );
         });
 
         return trackList;
@@ -60,8 +62,8 @@ const List = ({ items, handleClick }) => {
                     genres={genres}
                     images={images}
                     rank={rank}
-                    handleClick={handleClick} />
-            )
+                    handleClick={handleClick || null} />
+            );
         });
 
         return artistList;
@@ -75,8 +77,8 @@ const List = ({ items, handleClick }) => {
                     id={index}
                     name={name}
                     trackCount={total}
-                    handleClick={handleClick} />
-            )
+                    handleClick={handleClick || null}/>
+            );
         });
 
         return playlistList;

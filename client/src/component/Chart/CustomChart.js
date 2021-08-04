@@ -7,7 +7,7 @@ const CustomChart = ({title, data, colors}) => {
 
     const reference = useRef(null);
 
-    const buildChart = () => {
+    function buildChart() {
         if (!data || Object.keys(data).length === 0) return null;
         const [labels, values] = [Object.keys(data), Object.values(data)];
         const chartReference = reference.current.getContext("2d");

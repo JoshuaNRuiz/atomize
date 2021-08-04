@@ -11,3 +11,4 @@ export const MODE_ARTIST = TYPE_ARTIST;
 export const MODE_SEARCH = 'search';
 export const MODE_ANALYZE = 'analyze';
 export const MODE_CHOOSE = 'choose';
+export const MODE_LIBRARY = 'library';

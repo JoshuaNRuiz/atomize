@@ -1,30 +1,9 @@
 .TrackAnalyzer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.TrackAnalyzer__AnalyzerHeader {
     display: grid;
-    grid-template-columns: 32px 1fr;
-    justify-content: center;
-    margin: auto;
-    background-color: #121212;
+    grid-template-rows: 1 1;
+    place-items: center;
 }
 
-.TrackAnalyzer__BackButton {
-    margin: 0;
-    padding: 0;
-    background: none;
-    outline: none;
-    background-color: #121212;
-    border: 1px solid black;
-    border-right: none;
-    font-size: 24px;
-    color: white;
-}
-
-.TrackAnalyzer__BackButton:hover {
-    cursor: pointer;
+.TrackAnalyzer__Header {
+    
 }

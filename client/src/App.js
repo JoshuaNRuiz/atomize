@@ -4,7 +4,7 @@ import axios from 'axios';
 import Cookies from './helpers/Cookies';
 
 import Navbar from './component/Navbar/Navbar';
-import Login from './container/Login/Login';
+import Login from './component/Login/Login';
 import Gateway from './component/Gateway/Gateway';
 import Analyzer from './container/Analyzer/Analyzer';
 import Tracker from './container/Tracker/Tracker';

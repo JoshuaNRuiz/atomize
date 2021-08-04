@@ -1,76 +1,41 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 
-import List from '../../../component/List/List';
+import PlaylistItem from '../../../component/Items/PlaylistItem/PlaylistItem';
+import CustomChart from '../../../component/Chart/CustomChart';
+
 import './PlaylistAnalyzer.css'
-import SearchBar from '../../../component/SearchBar/SearchBar';
+
+import { getAudioFeatures } from '../../../helpers/functions';
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
-const PlaylistAnalyzer = (props) => {
+const PlaylistAnalyzer = ({ playlist }) => {
 
-    const [playlists, setPlaylists] = useState({})
-    const [isReady, setIsReady] = useState(false);
-    const [isSearch, setIsSearch] = useState(false);
-    const [searchResults, setSearchResults] = useState([]);
-    const [audioFeatureData, setAudioFeatureData] = useState([]);
+    const [audioFeatures, setAudioFeatures] = useState([]);
 
-    useEffect(getUsersPlaylists, []);
+    function renderAnalyticalComponents() {
+        if (!playlist || Object.keys(playlist).length === 0) return null;
+        
+        const audioFeatureAverages = calculateAudioFeatureAverages();
+        const components = [
+            <PlaylistItem id={playlist.id} name={playlist.name} count={playlist.count}/>,
+            <CustomChart audioFeatures={audioFeatureAverages} />,
+        ]
 
-    function getUsersPlaylists() {
-        const url = `${BASE_URL}/api/spotify-helper/user-data/playlists`;
-        axios.get(url)
-            .then(response => {
-                const playlists = response.data;
-                setPlaylists(playlists);
-            })
-            .then(() => setIsReady(true));
+        return components
     }
 
-    function handleClick(event) {
-        event.stopPropagation();
-        const playlistId = event.currentTarget.value;
-        if (!!playlistId) {
-            getData(playlistId);
+    useEffect(load, [playlist]);
+
+    function load() {
+        if (playlist) {
+            const trackIds = Object.entries(playlist.tracks).map(({id}) => id);
+            getAudioFeatures(trackIds)
+                .then(audioFeatures => setAudioFeatures(audioFeatures));
         }
     }
 
-    function getData(playlistId) {
-        getTracksFromPlaylist(playlistId)
-            .then(tracks => getTrackIds(tracks))
-            .then(trackIds => getAudioFeatures(trackIds))
-            .then(audioFeatureData => setAudioFeatureData(audioFeatureData));
-    }
-
-    async function getTracksFromPlaylist(playlistId) {
-        const url = `${BASE_URL}/api/spotify-helper/playlist/${playlistId}`;
-        const tracks = await axios.get(url)
-            .then(response => response.data.items);
-        return tracks;
-    }
-
-    function getTrackIds(tracks) {
-        let trackIds = [];
-        for (const track of tracks) {
-            trackIds.push(track.track.id);
-        }
-        return trackIds;
-    }
-
-    async function getAudioFeatures(trackIds) {
-        const url = `${BASE_URL}/api/spotify-helper/audio-features`;
-        const requestData = {
-            track_ids: trackIds
-        }
-        const data = await axios.post(url, requestData)
-            .then(response => {
-                return response.data;
-            });
-        console.log(data);
-        return data;
-    }
-
-    function calculateAudioFeatureAverages(featureData) {
+    function calculateAudioFeatureAverages(audioFeatures) {
         let featureAverages = {
             danceability: 0,
             energy: 0,
@@ -81,7 +46,7 @@ const PlaylistAnalyzer = (props) => {
             speechiness: 0
         }
 
-        for (const data of Object.values(featureData)) {
+        for (const data of Object.values(audioFeatures)) {
             featureAverages.danceability += data.danceability;
             featureAverages.energy += data.energy;
             featureAverages.tempo += data.tempo;
@@ -91,7 +56,7 @@ const PlaylistAnalyzer = (props) => {
             featureAverages.speechiness += data.speechiness;
         }
 
-        const count = Object.keys(featureData).length;
+        const count = Object.keys(audioFeatures).length;
 
         Object.keys(featureAverages).forEach(key => {
             featureAverages[key] = featureAverages[key] / count;
@@ -100,25 +65,9 @@ const PlaylistAnalyzer = (props) => {
         return featureAverages;
     }
 
-    // TODO: THIS HAS TO BE IMPROVED, WE ARE DUPLICATING DATA -- we just need to filter
-    function searchForPlaylist(event) {
-        const formattedString = event.target.value.trim().toUpperCase();
-        if (formattedString !== '') {
-            let results = Object.values(playlists).filter(playlist => {
-                return playlist.name.toUpperCase().includes(formattedString);
-            });
-            if (results.length === 0) results = {};
-            setSearchResults(results)
-            if (!isSearch) setIsSearch(true);
-        } else {
-            setIsSearch(false);
-        }
-    }
-
     return (
         <div className='PlaylistAnalyzer'>
-            {isReady && <SearchBar handleChange={searchForPlaylist} />}
-            {isReady && <List items={isSearch ? searchResults : playlists} handleClick={handleClick} />}
+            {renderAnalyticalComponents()}
         </div>
     )
 }
