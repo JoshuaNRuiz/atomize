@@ -5,6 +5,8 @@ import Controls from '../../component/Controls/Controls';
 import List from '../../component/List/List';
 import './Tracker.css'
 
+axios.defaults.withCredentials = true;
+
 const Tracker = () => {
 
     const BASE_URL = process.env.REACT_APP_BASE_URL;
