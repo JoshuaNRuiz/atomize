@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import axios from 'axios';
 import Cookies from './helpers/Cookies';
 
@@ -9,6 +9,7 @@ import Gateway from './component/Gateway/Gateway';
 import Analyzer from './container/Analyzer/Analyzer';
 import Tracker from './container/Tracker/Tracker';
 import Explorer from './container/Explorer/Explorer';
+import Vibe from './container/Vibe/Vibe';
 
 import './App.css'
 
@@ -68,6 +69,9 @@ function App() {
                     </Route>
                     <Route path={BASE_PATH + '/explore'}>
                         <Explorer />
+                    </Route>
+                    <Route path={BASE_PATH + '/vibe'}>
+                        <Vibe />
                     </Route>
                 </Switch>
             </div>
