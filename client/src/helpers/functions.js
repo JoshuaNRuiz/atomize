@@ -33,3 +33,9 @@ export async function getAudioFeatures(trackIds) {
     return await axios.post(url, requestData)
         .then(response => response.data);
 }
+
+export async function getLikedTracks() {
+    const url = `${BASE_URL}/api/spotify-helper/user-data/track`;
+    return await axios.get(url)
+        .then(response => response.data);
+}
