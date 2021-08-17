@@ -1,7 +1,4 @@
 class Cookies {
-    constructor(cookies) {
-    }
-
     static get(key) {
         if (document.cookie) {
             const cookies = document.cookie.split('; ');
