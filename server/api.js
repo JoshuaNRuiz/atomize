@@ -14,12 +14,6 @@ const axios = require('axios').default;
 
 module.exports = function (app) {
 
-    // ************************ API ************************
-
-    app.get('/api/get-id', (req, res) => {
-        res.send(process.env.API_ID);
-    });
-
     // ************************ AUTHORIZATION ************************
 
     app.get('/api/spotify-helper/get-tokens', async (req, res) => {
