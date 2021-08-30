@@ -1,12 +1,16 @@
 require('dotenv').config({ path: __dirname + '/.env' });
-
-const qs = require('qs');
-const axios = require('axios').default;
+const Constants = require('./helpers/Constants');
 
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
-const BASE_PATH = process.env.BASE_PATH;
-const REDIRECT_URI = process.env.REDIRECT_URI;
+
+const ENV = process.env.NODE_ENV;
+const REDIRECT_URI = (ENV === Constants.DEV_ENV 
+    ? Constants.DEV_URL 
+    : Constants.PROD_URL);
+
+const qs = require('qs');
+const axios = require('axios').default;
 
 module.exports = function (app) {
 
@@ -18,7 +22,7 @@ module.exports = function (app) {
 
     // ************************ AUTHORIZATION ************************
 
-    app.get(BASE_PATH + '/api/spotify-helper/get-tokens', async (req, res) => {
+    app.get('/api/spotify-helper/get-tokens', async (req, res) => {
         const code = req.query.code;
 
         const data = await requestTokens(code)
@@ -64,7 +68,7 @@ module.exports = function (app) {
 
     // ************************ RENEWING ACCESS TOKENS ************************
 
-    app.get(BASE_PATH + '/api/spotify-helper/renew-access-token', async (req, res) => {
+    app.get('/api/spotify-helper/renew-access-token', async (req, res) => {
         const refreshToken = req.cookies.refresh_token;
 
         const data = await renewAccessToken(refreshToken)
@@ -120,7 +124,7 @@ module.exports = function (app) {
 
     // ************************ GETTING TOP TRACKS/ARTISTS ************************ 
 
-    app.get(BASE_PATH + '/api/spotify-helper/top-:type', async (req, res) => {
+    app.get('/api/spotify-helper/top-:type', async (req, res) => {
         const type = req.params.type;
         const accessToken = req.cookies.access_token
         const timeRange = req.query.time_range;
@@ -161,7 +165,7 @@ module.exports = function (app) {
 
     // ************************ GETTING USER DATA ************************ 
 
-    app.get(BASE_PATH + '/api/spotify-helper/user-data/:type', async (req, res) => {
+    app.get('/api/spotify-helper/user-data/:type', async (req, res) => {
         const type = req.params.type;
         const accessToken = req.cookies.access_token;
         let data = null;
@@ -240,7 +244,7 @@ module.exports = function (app) {
 
     // ************************ GETTING TRACK INFO ************************ 
 
-    app.get(BASE_PATH + '/api/spotify-helper/tracks/:infotype', async (req, res) => {
+    app.get('/api/spotify-helper/tracks/:infotype', async (req, res) => {
         const infotype = req.params.infotype;
         const accessToken = req.cookies.access_token;
         const ids = req.body.ids;
@@ -277,7 +281,7 @@ module.exports = function (app) {
         res.send(data);
     });
 
-    app.get(BASE_PATH + '/api/spotify-helper/tracks/:infotype/:id', async (req, res) => {
+    app.get('/api/spotify-helper/tracks/:infotype/:id', async (req, res) => {
         const infotype = req.params.infotype;
         const id = req.params.id;
         const accessToken = req.cookies.access_token;
@@ -315,7 +319,7 @@ module.exports = function (app) {
 
     // ************************ GETTING PLAYLIST INFO ************************ 
 
-    app.get(BASE_PATH + '/api/spotify-helper/playlist/:id', async (req, res) => {
+    app.get('/api/spotify-helper/playlist/:id', async (req, res) => {
         const playlistId = req.params.id;
         const accessToken = req.cookies.access_token;
 
@@ -350,7 +354,7 @@ module.exports = function (app) {
 
     // ************************ GETTING AUDIO FEATURES ************************ 
 
-    app.post(BASE_PATH + '/api/spotify-helper/audio-features', async (req, res) => {
+    app.post('/api/spotify-helper/audio-features', async (req, res) => {
         const accessToken = req.cookies.access_token;
         const ids = req.body.track_ids;
         const data = await getAudioFeatures(accessToken, ids)
@@ -399,7 +403,7 @@ module.exports = function (app) {
         return audioFeatureData;
     }
 
-    app.get(BASE_PATH + '/api/spotify-helper/audio-features/:id', async (req, res) => {
+    app.get('/api/spotify-helper/audio-features/:id', async (req, res) => {
         const accessToken = req.cookies.access_token;
         const id = req.params.id;
         const data = await getTrackAudioFeatures(accessToken, id)
@@ -434,7 +438,7 @@ module.exports = function (app) {
 
     // *********** SEARCHING
 
-    app.get(BASE_PATH + '/api/spotify-helper/search', async (req, res) => {
+    app.get('/api/spotify-helper/search', async (req, res) => {
         const accessToken = req.cookies.access_token;
         const query = req.query.q;
         const type = req.query.type;
