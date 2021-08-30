@@ -25,7 +25,7 @@ function App() {
             if (isAccessTokenValid) {
                 setLoginStatus(true);
             } else if (refreshToken) {
-                renewAccessToken(refreshToken)
+                renewAccessToken()
                     .then(() => setLoginStatus(true));
             } else {
                 const parameters = window.location.search;
@@ -45,7 +45,7 @@ function App() {
         await axios.get(url);
     }
 
-    async function renewAccessToken(token) {
+    async function renewAccessToken() {
         const url = '/api/spotify-helper/renew-access-token';
         await axios.get(url);
     }
