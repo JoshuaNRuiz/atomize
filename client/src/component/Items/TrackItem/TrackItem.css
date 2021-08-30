@@ -1,10 +1,15 @@
+:root {
+    --primary-color: #FFFFFF;
+    --primary-bg: #121212;
+}
+
 .TrackItem {
     width: 270px;
     height: 100px;
     display: grid;
     grid-template-columns: 85px 1fr;
     align-items: center;
-    background-color: #121212;
+    background-color: var(--primary-bg);
     border-radius: 2px;
     border: 1px solid black;
     position: relative;
@@ -12,7 +17,7 @@
 }
 
 .TrackItem--Link:hover {
-    border: 1px solid white;
+    border: 1px solid var(--primary-color);
     cursor: pointer;
     transition: border 0.7s;
 }
@@ -41,19 +46,19 @@
 }
 
 .TrackItem__Details__Name {
-    color: white;
+    color: var(--primary-color);
     font-size: 18px;
 }
 
 .TrackItem__Details__Artist {
-    color: white;
+    color: var(--primary-color);
     font-size: 14px;
     align-self: flex-start;
 }
 
 .TrackItem__Rank {
     position: absolute;
-    color: white;
+    color: var(--primary-color);
     top: 4px;
     right: 4px;
     font-family: 'Montserrat', sans-serif;
