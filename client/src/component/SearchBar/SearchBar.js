@@ -7,7 +7,7 @@ const SearchBar = ({value, handleSearch, handleChange}) => {
 
     return (
         <div className="SearchBar">
-            <i class="fas fa-search SearchBar__Icon"></i>
+            <i className="fas fa-search SearchBar__Icon"></i>
             <input className="SearchBar__Input" 
                 type="text" 
                 autoFocus 
