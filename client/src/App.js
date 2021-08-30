@@ -25,7 +25,7 @@ function App() {
             if (isAccessTokenValid) {
                 setLoginStatus(true);
             } else if (refreshToken) {
-                renewAccessToken()
+                renewAccessToken(refreshToken)
                     .then(() => setLoginStatus(true));
             } else {
                 const parameters = window.location.search;
