@@ -8,9 +8,6 @@ import './Tracker.css'
 axios.defaults.withCredentials = true;
 
 const Tracker = () => {
-
-    const BASE_URL = process.env.REACT_APP_BASE_URL;
-
     const TYPE_DEFAULT = 'tracks';
     const LIMIT_DEFAULT = 10;
     const RANGE_DEFAULT = 'long_term';
@@ -39,8 +36,7 @@ const Tracker = () => {
     }
 
     function getItems() {
-        let url = `${BASE_URL}/api/spotify-helper/top-${type}`;
-        url += `?time_range=${timeRange}&limit=${limit}&offset=${0}`
+        let url = `/api/spotify-helper/top-${type}?time_range=${timeRange}&limit=${limit}&offset=${0}`;
         axios.get(url)
             .then(response => {
                 const items = response.data.items;

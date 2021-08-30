@@ -7,8 +7,6 @@ import './PlaylistAnalyzer.css'
 
 import { getAudioFeatures } from '../../../helpers/functions';
 
-const BASE_URL = process.env.REACT_APP_BASE_URL;
-
 const PlaylistAnalyzer = ({ playlist }) => {
 
     const [audioFeatures, setAudioFeatures] = useState([]);

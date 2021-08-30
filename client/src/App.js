@@ -16,9 +16,6 @@ import './App.css'
 function App() {
     const [isLoggedIn, setLoginStatus] = useState(false);
 
-    const BASE_URL = process.env.REACT_APP_BASE_URL;
-    const BASE_PATH = process.env.REACT_APP_BASE_PATH;
-
     useEffect(handleLoginState, []);
 
     function handleLoginState() {
@@ -44,12 +41,12 @@ function App() {
     }
 
     async function getTokens(code) {
-        const url = BASE_URL + `/api/spotify-helper/get-tokens?code=${code}`;
+        const url = `/api/spotify-helper/get-tokens?code=${code}`;
         await axios.get(url);
     }
 
     async function renewAccessToken(token) {
-        const url = BASE_URL + '/api/spotify-helper/renew-access-token';
+        const url = '/api/spotify-helper/renew-access-token';
         await axios.get(url);
     }
 
@@ -58,19 +55,19 @@ function App() {
             <div className="App">
                 <Navbar />
                 <Switch>
-                    <Route exact path={BASE_PATH + '/'}>
+                    <Route exact path={'/'}>
                         {isLoggedIn ? Gateway : Login }
                     </Route>
-                    <Route path={BASE_PATH + '/analyze'}>
+                    <Route path={'/analyze'}>
                         <Analyzer />
                     </Route>
-                    <Route path={BASE_PATH + '/top'}>
+                    <Route path={'/top'}>
                         <Tracker />
                     </Route>
-                    <Route path={BASE_PATH + '/explore'}>
+                    <Route path={'/explore'}>
                         <Explorer />
                     </Route>
-                    <Route path={BASE_PATH + '/vibe'}>
+                    <Route path={'/vibe'}>
                         <Vibe />
                     </Route>
                 </Switch>
