@@ -25,7 +25,6 @@ module.exports = function (app) {
                 return data;
             })
             .catch(error => {
-                console.error(error)
                 if (error.response.status) res.status(error.response.status);
                 return {
                     error: error.message,
