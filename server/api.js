@@ -5,9 +5,7 @@ const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 
 const ENV = process.env.NODE_ENV;
-const REDIRECT_URI = (ENV === Constants.DEV_ENV 
-    ? Constants.DEV_URL 
-    : Constants.PROD_URL);
+const REDIRECT_URI = process.env.REDIRECT_URI;
 
 const qs = require('qs');
 const axios = require('axios').default;
@@ -18,7 +16,6 @@ module.exports = function (app) {
 
     app.get('/api/spotify-helper/get-tokens', async (req, res) => {
         const code = req.query.code;
-
         const data = await requestTokens(code)
             .then(data => {
                 const [accessToken, expirationTime, refreshToken]= extractData(data);
@@ -28,9 +25,10 @@ module.exports = function (app) {
                 return data;
             })
             .catch(error => {
+                console.error(error)
                 if (error.response.status) res.status(error.response.status);
                 return {
-                    error: error.message
+                    error: error.message,
                 }
             });
 
