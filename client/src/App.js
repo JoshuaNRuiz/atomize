@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from './helpers/Cookies';
 
@@ -34,15 +34,24 @@ function App() {
 
                 if (codeIsInParameters) {
                     getTokens(code)
-                        .then(() => setLoginStatus(true));
+                        .then(() => setLoginStatus(true))
+                        .catch(error => alert(error));
                 }
             }
         }
     }
 
     async function getTokens(code) {
-        const url = `/api/spotify-helper/get-tokens?code=${code}`;
-        await axios.get(url);
+        const url = '/api/spotify-helper/get-tokens';
+        const options = {
+            params: {
+                'code': code
+            },
+            headers: {
+                'Accept': 'application/json'
+            }
+        }
+        await axios.get(url, options);
     }
 
     async function renewAccessToken() {
@@ -56,7 +65,7 @@ function App() {
                 <Navbar />
                 <Switch>
                     <Route exact path={'/'}>
-                        {isLoggedIn ? Gateway : Login }
+                        {isLoggedIn ? Gateway : Login}
                     </Route>
                     <Route path={'/analyze'}>
                         <Analyzer />
