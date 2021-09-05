@@ -1,15 +1,13 @@
 import React from 'react';
 import './PlaylistItem.css';
 
-const PlaylistItem = (props) => {
-
-    const {id, name, trackCount, handleClick } = props;
+const PlaylistItem = ({ id, name, trackCount, handleClick }) => {
 
     return (
-        <div className='PlaylistItem' value={id} onClick={handleClick}>
-            <p className='PlaylistItem__Title'>{name}</p>
-            <div className='PlaylistItem__CountContainer'>
-                <span className='PlaylistItem__CountContainer__TrackCount'>{trackCount}</span>
+        <div className='PlaylistItem' id={id} onClick={handleClick}>
+            <span className='PlaylistItem__Title'>{name}</span>
+            <div className='PlaylistItem__TrackCountContainer'>
+                <span className='PlaylistItem__TrackCountContainer__TrackCount'>{trackCount}</span>
             </div>
         </div>
     )

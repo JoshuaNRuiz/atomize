@@ -44,5 +44,6 @@
       ],
       "extensions": "js,jsx,css"
     }
-  }
+  },
+  "proxy": "http://localhost:8000"
 }

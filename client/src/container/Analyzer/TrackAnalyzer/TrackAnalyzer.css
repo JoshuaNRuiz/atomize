@@ -1,6 +1,9 @@
 .TrackAnalyzer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
+    display: grid;
+    grid-template-rows: 1 1;
+    place-items: center;
+}
+
+.TrackAnalyzer__Header {
+    
 }

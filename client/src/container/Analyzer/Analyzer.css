@@ -1,7 +1,14 @@
 .Analyzer {
-    
+    display: grid;
+    grid-template-rows: 1 1 1 1;
+    place-items: center;
 }
 
 .Analyzer__page-title {
     color: white;
+}
+
+.TrackAnalyzer,
+.PlaylistAnalyzer {
+    
 }

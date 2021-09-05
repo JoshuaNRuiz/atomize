@@ -1,9 +1,9 @@
 import React from 'react';
-
+import * as Constants from '../../helpers/Constants';
 import './Login.css';
 
 const Login = () => {
-    const redirect_uri = process.env.REACT_APP_BASE_URL + '/';
+    const redirect_uri = 'http://localhost:3000/'
     const scope = 'user-top-read playlist-read-private user-library-read';
 
     function openSpotifyAuthorization() {

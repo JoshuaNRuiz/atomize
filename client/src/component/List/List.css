@@ -5,4 +5,6 @@
     justify-content: center;
 }
 
-.List--Empty {}
+.List > * {
+    margin: 8px;
+}

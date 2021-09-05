@@ -3,14 +3,13 @@ import Chart from 'chart.js/auto';
 
 import './CustomChart.css';
 
-const CustomChart = (props) => {
+const CustomChart = ({title, data, colors}) => {
 
-    const { title, data, colors } = props;
-
-    const [labels, values] = [Object.keys(data), Object.values(data)];
     const reference = useRef(null);
 
-    const buildChart = () => {
+    function buildChart() {
+        if (!data || Object.keys(data).length === 0) return null;
+        const [labels, values] = [Object.keys(data), Object.values(data)];
         const chartReference = reference.current.getContext("2d");
 
         const danceabilityColor = 'rgba(255, 202, 58, 0.2)';
@@ -22,7 +21,7 @@ const CustomChart = (props) => {
         const backgroundColors = [danceabilityColor, energyColor,
             instrumentalnessColor, speechinessColor, valenceColor];
 
-        const data = {
+        const chartData = {
             labels: labels,
             datasets: [{
                 label: 'Musical Breakdown',
@@ -65,7 +64,7 @@ const CustomChart = (props) => {
 
         const config = {
             type: 'bar',
-            data: data,
+            data: chartData,
             options: options
         }
 

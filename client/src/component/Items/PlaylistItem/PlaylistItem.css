@@ -1,14 +1,13 @@
 .PlaylistItem {
-    position: relative;
-    display: flex;
-    align-items: center;
     width: 280px;
     height: 48px;
-    margin: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: grid;
+    grid-template-columns: 1fr 48px;
+    align-items: center;
+    background-color: #121212;
+    border-color: 1px solid black;
     border-radius: 2px;
-    background-color: #ececec;
-    color: #960f47;
+    font-family: 'Montserrat';
 }
 
 .PlaylistItem:hover {
@@ -16,33 +15,25 @@
 }
 
 .PlaylistItem__Title {
-    margin: 0;
-    padding: 0;
-    font-family: 'Montserrat';
-    display: inline;
     font-size: 14px;
-    min-width: 0;
-    max-width: 85%;
-    margin-left: 8px;
     white-space: nowrap;
     overflow: hidden;
     font-weight: 500;
     text-overflow: ellipsis;
-}
-
-.PlaylistItem__CountContainer {
-    display: flex;
-    min-width: 48px;
-    margin: 0 0 auto auto;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    background-color: #960f47;
-    border-left: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 2px;
-}
-
-.PlaylistItem__CountContainer__TrackCount {
-    font-weight: 500;
+    margin: 0 12px;
+    text-align: left;
     color: white;
+}
+
+.PlaylistItem__TrackCountContainer {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: black;
+    color: white;
+}
+
+.PlaylistItem__TrackCountContainer__TrackCount{
+    font-weight: 600;
 }

@@ -1,56 +1,39 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import * as Constants from '../../../helpers/Constants';
 
-import List from '../../../component/List/List';
 import CustomChart from "../../../component/Chart/CustomChart";
-import SearchBar from '../../../component/SearchBar/SearchBar';
 import TrackItem from '../../../component/Items/TrackItem/TrackItem';
+
+import { getAudioFeaturesForTrack } from '../../../helpers/functions';
 
 import './TrackAnalyzer.css';
 
-const TrackAnalyzer = () => {
-    const BASE_URL = process.env.REACT_APP_BASE_URL;
-    const [mode, setMode] = useState('');
-    const [searchResults, setSearchResults] = useState({});
-    const [trackDetails, setTrackDetails] = useState({});
-    const [trackFeatures, setTrackFeatures] = useState({});
+const TrackAnalyzer = ({ track }) => {
 
-    function searchForTrack(event) {
-        if (event.key === 'Enter') {
-            const searchText = event.target.value.trim();
-            const url = `${BASE_URL}/api/spotify-helper/search?q=${searchText}&type=track`;
-            axios.get(url)
-                .then(response => response.data.tracks.items)
-                .then(items => {
-                    console.log(items);
-                    setSearchResults(items);
-                    if (mode !== Constants.MODE_SEARCH) setMode(Constants.MODE_SEARCH);
-                });
+    const [audioFeatures, setAudioFeatures] = useState({});
+
+    function renderAnalyticalComponents() {
+        if (!track || Object.keys(track).length === 0) return null;
+
+        const { id, name, artists, album } = track;
+
+        const components = [
+            <TrackItem id={id} name={name} artists={artists} album={album} />,
+            <CustomChart data={audioFeatures} />,
+        ];
+
+        return components;
+    }
+
+    useEffect(load, [track]);
+
+    function load() {
+        if (track) {
+            getAudioFeaturesForTrack(track.id)
+                .then(audioFeatures => {
+                    const filteredAudioFeatures = filterAudioFeatures(audioFeatures);
+                    setAudioFeatures(filteredAudioFeatures);
+                })
         }
-    };
-
-    function handleTrackSelection(event) {
-        event.stopPropagation();
-        const index = event.currentTarget.id;
-
-        const trackDetails = searchResults[index];
-        const trackId = trackDetails.id;
-
-        setTrackDetails(trackDetails);
-
-        getAudioFeatures(trackId)
-            .then(audioFeatures => {
-                setTrackFeatures(audioFeatures);
-                setMode(Constants.MODE_ANALYZE)
-            });
-    };
-
-    async function getAudioFeatures(trackId) {
-        const url = `${BASE_URL}/api/spotify-helper/audio-features/${trackId}`;
-        return await axios.get(url)
-            .then(response => response.data)
-            .then(audioFeatures => filterAudioFeatures(audioFeatures));
     }
 
     function filterAudioFeatures(data) {
@@ -64,24 +47,12 @@ const TrackAnalyzer = () => {
         }
     };
 
-    function buildHeader() {
-        const id = trackDetails.id;
-        const title = trackDetails.name;
-        const artistName = trackDetails.artists[0].name;
-        const album = trackDetails.album;
-        return (
-            <TrackItem id={id} title={title} artists={artistName} album={album} />
-        )
-    };
-
     return (
         <div className='TrackAnalyzer'>
-            <SearchBar handleSearch={searchForTrack} />
-            {mode === Constants.MODE_SEARCH && <List items={searchResults} handleClick={handleTrackSelection} />}
-            {mode === Constants.MODE_ANALYZE && buildHeader(trackDetails)}
-            {mode === Constants.MODE_ANALYZE && <CustomChart data={trackFeatures} />}
+            {renderAnalyticalComponents()}
         </div>
     )
+
 }
 
 export default TrackAnalyzer;

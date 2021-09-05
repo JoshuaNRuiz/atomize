@@ -1,24 +1,28 @@
 import React from 'react';
 import './Selector.css'
 
-const Selector = (props) => {
-
-    const options = props.options
-    const handleSelection = props.handleSelection;
+const Selector = ({options, handleSelection}) => {
     
     function makeSelector() {
-        return options.map(option => {
+        const buttons = options.map(option => {
             const {title, value, image} = option;
+            const style = {
+                backgroundImage: `url("${image}")`,
+                backgroundSize: 'cover',
+            }
+
             return (
                 <button 
                     className='Selector__Option' 
                     onClick={handleSelection} 
                     value={value}
-                    style={{backgroundImage: `url(${image})`}}>
-                    {title}
+                    style={style}>
+                    <span className="Selector__Option__Title">{title}</span>
                 </button>
             )
         });
+
+        return buttons;
     }
 
     return (

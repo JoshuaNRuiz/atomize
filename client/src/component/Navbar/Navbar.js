@@ -12,6 +12,7 @@ const Navbar = (props) => {
                 <Link to='analyze' className="Navbar__Link" disabled><li>analyze</li></Link>
                 <Link to='top' className="Navbar__Link"><li>top</li></Link>
                 <Link to='explore' className="Navbar__Link" disabled><li>explore</li></Link>
+                <Link to='vibe' className="Navbar__Link" disabled><li>vibe</li></Link>
             </ul>
         </nav>
     )

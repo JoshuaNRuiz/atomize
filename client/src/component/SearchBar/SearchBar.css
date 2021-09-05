@@ -2,7 +2,7 @@
     margin: 16px;
     padding: 8px 12px;
     display: grid;
-    grid-template-columns: 24px 1fr;
+    grid-template-columns: 28px 1fr;
     align-items: center;
     background-color: #252525;
     border: 1px solid black;
@@ -12,13 +12,13 @@
 
 .SearchBar:focus,
 .SearchBar:hover {
-    outline: 1px solid #ffc608;
+    outline: 1px solid white;
     transition: outline 0.5s;
 }
 
 .SearchBar__Icon {
-    padding: 0;
     color: white;
+    align-self: center;
 }
 
 .SearchBar__Input {
@@ -29,4 +29,5 @@
     background-color: transparent;
     border: none;
     outline: none;
+    font-size: 16px;
 }

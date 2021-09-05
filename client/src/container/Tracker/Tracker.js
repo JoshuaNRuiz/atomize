@@ -5,8 +5,9 @@ import Controls from '../../component/Controls/Controls';
 import List from '../../component/List/List';
 import './Tracker.css'
 
-const Tracker = (props) => {
+axios.defaults.withCredentials = true;
 
+const Tracker = () => {
     const TYPE_DEFAULT = 'tracks';
     const LIMIT_DEFAULT = 10;
     const RANGE_DEFAULT = 'long_term';
@@ -16,8 +17,6 @@ const Tracker = (props) => {
     const [timeRange, setTimeRange] = useState(RANGE_DEFAULT);
     const [items, setItems] = useState([]);
     const [isReady, setIsReady] = useState(false);
-
-    const BASE_URL = process.env.REACT_APP_BASE_URL;
 
     function handleTypeChange(event) {
         setType(event.target.value);
@@ -37,15 +36,13 @@ const Tracker = (props) => {
     }
 
     function getItems() {
-        let url = `${BASE_URL}/api/spotify-helper/top-${type}`;
-        url += `?time_range=${timeRange}&limit=${limit}&offset=${0}`
+        let url = `/api/spotify-helper/top-${type}?time_range=${timeRange}&limit=${limit}&offset=${0}`;
         axios.get(url)
             .then(response => {
                 const items = response.data.items;
-                console.log(items);
                 setItems(items);
-            })
-            .then(() => setIsReady(true))
+                setIsReady(true);
+            });
     }
 
     useEffect(getItems, [type, timeRange, limit]);

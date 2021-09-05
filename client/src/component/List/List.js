@@ -1,4 +1,5 @@
 import * as Constants from '../../helpers/Constants';
+
 import React from 'react';
 import TrackItem from '../Items/TrackItem/TrackItem';
 import ArtistItem from '../Items/ArtistItem/ArtistItem';
@@ -6,67 +7,85 @@ import PlaylistItem from '../Items/PlaylistItem/PlaylistItem';
 
 import './List.css';
 
-const List = (props) => {
-
-    const { items, handleClick } = props;
+const List = ({ items, handleClick }) => {
 
     function makeList() {
-        if (Object.keys(items).length === 0) {
+        if (!items || Object.keys(items).length === 0) return null;
+        
+        let list = null;
+        const type = items[0].type;
+        if (type === Constants.TYPE_TRACK) {
+            list = TrackList();
+        } else if (type === Constants.TYPE_ARTIST) {
+            list = ArtistList();
+        } else if (type === Constants.TYPE_PLAYLIST) {
+            list = PlaylistList();
+        }
+    
+        const capitalizedTypeName = type.charAt(0).toUpperCase() + type.slice(1);
+        const classes = `List ${capitalizedTypeName}List`;
+
+        return (
+            <div className={classes}>
+                {list}
+            </div>
+        )
+    }
+
+    function TrackList() {
+        const trackList = Object.values(items).map((track, index) => {
+            const { id, name, artists, album, features } = track;
+            const rank = index + 1;
             return (
-                <div className='List--Empty'></div>
-            )
-        }
-
-        if (items[0].type === Constants.TYPE_TRACK) {
-            return makeTrackList();
-        } else if (items[0].type === Constants.TYPE_ARTIST) {
-            return makeArtistList();
-        } else if (items[0].type === Constants.TYPE_PLAYLIST) {
-            return makePlaylistList();
-        }
-
-        return null;
-    }
-
-    function makeTrackList() {
-        let title, artist, album, rank, trackId;
-        return Object.values(items).map((item, index) => {
-            title = item.name;
-            artist = item.artists[0].name;
-            album = item.album;
-            rank = index + 1;
-            trackId = item.id;
-            return <TrackItem id={index} key={trackId} title={title} artists={artist} album={album} rank={rank} handleClick={handleClick}/>
+                <TrackItem key={id}
+                    id={id}
+                    index={index}
+                    name={name}
+                    artists={artists}
+                    album={album}
+                    rank={rank}
+                    audioFeatures={features}
+                    handleClick={handleClick || null} />
+            );
         });
+
+        return trackList;
     };
 
-    function makeArtistList() {
-        let name, genres, images, rank, key;
-        return items.map((item, index) => {
-            name = item.name;
-            genres = item.genres;
-            images = item.images;
-            rank = index + 1;
-            key = name + " " + rank;
-            return <ArtistItem key={key} name={name} genres={genres} images={images} rank={rank} handleClick={handleClick}/>
+    function ArtistList() {
+        const artistList = items.map((artist, index) => {
+            const { id, name, genres, images } = artist;
+            const rank = index + 1;
+            return (
+                <ArtistItem key={id}
+                    id={id}
+                    name={name}
+                    genres={genres}
+                    images={images}
+                    rank={rank}
+                    handleClick={handleClick || null} />
+            );
         });
+
+        return artistList;
     };
 
-    function makePlaylistList() {
-        let name, trackCount, playlistId;
-        return Object.values(items).map((playlist) => {
-            playlistId = playlist.id
-            name = playlist.name;
-            trackCount = playlist.tracks.total;
-            return <PlaylistItem key={playlistId} id={playlistId} name={name} trackCount={trackCount} handleClick={handleClick}/>
+    function PlaylistList() {
+        const playlistList = Object.values(items).map((playlist, index) => {
+            const { id, name, tracks: { total } } = playlist;
+            return (
+                <PlaylistItem key={id}
+                    id={index}
+                    name={name}
+                    trackCount={total}
+                    handleClick={handleClick || null}/>
+            );
         });
+
+        return playlistList;
     }
 
-    return (
-        <div className='List'>
-            {makeList()}
-        </div>
-    )
+    return makeList();
 }
 
 export default List;
