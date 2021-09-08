@@ -63,6 +63,7 @@ function App() {
         <Router>
             <div className="App">
                 <Navbar />
+                <Gateway />
                 <Switch>
                     <Route exact path={'/'}>
                         {isLoggedIn ? Gateway : Login}

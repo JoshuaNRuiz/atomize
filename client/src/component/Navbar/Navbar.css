@@ -4,13 +4,10 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
-.Navbar__Logo{
-    margin: 0 0 0 16px;
-    padding: 0;
+.Navbar__Logo {
+    margin-left: 16px;
     color: white;
     font-size: 16px;
     font-weight: bold;
@@ -18,20 +15,19 @@
 }
 
 .Navbar__Links {
-    margin-right: 16px;
-    display: flex;
-    align-items: center;
     list-style-type: none;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
 }
 
-.Navbar__Link,
-.Navbar__Link:visited {
+.Navbar__Link, .Navbar__Link:visited {
     padding: 14px 0px;
     width: 60px;
     color: white;
     font-size: 14px;
-    font-weight: normal;
+    font-weight: bold;
     text-decoration: none;
+    opacity: 50%;
 }
 
 .Navbar__Link:hover {
@@ -39,4 +35,8 @@
     background-color: rgba(255, 255, 255, 0.9);
     color: black;
     transition: 0.5s;
+}
+
+.Navbar__Link--active {
+    opacity: 100%;
 }
