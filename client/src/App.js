@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
+import { PrivateRoute } from './component/PrivateRoute/PrivateRoute';
 import axios from 'axios';
 import Cookies from './helpers/Cookies';
 
@@ -64,21 +65,25 @@ function App() {
             <div className="App">
                 <Navbar />
                 <Switch>
-                    <Route exact path={'/'}>
-                        {isLoggedIn ? Gateway : Login}
+                    <Route path={'/login'}>
+                        <Login />
                     </Route>
-                    <Route path={'/analyze'}>
+                    
+                    <PrivateRoute exact path={'/'}>
+                        <Gateway />
+                    </PrivateRoute>
+                    <PrivateRoute path={'/analyze'}>
                         <Analyzer />
-                    </Route>
-                    <Route path={'/top'}>
+                    </PrivateRoute>
+                    <PrivateRoute path={'/top'}>
                         <Tracker />
-                    </Route>
-                    <Route path={'/explore'}>
+                    </PrivateRoute>
+                    <PrivateRoute path={'/explore'}>
                         <Explorer />
-                    </Route>
-                    <Route path={'/vibe'}>
+                    </PrivateRoute>
+                    <PrivateRoute path={'/vibe'}>
                         <Vibe />
-                    </Route>
+                    </PrivateRoute>
                 </Switch>
             </div>
         </Router>
