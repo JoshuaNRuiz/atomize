@@ -5,18 +5,9 @@ import './Navbar.css';
 
 const Navbar = () => {
 
-    const [isMenuExpanded, setIsMenuExpanded] = useState(true);
-
-    function toggleBurgerMenu() {
-        setIsMenuExpanded(!isMenuExpanded);
-    }
-
     return (
         <nav className='Navbar'>
             <NavLink to='/' className='Navbar__Logo'><span>atomize</span></NavLink>
-            <div className="Navbar__Menu__Toggle" onClick={toggleBurgerMenu}>
-                <i className="fas fa-bars" />
-            </div>
             <div className='Navbar__Links'>
                 <NavLink to='analyze' className='Navbar__Link' activeClassName='Navbar__Link--active' disabled>
                     <span>analyze <i className="fas fa-chart-bar" /></span>
