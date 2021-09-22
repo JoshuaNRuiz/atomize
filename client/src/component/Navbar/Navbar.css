@@ -1,33 +1,33 @@
 .Navbar {
-    margin: 0 auto;
-    height: 50px;
+    width: 100%;
+    height: auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
 }
 
-.Navbar__Logo {
-    margin-left: 16px;
+.Navbar__Logo, .Navbar__Logo:visited {
     color: white;
     font-size: 16px;
     font-weight: bold;
     font-family: 'Montserrat', sans-serif;
+    text-decoration: none;
+    margin: 0 10px;
 }
 
 .Navbar__Links {
-    list-style-type: none;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    width: auto;
+    display: flex;
+    justify-content: space-between;
+    margin: 0 10px;
 }
 
 .Navbar__Link, .Navbar__Link:visited {
-    padding: 14px 0px;
-    width: 60px;
+    padding: 14px 8px;
     color: white;
     font-size: 14px;
-    font-weight: bold;
     text-decoration: none;
-    opacity: 50%;
 }
 
 .Navbar__Link:hover {
@@ -39,4 +39,39 @@
 
 .Navbar__Link--active {
     opacity: 100%;
+}
+
+.Navbar__Menu__Toggle {
+    display: none;
+    color: white;
+    margin: 0 10px;
+}
+
+/* desktop */
+@media only screen and (min-width: 1200px) {}
+
+/* tablet landscape */
+@media only screen and (min-width: 900px) and (max-width: 1199px) {
+    
+}
+
+/* tablet portrait */
+@media only screen and (min-width: 600px) and (max-width: 899px) {
+    
+}
+
+/* phone screen */
+@media only screen and (max-width: 599px) {
+
+    .Navbar__Links {
+        /* display: none; */
+        flex-basis: 100%;
+        flex-direction: column;
+        width: 0;
+    }
+
+    .Navbar__Menu__Toggle {
+        display: inline;
+    }
+
 }

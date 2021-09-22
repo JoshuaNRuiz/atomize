@@ -1,18 +1,24 @@
+:root {
+    --color-primary: #FFC608;
+    --color-secondary: #FFFFFF;
+    --color-background-primary: ##2e2e2e;
+    --color-background-secondary: #252525;
+}
+
 html {
-  background-color: #2E2E2E;
-  padding-bottom: 48px;
+    background-color: #2E2E2E;
 }
 
 body {
-  max-width: 960px;
-  margin: 0 auto;
+    max-width: 960px;
+    height: 100%;
+    margin: 0 auto;
+    text-align: center;
 }
 
 .App {
-  width: 100vw;
-  max-width: 960px;
-  margin: auto;
-  text-align: center;
-  font-family: 'Rubik', sans-serif;
-  /* overflow: hidden; */
+    width: 100%;
+    max-width: 960px;
+    font-family: 'Rubik', sans-serif;
+    height: 100%;
 }

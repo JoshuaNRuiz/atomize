@@ -40,7 +40,8 @@ const Controls = (props) => {
                     max={MAX_LIMIT}
                     value={props.limit}
                     onClick={props.refresh}
-                    onChange={props.handleLimitChange}/>
+                    onChange={props.handleLimitChange}
+                    size={2}/>
             </div>
         </div>
     )

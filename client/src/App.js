@@ -12,6 +12,7 @@ import Explorer from './container/Explorer/Explorer';
 import Vibe from './container/Vibe/Vibe';
 
 import './App.css'
+import Footer from './component/Footer/Footer';
 
 function App() {
     const [isLoggedIn, setLoginStatus] = useState(false);
@@ -60,10 +61,9 @@ function App() {
     }
 
     return (
-        <Router>
-            <div className="App">
+        <div className="App">
+            <Router>
                 <Navbar />
-                <Gateway />
                 <Switch>
                     <Route exact path={'/'}>
                         {isLoggedIn ? Gateway : Login}
@@ -81,9 +81,8 @@ function App() {
                         <Vibe />
                     </Route>
                 </Switch>
-            </div>
-        </Router>
-
+            </Router>
+        </div>
     );
 }
 

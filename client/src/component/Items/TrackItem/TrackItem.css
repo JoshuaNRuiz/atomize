@@ -15,13 +15,15 @@
     transition: border 0.7s;
 }
 
-.TrackItem--Link:hover {
+.TrackItem:hover {
     border: 1px solid var(--primary-color);
     cursor: pointer;
-    transition: border 0.7s;
+    transition: border 0.3s;
 }
 
 .TrackItem__Rank {
+    margin-left: 8px;
+    margin-top: 4px;
     justify-self: center;
     align-self: start;
     color: var(--primary-color);
@@ -46,6 +48,7 @@
 .TrackItem__Details__Name {
     color: var(--primary-color);
     font-size: 16px;
+    
 }
 
 .TrackItem__Details__Artist {

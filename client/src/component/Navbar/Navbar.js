@@ -1,24 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 
 import './Navbar.css';
 
 const Navbar = () => {
 
+    const [isMenuExpanded, setIsMenuExpanded] = useState(true);
+
+    function toggleBurgerMenu() {
+        setIsMenuExpanded(!isMenuExpanded);
+    }
+
     return (
         <nav className='Navbar'>
-            <Link to='/'><span className='Navbar__Logo'>atomize</span></Link>
-            <ul className='Navbar__Links'>
+            <NavLink to='/' className='Navbar__Logo'><span>atomize</span></NavLink>
+            <div className="Navbar__Menu__Toggle" onClick={toggleBurgerMenu}>
+                <i className="fas fa-bars" />
+            </div>
+            <div className='Navbar__Links'>
                 <NavLink to='analyze' className='Navbar__Link' activeClassName='Navbar__Link--active' disabled>
-                    <li>analyze</li>
+                    <span>analyze <i className="fas fa-chart-bar" /></span>
                 </NavLink>
                 <NavLink to='top' className='Navbar__Link' activeClassName='Navbar__Link--active'>
-                    <li>top</li>
+                    <span>top <i className="fas fa-trophy" /></span>
                 </NavLink>
                 <NavLink to='explore' className='Navbar__Link' activeClassName='Navbar__Link--active' disabled>
-                    <li>explore</li>
+                    <span>explore <i className="fas fa-atlas" /></span>
                 </NavLink>
-            </ul>
+            </div>
         </nav>
     )
 }

@@ -1,8 +1,11 @@
 .List {
     width: 100%;
+    height: 100%;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    background-color: var(--color-background-secondary);
+    padding: 32px 0px;
 }
 
 .List > * {

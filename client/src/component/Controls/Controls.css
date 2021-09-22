@@ -1,47 +1,29 @@
 .Controls {
     display: flex;
     justify-content: center;    
-    padding: 4px;
-    max-width: 648px;
-    margin: 8px auto
+    width: 100%;
+    padding: 8px 0;
 }
 
 .Controls__Container {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    align-items: center;
-    justify-content: center;
-    padding: 8px;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    place-items: center;
+    padding: 0px 4px;
     color: white;
     font-weight: 500;
 }
 
 .Controls__Container__Label {
-    margin-bottom: 4px;
+    font-size: 14px;
 }
 
 .Controls__Container__TypeSelect,
 .Controls__Container__TimeRangeSelect,
 .Controls__Container__LimitInput {
     padding: 4px;
-    appearance: none;
-    outline: none;
-    background-color: rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(0, 0, 0, 0.5);
-    text-align: center;
-    font-size: 16px;
-    font-weight: 500;
-    color: white;
-}
-
-/* ********** SONG LIMIT ********** */
-
-.Controls__Container__LimitInput {
-    padding: 5px; 
-    width: 40px;
-    border: 1px solid rgba(0, 0, 0, 0.5);
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: var(--color-background-secondary);
+    border: 1px solid #121212;
     text-align: center;
     font-size: 16px;
     font-weight: 500;
@@ -57,5 +39,5 @@
 .Controls__Container__LimitInput[type=number] {
     -moz-appearance: textfield;
     text-align: center;
-
+    size: 2;
 }

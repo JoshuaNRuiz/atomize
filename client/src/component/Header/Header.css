@@ -1,0 +1,32 @@
+.Header {
+    padding: 32px;
+    color: white;
+    font-size: 32px;
+    font-family: 'Rokkitt', serif;
+    margin: 0 16px;
+}
+
+/* desktop */
+@media only screen and (min-width: 1200px) {}
+
+/* tablet landscape */
+@media only screen and (min-width: 900px) and (max-width: 1199px) {
+    .Header {
+        padding: 1em 0;
+    }
+}
+
+/* tablet portrait */
+@media only screen and (min-width: 600px) and (max-width: 899px) {
+    .Header {
+        padding: 1em 0;
+    }
+}
+
+/* phone screen */
+@media only screen and (max-width: 599px) {
+    .Header {
+        padding: 0.5em 0;
+        font-size: 1.5rem;
+    }
+}

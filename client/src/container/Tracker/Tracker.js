@@ -4,6 +4,7 @@ import axios from 'axios';
 import Controls from '../../component/Controls/Controls';
 import List from '../../component/List/List';
 import './Tracker.css'
+import Header from '../../component/Header/Header';
 
 axios.defaults.withCredentials = true;
 
@@ -27,12 +28,13 @@ const Tracker = () => {
     }
 
     function handleLimitChange(event) {
-        if (event.target.value > 50) {
-            event.target.value = 50;
-        } else if (event.target.value < 0) {
-            event.target.value = 0
+        let value = Math.round(event.target.value)
+        if (value > 50) {
+            value = 50;
+        } else if (value < 0) {
+            value = 0
         }
-        setLimit(event.target.value);
+        setLimit(value);
     }
 
     function getItems() {
@@ -49,11 +51,14 @@ const Tracker = () => {
 
     return (
         <div className='Tracker'>
-            <Controls
-                limit={limit}
-                handleTypeChange={handleTypeChange}
-                handleTimeRangeChange={handleTimeRangeChange}
-                handleLimitChange={handleLimitChange}/>
+            <Header>
+                top artists & tracks
+                <Controls
+                    limit={limit}
+                    handleTypeChange={handleTypeChange}
+                    handleTimeRangeChange={handleTimeRangeChange}
+                    handleLimitChange={handleLimitChange} />
+            </Header>
             {isReady && <List items={items} />}
         </div>
     )
