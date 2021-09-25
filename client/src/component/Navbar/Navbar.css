@@ -37,8 +37,9 @@
     transition: 0.5s;
 }
 
-.Navbar__Link--active {
-    opacity: 100%;
+.Navbar__Link--Active {
+    color: green;
+    font-weight: bold;
 }
 
 .Navbar__Menu__Toggle {
@@ -62,7 +63,6 @@
 
 /* phone screen */
 @media only screen and (max-width: 599px) {
-
     
 
 }

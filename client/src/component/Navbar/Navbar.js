@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 import './Navbar.css';
 
@@ -9,18 +9,19 @@ const Navbar = () => {
         <nav className='Navbar'>
             <NavLink to='/' className='Navbar__Logo'><span>atomize</span></NavLink>
             <div className='Navbar__Links'>
-                <NavLink to='analyze' className='Navbar__Link' activeClassName='Navbar__Link--active' disabled>
+                <NavLink exact to='analyze' className='Navbar__Link' activeClassName='Navbar__Link--Active' disabled>
                     <span>analyze <i className="fas fa-chart-bar" /></span>
                 </NavLink>
-                <NavLink to='top' className='Navbar__Link' activeClassName='Navbar__Link--active'>
+                <NavLink exact to='top' className='Navbar__Link' activeClassName='Navbar__Link--Active'>
                     <span>top <i className="fas fa-trophy" /></span>
                 </NavLink>
-                <NavLink to='explore' className='Navbar__Link' activeClassName='Navbar__Link--active' disabled>
+                {/* <NavLink exact to='explore' className='Navbar__Link' activeClassName='Navbar__Link--Active' disabled>
                     <span>explore <i className="fas fa-atlas" /></span>
-                </NavLink>
+                </NavLink> */}
             </div>
         </nav>
     )
 }
 
 export default Navbar;
+
