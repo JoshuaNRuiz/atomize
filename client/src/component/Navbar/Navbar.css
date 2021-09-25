@@ -38,8 +38,7 @@
 }
 
 .Navbar__Link--Active {
-    color: green;
-    font-weight: bold;
+    /* color: green; */
 }
 
 .Navbar__Menu__Toggle {
