@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 
 import Controls from '../../component/Controls/Controls';
@@ -9,6 +10,8 @@ import Header from '../../component/Header/Header';
 axios.defaults.withCredentials = true;
 
 const Tracker = () => {
+    const history = useHistory();
+
     const TYPE_DEFAULT = 'tracks';
     const LIMIT_DEFAULT = 10;
     const RANGE_DEFAULT = 'long_term';
@@ -37,6 +40,11 @@ const Tracker = () => {
         setLimit(value);
     }
 
+    function handleItemClick(event) {
+        const id = event.currentTarget.id;
+        history.push(`/analyze?track=${id}`);
+    }
+
     function getItems() {
         let url = `/api/spotify-helper/top-${type}?time_range=${timeRange}&limit=${limit}&offset=${0}`;
         axios.get(url)
@@ -59,7 +67,7 @@ const Tracker = () => {
                     handleTimeRangeChange={handleTimeRangeChange}
                     handleLimitChange={handleLimitChange} />
             </Header>
-            {isReady && <List items={items} />}
+            {isReady && <List items={items} handleClick={handleItemClick}/>}
         </div>
     )
 }
