@@ -1,7 +1,6 @@
 require('dotenv').config({path: __dirname + '/.env'});
-const Constants = require('./helpers/Constants');
 
-const DEFAULT_PORT = 8000
+const DEFAULT_PORT = 8000;
 const PORT = process.argv[2] || DEFAULT_PORT;
 
 const express = require('express');
