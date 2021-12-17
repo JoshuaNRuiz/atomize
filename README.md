@@ -1,7 +1,7 @@
 # atomize for Spotify
 ### A tool for Spotify with a variety of features.
 
-**Try it**: https://joshuanruiz.com/projects/atomize/
+**Try it**: https://atomize.info
 
 **Current status:** beta - under active development
 
