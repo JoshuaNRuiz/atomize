@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useLocation } from 'react-router';
 
 export async function getUsersPlaylists() {
     const url = '/api/spotify-helper/user-data/playlists';
@@ -37,4 +38,14 @@ export async function getLikedTracks() {
     const url = `/api/spotify-helper/user-data/track`;
     return await axios.get(url)
         .then(response => response.data);
+}
+
+export async function getTrack(id) {
+    const url = `/api/spotify-helper/tracks/${id}`;
+    return await axios.get(url)
+        .then(response => response.data);
+}
+
+export function useQueryParameters() {
+    return new URLSearchParams(useLocation().search);
 }

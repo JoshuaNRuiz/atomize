@@ -42,7 +42,7 @@ const Tracker = () => {
 
     function handleItemClick(event) {
         const id = event.currentTarget.id;
-        history.push(`/analyze?track=${id}`);
+        history.push(`/analyze?trackId=${id}`);
     }
 
     function getItems() {

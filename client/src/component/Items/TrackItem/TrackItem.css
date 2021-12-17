@@ -2,12 +2,13 @@
     width: 270px;
     height: 80px;
     display: grid;
-    grid-template-columns: 12px 1fr 80px;
+    grid-template-columns: 1fr 80px;
     align-items: center;
     background-color: var(--color-background-secondary);
     border-radius: 2px;
     border: 1px solid black;
     transition: border 0.7s;
+    position: relative;
 }
 
 .TrackItem:hover {
@@ -17,13 +18,15 @@
 }
 
 .TrackItem__Rank {
-    margin-left: 8px;
-    margin-top: 4px;
-    justify-self: center;
-    align-self: start;
+    width: 16px;
+    padding: 2px;
+    position: absolute;
+    top: 0;
+    left: 0;
     color: var(--color-secondary);
     font-family: 'Montserrat', sans-serif;
     font-size: 12px;
+    background-color: #000000;
 }
 
 .TrackItem__Details {
@@ -33,6 +36,7 @@
 }
 
 .TrackItem__Details__Name, .TrackItem__Details__Artist {
+    color: var(--color-secondary);
     display: block;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -41,14 +45,11 @@
 }
 
 .TrackItem__Details__Name {
-    color: var(--color-secondary);
     font-size: 16px;
 }
 
 .TrackItem__Details__Artist {
-    color: var(--color-secondary);
     font-size: 12px;
-    align-self: flex-start;
 }
 
 .TrackItem__Image {

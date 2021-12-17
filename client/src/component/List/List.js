@@ -34,7 +34,7 @@ const List = ({ items, handleClick }) => {
 
     function TrackList() {
         const trackList = Object.values(items).map((track, index) => {
-            const { id, name, artists, album, features } = track;
+            const { id, name, artists, album } = track;
             const rank = index + 1;
             return (
                 <TrackItem key={id}
@@ -43,8 +43,7 @@ const List = ({ items, handleClick }) => {
                     name={name}
                     artists={artists}
                     album={album}
-                    rank={rank}
-                    audioFeatures={features}
+                    rank={rank || null} 
                     handleClick={handleClick || null} />
             );
         });
