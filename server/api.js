@@ -1,8 +1,8 @@
-module.exports = function (app) {
-    require('./api/authorization')(app);
-    require('./api/tracks')(app);
-    require('./api/audio-features')(app);
-    require('./api/user-data')(app);
-    require('./api/search')(app);
-    require('./api/top-data')(app);
+module.exports = function (app, connection) {
+    require('./api/authorization')(app, connection);
+    require('./api/tracks')(app, connection);
+    require('./api/audio-features')(app, connection);
+    require('./api/user-data')(app), connection;
+    require('./api/search')(app, connection);
+    require('./api/top-data')(app, connection);
 }
