@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { setTrack } from '../../features/trackSlice';
+import { setItems } from '../../features/itemsSlice';
 import axios from 'axios';
 
 import Controls from '../../component/Controls/Controls';
@@ -10,6 +13,9 @@ import Header from '../../component/Header/Header';
 axios.defaults.withCredentials = true;
 
 const Tracker = () => {
+    const track = useSelector(state => state.track.value);
+    const items = useSelector(state => state.items.value);
+    const dispatch = useDispatch();
     const history = useHistory();
 
     const TYPE_DEFAULT = 'tracks';
@@ -19,7 +25,6 @@ const Tracker = () => {
     const [type, setType] = useState(TYPE_DEFAULT);
     const [limit, setLimit] = useState(LIMIT_DEFAULT);
     const [timeRange, setTimeRange] = useState(RANGE_DEFAULT);
-    const [items, setItems] = useState([]);
     const [isReady, setIsReady] = useState(false);
 
     function handleTypeChange(event) {
@@ -46,11 +51,11 @@ const Tracker = () => {
     }
 
     function getItems() {
-        let url = `/api/spotify-helper/top-${type}?time_range=${timeRange}&limit=${limit}&offset=${0}`;
+        const url = `/api/spotify-helper/top-${type}?time_range=${timeRange}&limit=${limit}&offset=${0}`;
         axios.get(url)
             .then(response => {
                 const items = response.data.items;
-                setItems(items);
+                dispatch(setItems(items));
                 setIsReady(true);
             });
     }

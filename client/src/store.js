@@ -5,6 +5,6 @@ import itemsReducer from './features/itemsSlice';
 export default configureStore({
     reducer: {
         track: trackReducer,
-        items: itemsReducer
+        items: itemsReducer,
     }
 });

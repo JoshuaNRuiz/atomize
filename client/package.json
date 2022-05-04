@@ -49,5 +49,8 @@
       "extensions": "js,jsx,css"
     }
   },
-  "proxy": "http://localhost:8000"
+  "proxy": "http://localhost:8000",
+  "devDependencies": {
+    "react-error-overlay": "6.0.9"
+  }
 }
