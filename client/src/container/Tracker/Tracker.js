@@ -4,20 +4,16 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setTrack } from '../../features/trackSlice';
 import { setItems } from '../../features/itemsSlice';
 import { getTop } from '../../helpers/api';
-import axios from 'axios';
 
+import Header from '../../component/Header/Header';
 import Controls from '../../component/Controls/Controls';
 import List from '../../component/List/List';
 import './Tracker.css'
-import Header from '../../component/Header/Header';
-
-axios.defaults.withCredentials = true;
 
 const Tracker = () => {
     const track = useSelector(state => state.track.value);
     const items = useSelector(state => state.items.value);
     const dispatch = useDispatch();
-    const history = useHistory();
 
     const TYPE_DEFAULT = 'tracks';
     const LIMIT_DEFAULT = 10;

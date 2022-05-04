@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useLocation } from 'react-router';
 
 const API = '/api/spotify-helper';
+axios.defaults.withCredentials = true;
 
 export async function getUsersPlaylists() {
     const url = `${API}/user-data/playlists`;
