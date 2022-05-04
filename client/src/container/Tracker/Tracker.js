@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { setTrack } from '../../features/trackSlice';
 import { setItems } from '../../features/itemsSlice';
+import { getTop } from '../../helpers/api';
 import axios from 'axios';
 
 import Controls from '../../component/Controls/Controls';
@@ -47,20 +48,17 @@ const Tracker = () => {
 
     function handleItemClick(event) {
         const id = event.currentTarget.id;
-        history.push(`/analyze?trackId=${id}`);
     }
 
-    function getItems() {
-        const url = `/api/spotify-helper/top-${type}?time_range=${timeRange}&limit=${limit}&offset=${0}`;
-        axios.get(url)
-            .then(response => {
-                const items = response.data.items;
-                dispatch(setItems(items));
-                setIsReady(true);
-            });
+    async function getItems() {
+        getTop(type, timeRange, limit)
+            .then(items => dispatch(setItems(items)))
+            .then(setIsReady(true));
     }
 
-    useEffect(getItems, [type, timeRange, limit]);
+    useEffect(() => {
+        getItems();
+    }, [type, timeRange, limit]);
 
     return (
         <div className='Tracker'>

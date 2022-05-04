@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import CustomChart from "../../../component/Chart/CustomChart";
 import TrackItem from '../../../component/Items/TrackItem/TrackItem';
 
-import { getAudioFeaturesForTrack } from '../../../helpers/functions';
+import { getAudioFeaturesForTrack } from '../../../helpers/api';
 
 import './TrackAnalyzer.css';
 

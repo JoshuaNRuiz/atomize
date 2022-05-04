@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { searchForTrack, getAudioFeaturesForTrack, getTrack, useQueryParameters } from '../../helpers/functions';
+import { searchForTrack, getAudioFeaturesForTrack, getTrack, useQueryParameters } from '../../helpers/api';
 import { ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Tooltip } from 'recharts';
 import { useHistory } from 'react-router-dom';
 import SearchBar from '../../component/SearchBar/SearchBar';

@@ -5,7 +5,7 @@ import CustomChart from '../../../component/Chart/CustomChart';
 
 import './PlaylistAnalyzer.css'
 
-import { getAudioFeatures } from '../../../helpers/functions';
+import { getAudioFeatures } from '../../../helpers/api';
 
 const PlaylistAnalyzer = ({ playlist }) => {
 
