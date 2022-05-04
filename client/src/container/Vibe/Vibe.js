@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getAudioFeatures, getAudioFeaturesForTrack, getLikedTracks } from '../../helpers/functions';
+import { getAudioFeatures, getAudioFeaturesForTrack, getLikedTracks } from '../../helpers/api';
 import './Vibe.css';
 import axios from 'axios';
 

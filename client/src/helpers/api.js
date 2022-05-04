@@ -1,32 +1,35 @@
 import axios from 'axios';
 import { useLocation } from 'react-router';
 
+const API = '/api/spotify-helper';
+axios.defaults.withCredentials = true;
+
 export async function getUsersPlaylists() {
-    const url = '/api/spotify-helper/user-data/playlists';
+    const url = `${API}/user-data/playlists`;
     return await axios.get(url)
         .then(response => response.data);
 }
 
 export async function getPlaylistTracks(playlistId) {
-    const url = `/api/spotify-helper/playlist/${playlistId}`;
+    const url = `${API}/playlist/${playlistId}`;
     return await axios.get(url)
         .then(response => response.data.items);
 }
 
 export async function searchForTrack(trackName) {
-    const url = `/api/spotify-helper/search?q=${trackName}&type=track`;
+    const url = `${API}/search?q=${trackName}&type=track`;
     return await axios.get(url)
         .then(response => response.data.tracks.items);
 };
 
 export async function getAudioFeaturesForTrack(trackId) {
-    const url = `/api/spotify-helper/audio-features/${trackId}`;
+    const url = `${API}/audio-features/${trackId}`;
     return await axios.get(url)
         .then(response => response.data);
 }
 
 export async function getAudioFeatures(trackIds) {
-    const url = `/api/spotify-helper/audio-features`;
+    const url = `${API}/audio-features`;
     const requestData = {
         track_ids: trackIds
     }
@@ -35,15 +38,21 @@ export async function getAudioFeatures(trackIds) {
 }
 
 export async function getLikedTracks() {
-    const url = `/api/spotify-helper/user-data/track`;
+    const url = `${API}/user-data/track`;
     return await axios.get(url)
         .then(response => response.data);
 }
 
 export async function getTrack(id) {
-    const url = `/api/spotify-helper/tracks/${id}`;
+    const url = `${API}/tracks/${id}`;
     return await axios.get(url)
         .then(response => response.data);
+}
+
+export async function getTop(type, timeRange, limit, offset = 0) {
+    const url = `${API}/top-${type}?time_range=${timeRange}&limit=${limit}&offset=${0}`;
+    return await axios.get(url)
+        .then(response => response.data.items);
 }
 
 export function useQueryParameters() {

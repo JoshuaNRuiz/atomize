@@ -4,15 +4,14 @@ import axios from 'axios';
 import Cookies from './helpers/Cookies';
 
 import Navbar from './component/Navbar/Navbar';
+import Footer from './component/Footer/Footer';
 import Login from './component/Login/Login';
 import Gateway from './component/Gateway/Gateway';
 import Analyzer from './container/Analyzer/Analyzer';
 import Tracker from './container/Tracker/Tracker';
 import Explorer from './container/Explorer/Explorer';
 import Vibe from './container/Vibe/Vibe';
-
 import './App.css'
-import Footer from './component/Footer/Footer';
 
 function App() {
     const [isLoggedIn, setLoginStatus] = useState(false);
